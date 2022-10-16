@@ -1,0 +1,10 @@
+*/*.retry
+aliyun*
+.vscode
+beagle-*.tgz
+docker*.tgz
+registry-*
+gateway-*
+envoy-*
+
+.registry/

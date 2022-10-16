@@ -1,0 +1,9 @@
+- name: kubectl label master
+  environment:
+    K8S_HOST: '{{ inventory_hostname }}'
+  script: label.sh
+  register: label_node
+  until: label_node.rc == 0
+  retries: 30
+  delay: 5
+  ignore_errors: true

@@ -1,0 +1,17 @@
+- name: mkdir -p /etc/kubernetes/ssl/etcd
+  raw: mkdir -p /etc/kubernetes/ssl/etcd
+
+- name: copy /etc/kubernetes/ssl/etcd/ca.crt
+  copy: src=ca.crt dest=/etc/kubernetes/ssl/etcd/ca.crt mode=0644
+
+- name: copy /etc/kubernetes/ssl/etcd/ca.key
+  copy: src=ca.key dest=/etc/kubernetes/ssl/etcd/ca.key mode=0600
+
+- name: template /etc/kubernetes/ssl/etcd/server.cnf
+  template: src=server.cnf dest=/etc/kubernetes/ssl/etcd/server.cnf mode=0600
+
+- name: template /etc/kubernetes/ssl/etcd/etcd.sh
+  template: src=etcd.sh dest=/etc/kubernetes/ssl/etcd/etcd.sh mode=0755
+
+- name: /etc/kubernetes/ssl/etcd/etcd.sh
+  raw: /etc/kubernetes/ssl/etcd/etcd.sh

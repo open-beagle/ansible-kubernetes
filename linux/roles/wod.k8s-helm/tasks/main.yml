@@ -1,0 +1,5 @@
+- name: template helm.sh
+  template: src=helm.sh dest=/etc/kubernetes/scripts/helm.sh mode=0755
+
+- name: /etc/kubernetes/scripts/helm.sh
+  raw: /etc/kubernetes/scripts/helm.sh

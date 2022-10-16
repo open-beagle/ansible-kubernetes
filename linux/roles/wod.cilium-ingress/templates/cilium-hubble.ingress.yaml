@@ -1,0 +1,30 @@
+apiVersion: bcc.bd-apaas.com/v1alpha1
+kind: IngressRoute
+metadata:
+  name: hubble-ui
+  namespace: kube-system
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`hubble.{{ K8S_DOMAIN }}`)
+      kind: Rule
+      services:
+      - name: hubble-ui
+        port: 80
+  tls: {}
+---
+apiVersion: bcc.bd-apaas.com/v1alpha1
+kind: IngressRoute
+metadata:
+  name: hubble-ui-http
+  namespace: kube-system
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`hubble.{{ K8S_DOMAIN }}`)
+      kind: Rule
+      services:
+      - name: hubble-ui
+        port: 80

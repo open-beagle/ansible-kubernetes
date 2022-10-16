@@ -1,0 +1,39 @@
+apiVersion: bcc.bd-apaas.com/v1alpha1
+kind: IngressRoute
+metadata:
+  name: kubernetes
+  namespace: default
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`kubernetes.{{ K8S_DOMAIN }}`)
+      kind: Rule
+      services:
+      - name: kubernetes
+        port: 443
+  tls:
+    certResolver: default
+---
+apiVersion: bcc.bd-apaas.com/v1alpha1
+kind: IngressRoute
+metadata:
+  name: kubernetes-http
+  namespace: default
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`kubernetes.{{ K8S_DOMAIN }}`)
+      kind: Rule
+      services:
+      - name: kubernetes
+        port: 443
+---
+apiVersion: bcc.bd-apaas.com/v1alpha1
+kind: IngressHost
+metadata:
+  name: kubernetes
+  namespace: default
+spec:
+  host: {{ K8S_DOMAIN }}

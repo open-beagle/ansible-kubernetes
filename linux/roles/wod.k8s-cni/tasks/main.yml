@@ -1,0 +1,8 @@
+- name: mkdir -p /etc/kubernetes/scripts
+  raw: mkdir -p /etc/kubernetes/scripts
+
+- name: template cni.sh
+  template: src=cni.sh dest=/etc/kubernetes/scripts/cni.sh mode=0755
+
+- name: /etc/kubernetes/scripts/cni.sh
+  raw: /etc/kubernetes/scripts/cni.sh

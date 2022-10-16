@@ -1,0 +1,38 @@
+- name: mkdir /etc/kubernetes/ssl
+  raw: mkdir -p /etc/kubernetes/ssl
+  
+- name: check need admin.key
+  raw: stat /etc/kubernetes/ssl/admin.key
+  register: need_ssl_ca_crt
+  ignore_errors: True  
+
+- name: copy admin.key
+  copy: src=admin.key dest=/etc/kubernetes/ssl/admin.key mode=0644
+  when: need_ssl_ca_crt is failed
+
+- name: check need apiserver.key
+  raw: stat /etc/kubernetes/ssl/apiserver.key
+  register: need_ssl_ca_key
+  ignore_errors: True  
+
+- name: copy apiserver.key
+  copy: src=apiserver.key dest=/etc/kubernetes/ssl/apiserver.key mode=0600
+  when: need_ssl_ca_key is failed
+
+- name: template admin.cnf
+  template: src=admin.cnf dest=/etc/kubernetes/ssl/admin.cnf
+
+- name: copy admin.sh
+  copy: src=admin.sh dest=/etc/kubernetes/ssl/admin.sh mode=0755
+
+- name: Run admin.sh
+  script: admin.sh
+
+- name: template apiserver.cnf
+  template: src=apiserver.cnf dest=/etc/kubernetes/ssl/apiserver.cnf
+
+- name: copy apiserver.sh
+  copy: src=apiserver.sh dest=/etc/kubernetes/ssl/apiserver.sh mode=0755
+
+- name: Run apiserver.sh
+  script: apiserver.sh  

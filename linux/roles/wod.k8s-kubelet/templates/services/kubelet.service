@@ -1,0 +1,23 @@
+[Unit]
+Description=kubelet
+Documentation=https://kubernetes.io
+Requires=docker.service
+After=docker.service
+[Service]
+Environment=PATH=/bin:/opt/bin:/usr/bin:/usr/sbin:/sbin:$PATH
+
+ExecStartPre=/usr/bin/mkdir -p /etc/kubernetes/data
+ExecStartPre=/usr/bin/mkdir -p /etc/kubernetes/manifests
+ExecStartPre=/usr/bin/mkdir -p /var/log/containers
+
+ExecStart=/opt/bin/kubelet \
+  --config=/etc/kubernetes/config/kubelet.yaml \
+  --kubeconfig=/etc/kubernetes/config/kubelet.conf \
+  --hostname-override={{ inventory_hostname }} \
+  --node-ip={{ HOST_IP }} \
+  --container-runtime-endpoint=unix:///run/containerd/containerd.sock
+
+Restart=always
+RestartSec=10
+[Install]
+WantedBy=multi-user.target

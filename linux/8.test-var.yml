@@ -1,0 +1,4 @@
+- hosts: all
+  tasks: 
+  - name: Show debug info 
+    debug: var=K8S_ADVERTISE_IP verbosity=0

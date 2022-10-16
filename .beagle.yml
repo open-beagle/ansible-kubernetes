@@ -1,0 +1,343 @@
+kind: pipeline
+name: docker
+
+trigger:
+  branch:
+    - dev
+
+volumes:
+  - name: docker
+    host:
+      path: /var/run/docker.sock
+
+clone:
+  disable: true
+
+steps:
+  - name: fetch
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-git:1.0
+
+  - name: curl
+    image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
+    environment:
+      CILIUM_VERSION: 1.11.9
+    commands:
+      - curl https://cache.wodcloud.com/kubernetes/k8s/charts/beagle-cilium-$CILIUM_VERSION.tgz > ./linux/roles/wod.cilium/files/beagle-cilium-$CILIUM_VERSION.tgz
+
+  - name: install-docker-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
+    environment:
+      DOCKER_VERSION: 20.10.18
+      ARCH: amd64
+    commands:
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
+
+  - name: install-registry-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/registry:v2.8.1-amd64
+    commands:
+      - cp /usr/local/bin/registry linux/roles/wod.registry/files/bin/registry-v2.8.1
+
+  - name: install-envoy-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:1.23.1-amd64
+    commands:
+      - cp /usr/local/bin/envoy linux/roles/wod.envoy/files/envoy-1.23.1
+
+  - name: docker-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    volumes:
+      - name: docker
+        path: /var/run/docker.sock
+    settings:
+      dockerfile: .beagle/dockerfile
+      base: registry.cn-qingdao.aliyuncs.com/wod/ansible:2-amd64
+      repo: wod/ansible-kubernetes
+      version: v1.24.6
+      channel: amd64
+      args: 'TARGETOS=linux,TARGETARCH=amd64'
+      registry: registry.cn-qingdao.aliyuncs.com
+      registry_user:
+        from_secret: REGISTRY_USER_ALIYUN
+      registry_password:
+        from_secret: REGISTRY_PASSWORD_ALIYUN
+
+  - name: install-docker-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
+    environment:
+      DOCKER_VERSION: 20.10.18
+      ARCH: arm64
+    commands:
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
+
+  - name: install-registry-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/registry:v2.8.1-arm64
+    commands:
+      - cp /usr/local/bin/registry linux/roles/wod.registry/files/bin/registry-v2.8.1
+
+  - name: install-envoy-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:1.23.1-arm64
+    commands:
+      - cp /usr/local/bin/envoy linux/roles/wod.envoy/files/envoy-1.23.1
+
+  - name: docker-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    volumes:
+      - name: docker
+        path: /var/run/docker.sock
+    settings:
+      dockerfile: .beagle/dockerfile
+      base: registry.cn-qingdao.aliyuncs.com/wod/ansible:2-arm64
+      repo: wod/ansible-kubernetes
+      version: v1.24.6
+      channel: arm64
+      args: 'TARGETOS=linux,TARGETARCH=arm64'
+      registry: registry.cn-qingdao.aliyuncs.com
+      registry_user:
+        from_secret: REGISTRY_USER_ALIYUN
+      registry_password:
+        from_secret: REGISTRY_PASSWORD_ALIYUN
+
+  - name: docker-arch
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-manifest:1.0
+    volumes:
+      - name: docker
+        path: /var/run/docker.sock
+    settings:
+      platforms: linux/amd64,linux/arm64
+      template: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.24.6-ARCH
+      target: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.24.6
+      username:
+        from_secret: REGISTRY_USER_ALIYUN
+      password:
+        from_secret: REGISTRY_PASSWORD_ALIYUN
+
+  - name: ansible-kubernetes-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    volumes:
+      - name: docker
+        path: /var/run/docker.sock
+    environment:
+      REGISTRY_REMOTE: registry.cn-qingdao.aliyuncs.com/wod
+      ITEM_REPO: ansible-kubernetes
+      ITEM_TAG: v1.24.6-amd64
+    commands:
+      - mkdir -p .tmp/amd64
+      - docker pull $REGISTRY_REMOTE/$ITEM_REPO:$ITEM_TAG 
+      - docker save $REGISTRY_REMOTE/$ITEM_REPO:$ITEM_TAG | gzip > .tmp/amd64/$ITEM_REPO-$ITEM_TAG.tgz
+
+  - name: ansible-kubernetes-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    volumes:
+      - name: docker
+        path: /var/run/docker.sock
+    environment:
+      REGISTRY_REMOTE: registry.cn-qingdao.aliyuncs.com/wod
+      ITEM_REPO: ansible-kubernetes
+      ITEM_TAG: v1.24.6-arm64
+    commands:
+      - mkdir -p .tmp/arm64
+      - docker pull $REGISTRY_REMOTE/$ITEM_REPO:$ITEM_TAG 
+      - docker save $REGISTRY_REMOTE/$ITEM_REPO:$ITEM_TAG | gzip > .tmp/arm64/$ITEM_REPO-$ITEM_TAG.tgz
+
+  - name: minio
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-minio:1.0
+    volumes:
+      - name: docker
+        path: /var/run/docker.sock
+    environment:
+      S3_ACCESS_KEY: 
+        from_secret: ACCESS_KEY_MINIO
+      S3_SECRET_KEY: 
+        from_secret: SECRET_KEY_MINIO
+    commands:
+      - mc alias set cache --api=S3v4 https://cache.wodcloud.com $S3_ACCESS_KEY $S3_SECRET_KEY
+      - mc cp --recursive .tmp/ cache/kubernetes/k8s/ansible/
+      
+---
+kind: pipeline
+name: images
+
+trigger:
+  branch:
+    - release
+
+volumes:
+  - name: docker
+    host:
+      path: /var/run/docker.sock
+
+clone:
+  disable: true
+
+steps:
+  - name: fetch
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-git:1.0
+
+  - name: ansible-kubernetes-images-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0
+    settings:
+      source: registry.cn-qingdao.aliyuncs.com/wod
+      yaml: linux/group_vars/all.yml
+      image: K8S_IMAGES
+      arch: amd64
+      group: k8s
+      release: .tmp/amd64/ansible-kubernetes-images-v1.24.6-amd64.tgz
+
+  - name: ansible-kubernetes-images-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0
+    settings:
+      source: registry.cn-qingdao.aliyuncs.com/wod
+      yaml: linux/group_vars/all.yml
+      image: K8S_IMAGES
+      arch: arm64
+      group: k8s
+      release: .tmp/arm64/ansible-kubernetes-images-v1.24.6-arm64.tgz
+
+  - name: minio
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-minio:1.0
+    volumes:
+      - name: docker
+        path: /var/run/docker.sock
+    environment:
+      S3_ACCESS_KEY: 
+        from_secret: ACCESS_KEY_MINIO
+      S3_SECRET_KEY: 
+        from_secret: SECRET_KEY_MINIO
+    commands:
+      - mc alias set cache --api=S3v4 https://cache.wodcloud.com $S3_ACCESS_KEY $S3_SECRET_KEY
+      - mc cp --recursive .tmp/ cache/kubernetes/k8s/ansible/
+
+---
+kind: pipeline
+name: harbor-master
+
+trigger:
+  branch:
+    - master
+
+platform:
+  runner: 10.11.92.33
+
+clone:
+  disable: true
+
+steps:
+  - name: harbor-latest-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-tag:1.0
+    settings:
+      source: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.24.6-amd64
+      target: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.24-amd64
+      registry: registry.cn-qingdao.aliyuncs.com
+      registry_user:
+        from_secret: REGISTRY_USER_ALIYUN
+      registry_password:
+        from_secret: REGISTRY_PASSWORD_ALIYUN
+
+  - name: harbor-latest-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-tag:1.0
+    settings:
+      source: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.24.6-arm64
+      target: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.24-arm64
+      registry: registry.cn-qingdao.aliyuncs.com
+      registry_user:
+        from_secret: REGISTRY_USER_ALIYUN
+      registry_password:
+        from_secret: REGISTRY_PASSWORD_ALIYUN
+
+  - name: harbor-latest-arch
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-manifest:1.0
+    settings:
+      platforms: linux/amd64,linux/arm64
+      template: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.24-ARCH
+      target: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.24
+      username:
+        from_secret: REGISTRY_USER_ALIYUN
+      password:
+        from_secret: REGISTRY_PASSWORD_ALIYUN
+
+---
+kind: pipeline
+name: harbor-latest
+
+depends_on:
+  - harbor-master
+
+trigger:
+  branch:
+    - master
+
+platform:
+  runner: 10.11.92.33
+
+clone:
+  disable: true
+
+steps:
+  - name: harbor-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-tag:1.0
+    volumes:
+      - name: docker
+        path: /var/run/docker.sock
+    settings:
+      source: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.24-amd64
+      target: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:latest-amd64
+      registry: registry.cn-qingdao.aliyuncs.com
+      registry_user:
+        from_secret: REGISTRY_USER_ALIYUN
+      registry_password:
+        from_secret: REGISTRY_PASSWORD_ALIYUN
+
+  - name: harbor-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-tag:1.0
+    volumes:
+      - name: docker
+        path: /var/run/docker.sock
+    settings:
+      source: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.24-arm64
+      target: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:latest-arm64
+      registry: registry.cn-qingdao.aliyuncs.com
+      registry_user:
+        from_secret: REGISTRY_USER_ALIYUN
+      registry_password:
+        from_secret: REGISTRY_PASSWORD_ALIYUN
+
+  - name: harbor-arch
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-manifest:1.0
+    volumes:
+      - name: docker
+        path: /var/run/docker.sock
+    settings:
+      platforms: linux/amd64,linux/arm64
+      template: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:latest-ARCH
+      target: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:latest
+      username:
+        from_secret: REGISTRY_USER_ALIYUN
+      password:
+        from_secret: REGISTRY_PASSWORD_ALIYUN
+
+---
+kind: secret
+name: REGISTRY_USER_ALIYUN
+get:
+  name: REGISTRY_USER_ALIYUN
+  path: devops-secrets
+
+---
+kind: secret
+name: REGISTRY_PASSWORD_ALIYUN
+get:
+  name: REGISTRY_PASSWORD_ALIYUN
+  path: devops-secrets
+
+---
+kind: secret
+name: ACCESS_KEY_MINIO
+get:
+  name: ACCESS_KEY_MINIO
+  path: devops-secrets
+
+---
+kind: secret
+name: SECRET_KEY_MINIO
+get:
+  name: SECRET_KEY_MINIO
+  path: devops-secrets

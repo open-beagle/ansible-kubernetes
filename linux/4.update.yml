@@ -1,0 +1,22 @@
+- hosts: all
+  gather_facts: False
+  roles:
+  - wod.python
+
+- hosts: all
+  # vars:
+  #   REGISTRY_LOCAL: "registry.cn-qingdao.aliyuncs.com/wod/"
+  roles:
+  - role: wod.k8s-ssl
+  - role: wod.k8s-master
+    when: "K8S_CLUSTER_ROLE[inventory_hostname] is defined and K8S_CLUSTER_ROLE[inventory_hostname] == 'master'"
+  - role: wod.k8s-kubectl
+    when: "K8S_CLUSTER_ROLE[inventory_hostname] is defined and K8S_CLUSTER_ROLE[inventory_hostname] == 'master'"
+  - role: wod.k8s-worker
+  - role: wod.k8s-label
+    when: "K8S_CLUSTER_ROLE[inventory_hostname] is defined and K8S_CLUSTER_ROLE[inventory_hostname] == 'master'"
+  - role: wod.k8s-cni
+  - role: wod.k8s-helm
+    when: "inventory_hostname == K8S_ADMIN_HOST"
+  - role: wod.flannel
+    when: "K8S_NETWORK_PLUGIN == 'flannel'"

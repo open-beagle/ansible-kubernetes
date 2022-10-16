@@ -1,0 +1,5 @@
+- name: template nerdctl.sh
+  template: src=nerdctl.sh dest=/etc/kubernetes/scripts/nerdctl.sh mode=0755
+
+- name: /etc/kubernetes/scripts/nerdctl.sh
+  raw: /etc/kubernetes/scripts/nerdctl.sh

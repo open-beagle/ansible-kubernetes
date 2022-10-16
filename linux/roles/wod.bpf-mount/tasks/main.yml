@@ -1,0 +1,8 @@
+- name: mkdir -p /etc/kubernetes/scripts
+  raw: mkdir -p /etc/kubernetes/scripts
+
+- name: template bpf.sh
+  template: src=bpf.sh dest=/etc/kubernetes/scripts/bpf.sh mode=0755
+
+- name: /etc/kubernetes/scripts/bpf.sh
+  raw: /etc/kubernetes/scripts/bpf.sh

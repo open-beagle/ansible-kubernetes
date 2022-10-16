@@ -1,0 +1,29 @@
+- name: mkdir -p /etc/kubernetes/services/k8s-envoy
+  raw: mkdir -p /etc/kubernetes/services/k8s-envoy
+
+- name: check need copy fles
+  raw: stat /opt/bin/envoy
+  register: need_copy_files
+  ignore_errors: True
+
+- name: mkdir -p /tmp/envoy
+  raw: mkdir -p /tmp/envoy
+  when: need_copy_files is failed
+
+- name: copy files to /tmp/envoy
+  copy:
+    src: ./
+    dest: /tmp/envoy
+  when: need_copy_files is failed
+
+- name: template envoy.sh
+  template: src=scripts/envoy.sh dest=/etc/kubernetes/scripts/envoy.sh mode=0755
+
+- name: template config/envoy.yaml
+  template: src=config/envoy.yaml dest=/etc/kubernetes/services/k8s-envoy/envoy.yaml
+
+- name: template services/k8s-envoy.service
+  template: src=services/envoy.service dest=/etc/systemd/system/k8s-envoy.service
+
+- name: /etc/kubernetes/scripts/envoy.sh
+  raw: /etc/kubernetes/scripts/envoy.sh

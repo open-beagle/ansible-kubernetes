@@ -1,0 +1,28 @@
+- name: mkdir -p /etc/kubernetes/addons/kube-system
+  raw: mkdir -p /etc/kubernetes/addons/kube-system
+
+- name: check need rbac-admin.yml
+  raw: stat /etc/kubernetes/addons/kube-system/rbac-admin.yml
+  register: need_addons_rbac_admin
+  ignore_errors: True
+
+- name: template rbac-admin.yml
+  template: src=rbac-admin.yml dest=/etc/kubernetes/addons/kube-system/rbac-admin.yml
+
+- name: kubectl create -f rbac-admin.yml
+  raw: /opt/bin/kubectl create -f /etc/kubernetes/addons/kube-system/rbac-admin.yml
+  when: 
+  - need_addons_rbac_admin is failed
+
+- name: check need coredns.yml
+  raw: stat /etc/kubernetes/addons/kube-system/coredns.yml
+  register: need_addons_dns
+  ignore_errors: True
+
+- name: template coredns.yml
+  template: src=coredns.yml dest=/etc/kubernetes/addons/kube-system/coredns.yml
+
+- name: kubectl create -f coredns.yml
+  raw: /opt/bin/kubectl create -f /etc/kubernetes/addons/kube-system/coredns.yml
+  when: 
+  - need_addons_dns is failed

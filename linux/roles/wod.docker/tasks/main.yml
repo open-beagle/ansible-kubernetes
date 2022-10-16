@@ -1,0 +1,23 @@
+- name: check need copy fles
+  raw: stat /opt/docker/VERSION-{{ DOCKER_VERSION }}.md
+  register: need_copy_files
+  ignore_errors: True
+
+- name: mkdir -p /opt/docker /etc/docker
+  raw: mkdir -p /opt/docker /etc/docker
+
+- name: copy files to /opt/docker
+  copy:
+    src: ./
+    dest: /opt/docker
+  when: need_copy_files is failed
+
+- name: template install-20.sh
+  template: src=install-20.sh.tmpl dest=/opt/docker/install-20.sh mode=0755
+
+- name: template uninstall-20.sh
+  template: src=uninstall-20.sh dest=/opt/docker/uninstall-20.sh mode=0755
+
+- name: /opt/docker/install.sh
+  raw: /opt/docker/install-20.sh
+  when: need_copy_files is failed

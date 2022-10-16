@@ -1,0 +1,11 @@
+# Ignore all development artifacts so that the build is always clean
+
+.git/
+.vscode/
+
+.beagle/
+docs/
+.beagle.yml
+.gitattributes
+.gitignore
+README.md

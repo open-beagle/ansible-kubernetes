@@ -1,0 +1,6 @@
+- name: Run uninstall.sh
+  script: uninstall.sh
+
+- name: reboot
+  raw: shutdown -r 0
+  ignore_errors: true  

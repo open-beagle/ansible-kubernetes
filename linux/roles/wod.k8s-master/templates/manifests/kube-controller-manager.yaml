@@ -1,0 +1,113 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kube-controller-manager
+  namespace: kube-system
+  labels:
+    k8s-app: kube-controller-manager
+    app.bd-apaas.com/cluster-component: core
+spec:
+  containers:
+  - name: kube-controller-manager
+    image: {{ REGISTRY_LOCAL }}/{{ K8S_IMAGES['KUBE-CONTROLLER-MANAGER']['NAME'] }}:{{ K8S_IMAGES['KUBE-CONTROLLER-MANAGER']['VERSION'] }}{{ "-%s" | format(K8S_ARCH) | replace("-amd64", "") }}
+    imagePullPolicy: IfNotPresent
+    command:
+    - kube-controller-manager
+    - --allocate-node-cidrs=true
+    - --authentication-kubeconfig=/etc/kubernetes/config/controller-manager.conf
+    - --authorization-kubeconfig=/etc/kubernetes/config/controller-manager.conf
+    - --bind-address=127.0.0.1
+    - --client-ca-file=/etc/kubernetes/ssl/ca.crt
+    - --cluster-name=kubernetes
+    - --cluster-cidr={{ K8S_POD_NETWORK }}
+    - --cluster-signing-cert-file=/etc/kubernetes/ssl/ca.crt
+    - --cluster-signing-key-file=/etc/kubernetes/ssl/ca.key
+    - --controllers=*,bootstrapsigner,tokencleaner
+    - --kubeconfig=/etc/kubernetes/config/controller-manager.conf
+    - --leader-elect=true
+    - --requestheader-client-ca-file=/etc/kubernetes/ssl/ca.crt
+    - --root-ca-file=/etc/kubernetes/ssl/ca.crt
+    - --service-account-private-key-file=/etc/kubernetes/ssl/apiserver.key
+    - --use-service-account-credentials=true
+    livenessProbe:
+      failureThreshold: 8
+      httpGet:
+        host: 127.0.0.1
+        path: /healthz
+        port: 10257
+        scheme: HTTPS
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      timeoutSeconds: 15
+    resources:
+      requests:
+        cpu: 200m
+    startupProbe:
+      failureThreshold: 24
+      httpGet:
+        host: 127.0.0.1
+        path: /healthz
+        port: 10257
+        scheme: HTTPS
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      timeoutSeconds: 15
+    volumeMounts:
+    - mountPath: /etc/ssl/certs
+      name: ca-certs
+      readOnly: true
+    - mountPath: /etc/ca-certificates
+      name: etc-ca-certificates
+      readOnly: true
+    - mountPath: /etc/pki
+      name: etc-pki
+      readOnly: true
+    - mountPath: /usr/libexec/kubernetes/kubelet-plugins/volume/exec
+      name: flexvolume-dir
+    - mountPath: /etc/kubernetes/ssl
+      name: k8s-certs
+      readOnly: true
+    - mountPath: /etc/kubernetes/config
+      name: kubeconfig
+      readOnly: true
+    - mountPath: /usr/local/share/ca-certificates
+      name: usr-local-share-ca-certificates
+      readOnly: true
+    - mountPath: /usr/share/ca-certificates
+      name: usr-share-ca-certificates
+      readOnly: true
+  hostNetwork: true
+  priorityClassName: system-node-critical
+  volumes:
+  - hostPath:
+      path: /etc/ssl/certs
+      type: DirectoryOrCreate
+    name: ca-certs
+  - hostPath:
+      path: /etc/ca-certificates
+      type: DirectoryOrCreate
+    name: etc-ca-certificates
+  - hostPath:
+      path: /etc/pki
+      type: DirectoryOrCreate
+    name: etc-pki
+  - hostPath:
+      path: /usr/libexec/kubernetes/kubelet-plugins/volume/exec
+      type: DirectoryOrCreate
+    name: flexvolume-dir
+  - hostPath:
+      path: /etc/kubernetes/ssl
+      type: DirectoryOrCreate
+    name: k8s-certs
+  - hostPath:
+      path: /etc/kubernetes/config
+      type: DirectoryOrCreate
+    name: kubeconfig
+  - hostPath:
+      path: /usr/local/share/ca-certificates
+      type: DirectoryOrCreate
+    name: usr-local-share-ca-certificates
+  - hostPath:
+      path: /usr/share/ca-certificates
+      type: DirectoryOrCreate
+    name: usr-share-ca-certificates

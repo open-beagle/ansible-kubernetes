@@ -1,0 +1,17 @@
+global:
+  checkNewVersion: false
+  sendAnonymousUsage: false
+
+entryPoints:
+  https-k8s:
+    address: :6443
+  https-registry:
+    address: :6444
+
+log:
+  level: ERROR
+  format: common
+
+providers:
+  file:
+    filename: /etc/kubernetes/services/k8s-gateway/router.yaml

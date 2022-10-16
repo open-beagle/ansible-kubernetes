@@ -1,0 +1,3 @@
+# docker options
+## DOCKER_VERSION , docker的安装版本
+DOCKER_VERSION: "20.10.18"

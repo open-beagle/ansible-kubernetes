@@ -1,0 +1,9 @@
+K8S_MASTER_HOST: kubernetes.beagle.default
+K8S_MASTER_PORT: 6443
+K8S_DNS_SERVICE_IP: "{{ K8S_SERVICE_IP_RANGE.split('.')[0:3] | join('.') }}.10"
+
+PAUSE_IMAGE: "{{ REGISTRY_LOCAL }}/{{ K8S_IMAGES['PAUSE']['NAME'] }}:{{ K8S_IMAGES['PAUSE']['VERSION'] }}{{ '-%s' | format(K8S_ARCH) | replace('-amd64', '') }}"
+
+### container日志设置 ###
+LOG_MAX_FILES: 2
+LOG_MAX_SIZE: 100Mi

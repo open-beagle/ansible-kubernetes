@@ -1,0 +1,137 @@
+# QuickStart Kubernetes Cluster
+
+## 简介
+
+- 快速搭建一个 Kubernetes 集群
+- 搭建过程离线，无需访问外部的服务器
+- 一行命令，使用ansible，全程自动化
+
+### 限制条件
+
+- Linux Kernel >= 5.10 , 推荐 Ubuntu 22.04
+
+### 核心组件
+
+- 容器引擎: docker 20.10
+- 数据库: etcd v3.5
+- 容器平台: kubernetes v1.24
+- 网络组件: cilium v1.11
+- 扩展组件: coredns 1.9
+
+## 安装一个离线kubernetes集群
+
+## 安装Docker
+
+```bash
+# HTTPS服务器
+export HTTP_SERVER=https://cache.wodcloud.com/kubernetes/k8s
+# 平台架构
+export TARGET_ARCH=amd64
+# Docker版本
+export DOCKER_VERSION=20.10.18
+
+# 下载文件
+# docker、containerd安装包与脚本 ， docker-20.10.18.tgz 68MB
+mkdir -p /opt/docker
+curl $HTTP_SERVER/docker/install-20.sh > /opt/docker/install-20.sh
+curl $HTTP_SERVER/docker/uninstall-20.sh > /opt/docker/uninstall-20.sh
+curl $HTTP_SERVER/docker/$TARGET_ARCH/docker-$DOCKER_VERSION.tgz > /opt/docker/docker-$DOCKER_VERSION.tgz
+
+# 安装Docker
+bash /opt/docker/install-20.sh
+```
+
+### 准备ansible镜像与k8s镜像
+
+```bash
+# HTTPS服务器
+export HTTP_SERVER=https://cache.wodcloud.com/kubernetes/k8s
+# 平台架构
+export TARGET_ARCH=amd64
+# K8S版本
+export K8S_VERSION=v1.24.6
+
+# 下载文件
+# 安装镜像 ansible-kubernetes-images-v1.24.6-amd64.tgz 1526MB
+# 安装脚本 ansible-kubernetes-v1.24.6-amd64.tgz 276MB
+curl $HTTP_SERVER/ansible/$TARGET_ARCH/ansible-kubernetes-images-$K8S_VERSION-$TARGET_ARCH.tgz > ./ansible-kubernetes-images-$K8S_VERSION-$TARGET_ARCH.tgz
+curl $HTTP_SERVER/ansible/$TARGET_ARCH/ansible-kubernetes-$K8S_VERSION-$TARGET_ARCH.tgz > ./ansible-kubernetes-$K8S_VERSION-$TARGET_ARCH.tgz
+
+# 加载镜像
+docker load -i ansible-kubernetes-$K8S_VERSION-$TARGET_ARCH.tgz
+```
+
+### 准备hosts文件
+
+```bash
+cat > hosts.ini <<\EOF
+[master]
+ubuntu-01 ansible_ssh_host=192.168.1.200 ansible_ssh_port=22 ansible_ssh_user=root ansible_python_interpreter=/opt/bin/python
+
+[node]
+ubuntu-02 ansible_ssh_host=192.168.1.201 ansible_ssh_port=22 ansible_ssh_user=root ansible_python_interpreter=/opt/bin/python
+ubuntu-03 ansible_ssh_host=192.168.1.202 ansible_ssh_port=22 ansible_ssh_user=root ansible_python_interpreter=/opt/bin/python
+EOF
+```
+
+### 安装k8s
+
+```bash
+export TARGET_ARCH=amd64 && \
+export K8S_VERSION=v1.24.6 && \
+docker run \
+-it --rm \
+-v $PWD/hosts.ini:/etc/ansible/hosts \
+-v $PWD/ansible-kubernetes-images-$K8S_VERSION-$TARGET_ARCH.tgz:/etc/ansible/linux/roles/wod.registry/files/images/ansible-kubernetes-images-$K8S_VERSION-$TARGET_ARCH.tgz \
+-w /etc/ansible/linux \
+registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.24.6-$TARGET_ARCH \
+ansible-playbook 1.install.yml
+```
+
+### 完成安装
+
+显示以下提示信息，所有节点都是ok，failed=0
+
+```bash
+PLAY RECAP *******************************************************************************************************
+ubuntu-01                  : ok=85   changed=65   unreachable=0    failed=0    skipped=23   rescued=0    ignored=6
+ubuntu-02                  : ok=37   changed=32   unreachable=0    failed=0    skipped=6    rescued=0    ignored=1
+ubuntu-03                  : ok=37   changed=32   unreachable=0    failed=0    skipped=6    rescued=0    ignored=1
+```
+
+### 验证安装
+
+```bash
+root@ubuntu-01:~# /opt/bin/kubectl get node
+NAME        STATUS   ROLES    AGE   VERSION
+ubuntu-01   Ready    master   93s   v1.24.6-beagle
+ubuntu-02   Ready    <none>   79s   v1.24.6-beagle
+ubuntu-03   Ready    <none>   79s   v1.24.6-beagle
+
+root@ubuntu-01:~# /opt/bin/kubectl get pod -A -o wide
+NAMESPACE     NAME                                READY   STATUS    RESTARTS   AGE   IP              NODE        NOMINATED NODE   READINESS GATES
+kube-system   cilium-2zq4f                        1/1     Running   0          76s   192.168.1.201   ubuntu-02   <none>           <none>
+kube-system   cilium-7tjl8                        1/1     Running   0          76s   192.168.1.202   ubuntu-03   <none>           <none>
+kube-system   cilium-f8gcp                        1/1     Running   0          76s   192.168.1.200   ubuntu-01   <none>           <none>
+kube-system   cilium-operator-7877c885b7-47ld8    1/1     Running   0          76s   192.168.1.201   ubuntu-02   <none>           <none>
+kube-system   cilium-operator-7877c885b7-phjpf    1/1     Running   0          76s   192.168.1.202   ubuntu-03   <none>           <none>
+kube-system   coredns-78dcd56fdf-ztqf6            1/1     Running   0          74s   10.2.0.134      ubuntu-01   <none>           <none>
+kube-system   etcd-ubuntu-01                      1/1     Running   0          97s   192.168.1.200   ubuntu-01   <none>           <none>
+kube-system   hubble-relay-84bff94f74-kclr9       1/1     Running   0          76s   10.2.0.234      ubuntu-01   <none>           <none>
+kube-system   hubble-ui-596749dfc4-v2cxd          2/2     Running   0          76s   10.2.0.248      ubuntu-01   <none>           <none>
+kube-system   kube-apiserver-ubuntu-01            1/1     Running   0          89s   192.168.1.200   ubuntu-01   <none>           <none>
+kube-system   kube-controller-manager-ubuntu-01   1/1     Running   0          99s   192.168.1.200   ubuntu-01   <none>           <none>
+kube-system   kube-scheduler-ubuntu-01            1/1     Running   0          99s   192.168.1.200   ubuntu-01   <none>           <none>
+```
+
+## FAQ
+
+### TASK [wod.docker-login : login.sh] 中断
+
+ERRO[0095] error waiting for container: unexpected EOF
+
+- 执行安装任务时意外中断。
+- 日志显示安装wod.docker-login任务时，中断
+- 此任务为离线安装，准备镜像Registry服务，初始化认证参数时，需要重启Containerd，重启Containerd导致退出容器。
+- 如果安装服务器同时在本机上安装K8S节点则会导致中断。
+- 忽略此错误，继续运行脚本ansible-playbook 1.install.yml可以解决问题。

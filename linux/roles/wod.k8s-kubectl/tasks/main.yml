@@ -1,0 +1,5 @@
+- name: template kubectl.sh
+  template: src=kubectl.sh dest=/etc/kubernetes/scripts/kubectl.sh mode=0755
+
+- name: /etc/kubernetes/scripts/kubectl.sh
+  raw: /etc/kubernetes/scripts/kubectl.sh

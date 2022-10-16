@@ -1,0 +1,38 @@
+- name: check need ssl/token.csv
+  raw: stat /etc/kubernetes/ssl/token.csv
+  register: need_ssl_token
+  ignore_errors: True
+
+- name: template ssl/token.csv
+  template: src=ssl/token.csv dest=/etc/kubernetes/ssl/token.csv
+  when: need_ssl_token is failed
+
+- name: mkdir -p /etc/kubernetes/config
+  raw: mkdir -p /etc/kubernetes/config
+
+- name: check need config/controller-manager.conf
+  raw: stat /etc/kubernetes/config/controller-manager.conf
+  register: need_apiserver_authentication
+  ignore_errors: True
+
+- name: template config/controller-manager.conf
+  template: src=config/controller-manager.conf dest=/etc/kubernetes/config/controller-manager.conf
+  when: need_apiserver_authentication is failed
+
+- name: check need config/scheduler.conf
+  raw: stat /etc/kubernetes/config/scheduler.conf
+  register: need_apiserver_authentication
+  ignore_errors: True
+
+- name: template config/scheduler.conf
+  template: src=config/scheduler.conf dest=/etc/kubernetes/config/scheduler.conf
+  when: need_apiserver_authentication is failed
+
+- name: template manifests/kube-apiserver.yaml
+  template: src=manifests/kube-apiserver.yaml dest=/etc/kubernetes/manifests/kube-apiserver.yaml
+
+- name: template manifests/kube-controller-manager.yaml
+  template: src=manifests/kube-controller-manager.yaml dest=/etc/kubernetes/manifests/kube-controller-manager.yaml
+
+- name: template manifests/kube-scheduler.yaml
+  template: src=manifests/kube-scheduler.yaml dest=/etc/kubernetes/manifests/kube-scheduler.yaml

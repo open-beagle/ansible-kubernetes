@@ -1,0 +1,8 @@
+- name: template /etc/kubernetes/scripts/etcdctl.sh
+  template: src=scripts/etcdctl.sh dest=/etc/kubernetes/scripts/etcdctl.sh mode=0755
+
+- name: /etc/kubernetes/scripts/etcdctl.sh
+  raw: /etc/kubernetes/scripts/etcdctl.sh
+
+- name: template manifests/etcd.yaml
+  template: src=manifests/etcd.yaml dest=/etc/kubernetes/manifests/etcd.yaml

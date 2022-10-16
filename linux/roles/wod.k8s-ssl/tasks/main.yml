@@ -1,0 +1,20 @@
+- name: mkdir /etc/kubernetes/ssl
+  raw: mkdir -p /etc/kubernetes/ssl
+  
+- name: check need ca.crt
+  raw: stat /etc/kubernetes/ssl/ca.crt
+  register: need_ssl_ca_crt
+  ignore_errors: True  
+
+- name: copy ca.crt
+  copy: src=ca.crt dest=/etc/kubernetes/ssl/ca.crt mode=0644
+  when: need_ssl_ca_crt is failed
+
+- name: check need ca.key
+  raw: stat /etc/kubernetes/ssl/ca.key
+  register: need_ssl_ca_key
+  ignore_errors: True  
+
+- name: copy ca.key
+  copy: src=ca.key dest=/etc/kubernetes/ssl/ca.key mode=0600
+  when: need_ssl_ca_key is failed

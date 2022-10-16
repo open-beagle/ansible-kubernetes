@@ -1,0 +1,8 @@
+- name: template kubelet.cnf
+  template: src=kubelet.cnf dest=/etc/kubernetes/ssl/kubelet.cnf
+
+- name: copy kubelet.sh
+  copy: src=kubelet.sh dest=/etc/kubernetes/ssl/kubelet.sh mode=0755
+
+- name: Run kubelet.sh
+  script: kubelet.sh

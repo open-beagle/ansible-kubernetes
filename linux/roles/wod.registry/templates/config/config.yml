@@ -1,0 +1,14 @@
+version: 0.1
+
+log:
+  level: info
+  accesslog:
+    disabled: true
+  fields:
+    service: registry
+    environment: staging
+
+http:
+  addr: :6444
+  headers:
+    X-Content-Type-Options: [nosniff]

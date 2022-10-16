@@ -1,0 +1,21 @@
+- hosts: all
+  gather_facts: False
+  roles:
+    - wod.python
+
+- hosts: all
+  roles:
+    - wod.docker
+    - wod.docker-conf
+    - wod.timezone
+    - wod.sys
+    - wod.k8s-ssl
+    - wod.k8s-cni
+    - wod.bpf-mount
+
+- hosts: node
+  roles:
+    - role: wod.k8s-ssl-kubelet
+    - role: wod.gateway
+    - role: wod.k8s-kubelet
+    - role: wod.k8s-cni

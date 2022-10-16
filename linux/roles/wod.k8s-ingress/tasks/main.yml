@@ -1,0 +1,15 @@
+- name: mkdir -p /etc/kubernetes/addons/default
+  raw: mkdir -p /etc/kubernetes/addons/default
+
+- name: check need k8s.ingress.yaml
+  raw: stat /etc/kubernetes/addons/default/k8s.ingress.yaml
+  register: need_addons_ingress
+  ignore_errors: True
+
+- name: template k8s.ingress.yaml
+  template: src=k8s.ingress.yaml dest=/etc/kubernetes/addons/default/k8s.ingress.yaml
+
+- name: kubectl create -f k8s.ingress.yaml
+  raw: /opt/bin/kubectl create -f /etc/kubernetes/addons/default/k8s.ingress.yaml
+  when: 
+  - need_addons_ingress is failed

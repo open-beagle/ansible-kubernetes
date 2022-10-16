@@ -1,0 +1,23 @@
+[Unit]
+Description=registry
+Wants=network.target
+
+[Service]
+Environment=PATH=/opt/bin:$PATH
+Environment=REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY=/etc/kubernetes/data/registry
+Environment=REGISTRY_HTTP_SECRET=r9w3BqGVAfVt
+Environment=REGISTRY_HTTP_TLS_CERTIFICATE=/etc/kubernetes/services/k8s-registry/registry.beagle.default.crt
+Environment=REGISTRY_HTTP_TLS_KEY=/etc/kubernetes/services/k8s-registry/registry.beagle.default.key
+Environment=REGISTRY_AUTH=htpasswd
+Environment=REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm
+Environment=REGISTRY_AUTH_HTPASSWD_PATH=/etc/kubernetes/services/k8s-registry/auth
+
+ExecStart=/opt/bin/registry \
+  serve \
+  /etc/kubernetes/services/k8s-registry/config.yml
+
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

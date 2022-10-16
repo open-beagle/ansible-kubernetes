@@ -1,0 +1,11 @@
+# install kernel
+- name: install kernel
+  environment:
+    HTTP_SERVER: '{{ HTTP_SERVER }}'
+  script: "{{ lookup('first_found', findme)}}"
+  vars:
+    findme:
+      - install-{{ ansible_distribution }}.sh
+      - install.sh
+  when: 
+  - ansible_kernel is version('5.7','<')

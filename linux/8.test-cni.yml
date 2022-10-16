@@ -1,0 +1,13 @@
+- hosts: all
+  gather_facts: False
+  roles:
+  - wod.python
+      
+- hosts: all
+  vars:
+    REGISTRY_LOCAL: registry.cn-qingdao.aliyuncs.com/wod
+  roles:
+    - wod.sys
+    - wod.k8s-ssl
+    - wod.bpf-mount
+    - wod.k8s-cni

@@ -1,0 +1,14 @@
+ARG BASE
+
+FROM $BASE
+
+ARG AUTHOR
+ARG VERSION
+LABEL maintainer=${AUTHOR} version=${VERSION}
+
+ARG TARGETOS
+ARG TARGETARCH
+
+ADD . /etc/ansible
+
+WORKDIR /etc/ansible/linux

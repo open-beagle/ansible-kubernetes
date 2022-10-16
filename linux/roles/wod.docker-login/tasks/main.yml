@@ -1,0 +1,5 @@
+- name: login.sh
+  script: login.sh
+  environment:
+    PAUSE_IMAGE: "{{ PAUSE_IMAGE }}"
+
