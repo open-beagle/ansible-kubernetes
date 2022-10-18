@@ -4,7 +4,7 @@
 
 - 快速搭建一个 Kubernetes 集群
 - 搭建过程离线，无需访问外部的服务器
-- 一行命令，使用ansible，全程自动化
+- 一行命令，使用 ansible，全程自动化
 
 ### 限制条件
 
@@ -18,9 +18,9 @@
 - 网络组件: cilium v1.11
 - 扩展组件: coredns 1.9
 
-## 安装一个离线kubernetes集群
+## 安装一个离线 kubernetes 集群
 
-## 安装Docker
+## 安装 Docker
 
 ```bash
 # HTTPS服务器
@@ -41,7 +41,7 @@ curl $HTTP_SERVER/docker/$TARGET_ARCH/docker-$DOCKER_VERSION.tgz > /opt/docker/d
 bash /opt/docker/install-20.sh
 ```
 
-### 准备ansible镜像与k8s镜像
+### 准备 ansible 镜像与 k8s 镜像
 
 ```bash
 # HTTPS服务器
@@ -49,11 +49,11 @@ export HTTP_SERVER=https://cache.wodcloud.com/kubernetes/k8s
 # 平台架构
 export TARGET_ARCH=amd64
 # K8S版本
-export K8S_VERSION=v1.24.6
+export K8S_VERSION=v1.24.7
 
 # 下载文件
-# 安装镜像 ansible-kubernetes-images-v1.24.6-amd64.tgz 1526MB
-# 安装脚本 ansible-kubernetes-v1.24.6-amd64.tgz 276MB
+# 安装镜像 ansible-kubernetes-images-v1.24.7-amd64.tgz 1526MB
+# 安装脚本 ansible-kubernetes-v1.24.7-amd64.tgz 276MB
 curl $HTTP_SERVER/ansible/$TARGET_ARCH/ansible-kubernetes-images-$K8S_VERSION-$TARGET_ARCH.tgz > ./ansible-kubernetes-images-$K8S_VERSION-$TARGET_ARCH.tgz
 curl $HTTP_SERVER/ansible/$TARGET_ARCH/ansible-kubernetes-$K8S_VERSION-$TARGET_ARCH.tgz > ./ansible-kubernetes-$K8S_VERSION-$TARGET_ARCH.tgz
 
@@ -61,7 +61,7 @@ curl $HTTP_SERVER/ansible/$TARGET_ARCH/ansible-kubernetes-$K8S_VERSION-$TARGET_A
 docker load -i ansible-kubernetes-$K8S_VERSION-$TARGET_ARCH.tgz
 ```
 
-### 准备hosts文件
+### 准备 hosts 文件
 
 ```bash
 cat > hosts.ini <<\EOF
@@ -74,23 +74,23 @@ ubuntu-03 ansible_ssh_host=192.168.1.202 ansible_ssh_port=22 ansible_ssh_user=ro
 EOF
 ```
 
-### 安装k8s
+### 安装 k8s
 
 ```bash
 export TARGET_ARCH=amd64 && \
-export K8S_VERSION=v1.24.6 && \
+export K8S_VERSION=v1.24.7 && \
 docker run \
 -it --rm \
 -v $PWD/hosts.ini:/etc/ansible/hosts \
 -v $PWD/ansible-kubernetes-images-$K8S_VERSION-$TARGET_ARCH.tgz:/etc/ansible/linux/roles/wod.registry/files/images/ansible-kubernetes-images-$K8S_VERSION-$TARGET_ARCH.tgz \
 -w /etc/ansible/linux \
-registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.24.6-$TARGET_ARCH \
+registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.24.7-$TARGET_ARCH \
 ansible-playbook 1.install.yml
 ```
 
 ### 完成安装
 
-显示以下提示信息，所有节点都是ok，failed=0
+显示以下提示信息，所有节点都是 ok，failed=0
 
 ```bash
 PLAY RECAP *******************************************************************************************************
@@ -104,9 +104,9 @@ ubuntu-03                  : ok=37   changed=32   unreachable=0    failed=0    s
 ```bash
 root@ubuntu-01:~# /opt/bin/kubectl get node
 NAME        STATUS   ROLES    AGE   VERSION
-ubuntu-01   Ready    master   93s   v1.24.6-beagle
-ubuntu-02   Ready    <none>   79s   v1.24.6-beagle
-ubuntu-03   Ready    <none>   79s   v1.24.6-beagle
+ubuntu-01   Ready    master   93s   v1.24.7-beagle
+ubuntu-02   Ready    <none>   79s   v1.24.7-beagle
+ubuntu-03   Ready    <none>   79s   v1.24.7-beagle
 
 root@ubuntu-01:~# /opt/bin/kubectl get pod -A -o wide
 NAMESPACE     NAME                                READY   STATUS    RESTARTS   AGE   IP              NODE        NOMINATED NODE   READINESS GATES
@@ -131,7 +131,7 @@ kube-system   kube-scheduler-ubuntu-01            1/1     Running   0          9
 ERRO[0095] error waiting for container: unexpected EOF
 
 - 执行安装任务时意外中断。
-- 日志显示安装wod.docker-login任务时，中断
-- 此任务为离线安装，准备镜像Registry服务，初始化认证参数时，需要重启Containerd，重启Containerd导致退出容器。
-- 如果安装服务器同时在本机上安装K8S节点则会导致中断。
-- 忽略此错误，继续运行脚本ansible-playbook 1.install.yml可以解决问题。
+- 日志显示安装 wod.docker-login 任务时，中断
+- 此任务为离线安装，准备镜像 Registry 服务，初始化认证参数时，需要重启 Containerd，重启 Containerd 导致退出容器。
+- 如果安装服务器同时在本机上安装 K8S 节点则会导致中断。
+- 忽略此错误，继续运行脚本 ansible-playbook 1.install.yml 可以解决问题。

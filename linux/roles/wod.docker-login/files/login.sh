@@ -37,11 +37,6 @@ ca_file = "/etc/kubernetes/ssl/ca.crt"
 [plugins."io.containerd.grpc.v1.cri".registry.configs."registry.beagle.default:6444".auth]
 auth = "YmVhZ2xlOmJlYWdsZQ=="
 EOF
-  RESTART_CONTAINERD=true
-fi
-# containerd , kubelet配置
-if ! (grep -q $PAUSE_IMAGE /etc/containerd/config.toml) ; then 
-  sed -i --expression "s?sandbox_image =.*?sandbox_image = \"$PAUSE_IMAGE\"?" /etc/containerd/config.toml
   sed -i -e 's/SystemdCgroup = false/SystemdCgroup = true/' /etc/containerd/config.toml
   RESTART_CONTAINERD=true
 fi

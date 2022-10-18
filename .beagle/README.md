@@ -36,7 +36,7 @@ ansible all -m shell -a 'rm -rf /opt/docker'
 
 ## Components
 
-### kubectl自动完成
+### kubectl 自动完成
 
 ```bash
 # 在 ~/.bashrc 中加上一行
@@ -50,7 +50,7 @@ kubectl -n kube-system exec cilium-kn-bash: _get_comp_words_by_ref: command not 
 apt install -y bash-completion
 ```
 
-### 生成registry的访问密码
+### 生成 registry 的访问密码
 
 ```bash
 docker run -it --rm \
@@ -72,7 +72,7 @@ docker run -it --rm \
 -e PLUGIN_IMAGE=K8S_IMAGES \
 -e PLUGIN_ARCH=amd64 \
 -e PLUGIN_GROUP=k8s \
--e PLUGIN_RELEASE=linux/roles/wod.registry/files/images/ansible-kubernetes-images-v1.24.6-amd64.tgz \
+-e PLUGIN_RELEASE=linux/roles/wod.registry/files/images/ansible-kubernetes-images-v1.24.7-amd64.tgz \
 -w $PWD \
 registry.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0
 ```
@@ -87,7 +87,7 @@ docker run -it --rm \
 -e PLUGIN_TLS=insecure \
 -e PLUGIN_USER=beagle \
 -e PLUGIN_PASS=beagle \
--e PLUGIN_RELEASE=$PWD/beagle-kubernetes-images-v1.24.6-amd64.tgz \
+-e PLUGIN_RELEASE=$PWD/beagle-kubernetes-images-v1.24.7-amd64.tgz \
 -w $PWD \
 registry.beagle.default:6444/k8s/devops-docker-images:1.0
 ```
