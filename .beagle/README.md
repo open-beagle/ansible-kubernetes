@@ -107,3 +107,9 @@ registry.beagle.default:6444/k8s/devops-docker-images:1.0
 ```bash
 systemctl restart containerd
 ```
+
+### 一键离线测试
+
+```bash
+curl -sfL https://cache.wodcloud.com/kubernetes/install.sh | sh -
+```
