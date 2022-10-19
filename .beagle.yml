@@ -16,6 +16,9 @@ clone:
 steps:
   - name: fetch
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-git:1.0
+    settings:
+      proxy:
+        from_secret: SOCKS5_PROXY
 
   - name: curl
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
@@ -305,6 +308,13 @@ steps:
         from_secret: REGISTRY_USER_ALIYUN
       password:
         from_secret: REGISTRY_PASSWORD_ALIYUN
+
+---
+kind: secret
+name: SOCKS5_PROXY
+get:
+  name: SOCKS5_PROXY
+  path: devops-secrets
 
 ---
 kind: secret
