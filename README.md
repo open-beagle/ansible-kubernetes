@@ -21,7 +21,8 @@
 ## 准备 hosts 文件
 
 ```bash
-cat > hosts.ini <<\EOF
+mkdir -p /etc/kubernetes/config && \
+cat > /etc/kubernetes/config/hosts.ini <<\EOF
 [master]
 ubuntu-01 ansible_ssh_host=192.168.1.200 ansible_ssh_port=22 ansible_ssh_user=root ansible_python_interpreter=/opt/bin/python
 
@@ -32,8 +33,6 @@ EOF
 ```
 
 ## 在线一键安装 kubernetes 集群
-
-注意与 hosts.ini 在同一个目录执行以下命令
 
 ```bash
 curl -sfL https://cache.wodcloud.com/kubernetes/install.sh | sh -
@@ -75,11 +74,11 @@ export K8S_VERSION=v1.24.7
 # 下载文件
 # 安装镜像 ansible-kubernetes-images-v1.24.7-amd64.tgz 1526MB
 # 安装脚本 ansible-kubernetes-v1.24.7-amd64.tgz 276MB
-curl $HTTP_SERVER/ansible/$TARGET_ARCH/ansible-kubernetes-images-$K8S_VERSION-$TARGET_ARCH.tgz > ./ansible-kubernetes-images-$K8S_VERSION-$TARGET_ARCH.tgz
-curl $HTTP_SERVER/ansible/$TARGET_ARCH/ansible-kubernetes-$K8S_VERSION-$TARGET_ARCH.tgz > ./ansible-kubernetes-$K8S_VERSION-$TARGET_ARCH.tgz
+curl $HTTP_SERVER/ansible/$TARGET_ARCH/ansible-kubernetes-images-$K8S_VERSION-$TARGET_ARCH.tgz > /etc/kubernetes/downloads/ansible-kubernetes-images-$K8S_VERSION-$TARGET_ARCH.tgz
+curl $HTTP_SERVER/ansible/$TARGET_ARCH/ansible-kubernetes-$K8S_VERSION-$TARGET_ARCH.tgz > /etc/kubernetes/downloads/ansible-kubernetes-$K8S_VERSION-$TARGET_ARCH.tgz
 
 # 加载镜像
-docker load -i ansible-kubernetes-$K8S_VERSION-$TARGET_ARCH.tgz
+docker load -i /etc/kubernetes/downloads/ansible-kubernetes-$K8S_VERSION-$TARGET_ARCH.tgz
 ```
 
 ### 安装 k8s
@@ -89,8 +88,8 @@ export TARGET_ARCH=amd64 && \
 export K8S_VERSION=v1.24.7 && \
 docker run \
 -it --rm \
--v $PWD/hosts.ini:/etc/ansible/hosts \
--v $PWD/ansible-kubernetes-images-$K8S_VERSION-$TARGET_ARCH.tgz:/etc/ansible/linux/roles/wod.registry/files/images/ansible-kubernetes-images-$K8S_VERSION-$TARGET_ARCH.tgz \
+-v /etc/kubernetes/config/hosts.ini:/etc/ansible/hosts \
+-v /etc/kubernetes/downloads/ansible-kubernetes-images-$K8S_VERSION-$TARGET_ARCH.tgz:/etc/ansible/linux/roles/wod.registry/files/images/ansible-kubernetes-images-$K8S_VERSION-$TARGET_ARCH.tgz \
 -w /etc/ansible/linux \
 registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.24.7-$TARGET_ARCH \
 ansible-playbook 1.install.yml
