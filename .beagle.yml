@@ -161,7 +161,7 @@ name: images
 
 trigger:
   branch:
-    - main
+    - release
 
 clone:
   disable: true
