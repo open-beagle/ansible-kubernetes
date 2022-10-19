@@ -169,6 +169,9 @@ clone:
 steps:
   - name: fetch
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-git:1.0
+    settings:
+      proxy:
+        from_secret: SOCKS5_PROXY
 
   - name: ansible-kubernetes-images-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0
