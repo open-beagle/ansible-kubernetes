@@ -37,13 +37,15 @@ source /etc/environment
 
 set -ex
 
-if ! [ -e /opt/docker/VERSION-$DOCKER_VERSION.md ]; then
-  rm -rf /opt/docker/$DOCKER_VERSION
-  tar -xzvf /opt/docker/docker-$DOCKER_VERSION.tgz -C /opt/docker/
-  mv /opt/docker/docker /opt/docker/$DOCKER_VERSION
-  rm -rf /opt/docker/docker-$DOCKER_VERSION.tgz
-  touch /opt/docker/VERSION-$DOCKER_VERSION.md
+if [ -e /opt/docker/VERSION-$DOCKER_VERSION.md ]; then
+  exit 0 
 fi
+
+rm -rf /opt/docker/$DOCKER_VERSION
+tar -xzvf /opt/docker/docker-$DOCKER_VERSION.tgz -C /opt/docker/
+mv /opt/docker/docker /opt/docker/$DOCKER_VERSION
+rm -rf /opt/docker/docker-$DOCKER_VERSION.tgz
+touch /opt/docker/VERSION-$DOCKER_VERSION.md
 
 rm -rf /opt/bin/docker /opt/bin/dockerd /opt/bin/docker-init /opt/bin/docker-proxy
 cp /opt/docker/$DOCKER_VERSION/docker /opt/bin/docker
@@ -139,8 +141,8 @@ cat > /etc/systemd/system/docker.service <<\EOF
 Description=Docker Application Container Engine
 Documentation=https://docs.docker.com
 After=network-online.target firewalld.service containerd.service
-Wants=network-online.target
-Requires=docker.socket containerd.service
+Wants=network-online.target containerd.service
+Requires=docker.socket 
 
 [Service]
 Type=notify
@@ -185,6 +187,15 @@ OOMScoreAdjust=-500
 WantedBy=multi-user.target
 
 EOF
+
+mkdir -p /etc/docker/
+if ! [ -e /etc/docker/daemon.json ]; then  
+  cat >> /etc/docker/daemon.json <<-EOF
+{
+  "live-restore": true
+}
+EOF
+fi
 
 # containerd , 信任自签名证书和默认登录
 mkdir -p /etc/containerd
