@@ -17,12 +17,12 @@
     - role: wod.k8s-ssl-etcd
     - role: wod.registry
     - role: wod.docker-login
+    - role: wod.nerdctl
     - role: wod.k8s-cni
     - role: wod.k8s-etcd
     - role: wod.k8s-master
     - role: wod.k8s-kubelet
     - role: wod.k8s-kubectl
-    - role: wod.nerdctl
     - role: wod.k8s-label
 
 - hosts: node
@@ -30,9 +30,9 @@
     - role: wod.k8s-ssl-kubelet
     - role: wod.envoy
     - role: wod.docker-login
+    - role: wod.nerdctl
     - role: wod.k8s-kubelet
     - role: wod.k8s-cni
-    - role: wod.nerdctl
 
 - hosts: master
   roles:

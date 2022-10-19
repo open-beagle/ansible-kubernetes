@@ -1,8 +1,7 @@
 */*.retry
 aliyun*
 .vscode
-beagle-*.tgz
-docker*.tgz
+*.tgz
 registry-*
 gateway-*
 envoy-*

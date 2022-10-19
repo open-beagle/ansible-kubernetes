@@ -57,38 +57,28 @@ EOF
   touch /etc/kubernetes/scripts/ipvs.sh
 fi
 
-RUN_SYSCTL=false
-if ! (grep -q 'net.ipv4.ip_forward = 1' /etc/sysctl.conf) ; then
-  echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf;
-  RUN_SYSCTL=true
+if ! [ -e /etc/modules-load.d/k8s.conf ] ; then 
+  cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
+overlay
+br_netfilter
+EOF
+
+  modprobe overlay
+  modprobe br_netfilter
+
 fi
 
-if ! (grep -q 'net.ipv6.conf.all.forwarding = 1' /etc/sysctl.conf) ; then
-  echo "net.ipv6.conf.all.forwarding = 1" >> /etc/sysctl.conf;
-  RUN_SYSCTL=true
-fi
+if ! [ -e /etc/modules-load.d/k8s.conf ] ; then 
+  # sysctl params required by setup, params persist across reboots
+  cat <<EOF | tee /etc/sysctl.d/k8s.conf
+net.bridge.bridge-nf-call-iptables  = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+net.ipv4.ip_forward                 = 1
+net.ipv4.ip_unprivileged_port_start = 0
+net.ipv4.ip_local_port_range        = 1 65535
+net.ipv6.conf.all.forwarding        = 1
+EOF
 
-if ! (grep -q 'net.bridge.bridge-nf-call-ip6tables' /etc/sysctl.conf) ; then
-  echo "net.bridge.bridge-nf-call-ip6tables = 1" >> /etc/sysctl.conf;
-  RUN_SYSCTL=true
+  # Apply sysctl params without reboot
+  sysctl --system
 fi
-
-if ! (grep -q 'net.bridge.bridge-nf-call-iptables' /etc/sysctl.conf) ; then
-  echo "net.bridge.bridge-nf-call-iptables = 1" >> /etc/sysctl.conf;
-  RUN_SYSCTL=true
-fi
-
-if ! (grep -q 'net.ipv4.ip_unprivileged_port_start' /etc/sysctl.conf) ; then
-  echo "net.ipv4.ip_unprivileged_port_start = 0" >> /etc/sysctl.conf;
-  RUN_SYSCTL=true
-fi
-
-if ! (grep -q 'net.ipv4.ip_local_port_range' /etc/sysctl.conf) ; then
-  echo "net.ipv4.ip_local_port_range = 1 65535" >> /etc/sysctl.conf;
-  RUN_SYSCTL=true
-fi
-
-# ubuntu22.04似乎不需要重置以上参数，待测试
-# if [ "$RUN_SYSCTL" = true ] ; then
-#   sysctl -p
-# fi

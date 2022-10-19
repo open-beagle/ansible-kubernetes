@@ -11,6 +11,16 @@ mkdir -p /etc/kubernetes/downloads
 mkdir -p /etc/kubernetes/config
 mkdir -p /opt/bin
 
+mkdir -p /etc/containerd
+if ! [ -e /etc/containerd/config.toml ]; then  
+  containerd config default > /etc/containerd/config.toml
+fi
+if ! (grep -q $PAUSE_IMAGE /etc/containerd/config.toml) ; then 
+  sed -i --expression "s?sandbox_image =.*?sandbox_image = \"$PAUSE_IMAGE\"?" /etc/containerd/config.toml
+  sed -i -e 's/SystemdCgroup = false/SystemdCgroup = true/' /etc/containerd/config.toml
+  systemctl restart containerd
+fi
+
 if ! [ -e /etc/kubernetes/downloads/kubelet-$REGISTRY_VERSION ]; then
   rm -rf /opt/bin/kubelet
   docker run -v /etc/kubernetes/downloads:/data/output \

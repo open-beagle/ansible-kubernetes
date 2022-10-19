@@ -91,3 +91,19 @@ docker run -it --rm \
 -w $PWD \
 registry.beagle.default:6444/k8s/devops-docker-images:1.0
 ```
+
+### Pause Image
+
+- kubelet 的pod-infra-container-image参数是专门给DockerShim用的，已过期
+- 需要设置/etc/containerd/config.toml的节
+
+```toml
+[plugins."io.containerd.grpc.v1.cri"]
+  sandbox_image = "registry.k8s.io/pause:3.2"
+```
+
+- 设置过后重启Containerd方能生效。
+
+```bash
+systemctl restart containerd
+```
