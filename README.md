@@ -18,6 +18,27 @@
 - 网络组件: cilium v1.11
 - 扩展组件: coredns 1.9
 
+## 准备 hosts 文件
+
+```bash
+cat > hosts.ini <<\EOF
+[master]
+ubuntu-01 ansible_ssh_host=192.168.1.200 ansible_ssh_port=22 ansible_ssh_user=root ansible_python_interpreter=/opt/bin/python
+
+[node]
+ubuntu-02 ansible_ssh_host=192.168.1.201 ansible_ssh_port=22 ansible_ssh_user=root ansible_python_interpreter=/opt/bin/python
+ubuntu-03 ansible_ssh_host=192.168.1.202 ansible_ssh_port=22 ansible_ssh_user=root ansible_python_interpreter=/opt/bin/python
+EOF
+```
+
+## 在线一键安装 kubernetes 集群
+
+注意与 hosts.ini 在同一个目录执行以下命令
+
+```bash
+curl -sfL https://cache.wodcloud.com/kubernetes/install.sh | sh -
+```
+
 ## 安装一个离线 kubernetes 集群
 
 ## 安装 Docker
@@ -59,19 +80,6 @@ curl $HTTP_SERVER/ansible/$TARGET_ARCH/ansible-kubernetes-$K8S_VERSION-$TARGET_A
 
 # 加载镜像
 docker load -i ansible-kubernetes-$K8S_VERSION-$TARGET_ARCH.tgz
-```
-
-### 准备 hosts 文件
-
-```bash
-cat > hosts.ini <<\EOF
-[master]
-ubuntu-01 ansible_ssh_host=192.168.1.200 ansible_ssh_port=22 ansible_ssh_user=root ansible_python_interpreter=/opt/bin/python
-
-[node]
-ubuntu-02 ansible_ssh_host=192.168.1.201 ansible_ssh_port=22 ansible_ssh_user=root ansible_python_interpreter=/opt/bin/python
-ubuntu-03 ansible_ssh_host=192.168.1.202 ansible_ssh_port=22 ansible_ssh_user=root ansible_python_interpreter=/opt/bin/python
-EOF
 ```
 
 ### 安装 k8s
