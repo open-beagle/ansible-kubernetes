@@ -45,3 +45,5 @@ docker run \
 -w /etc/ansible/linux \
 registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.24.7-$TARGET_ARCH \
 ansible-playbook 1.install.yml
+
+source /etc/environment
