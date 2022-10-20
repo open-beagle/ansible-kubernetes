@@ -64,6 +64,8 @@ data:
         kubernetes cluster.local {{ K8S_SERVICE_IP_RANGE }} {
           fallthrough in-addr.arpa ip6.arpa
         }
+        forward . /etc/resolv.conf {
+        }
         prometheus :9153
         cache 30
         reload
