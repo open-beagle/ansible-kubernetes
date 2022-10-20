@@ -111,5 +111,5 @@ systemctl restart containerd
 ### 一键离线测试
 
 ```bash
-curl -sfL https://cache.wodcloud.com/kubernetes/install.sh | sh -
+curl -sfL https://cache.wodcloud.com/kubernetes/install-offline.sh | sh -
 ```

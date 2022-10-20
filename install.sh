@@ -33,5 +33,3 @@ docker run \
 registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:$K8S_VERSION-$TARGET_ARCH \
 ansible-playbook 1.install.yml \
 --extra-vars "REGISTRY_LOCAL=registry.cn-qingdao.aliyuncs.com/wod"
-
-source /etc/environment
