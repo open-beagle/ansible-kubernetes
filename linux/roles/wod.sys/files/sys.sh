@@ -39,23 +39,23 @@ if ! [ -e /etc/kubernetes/scripts/swap.sh ] ; then
   touch /etc/kubernetes/scripts/swap.sh
 fi
 
-# 开启IPVS
-if ! [ -e /etc/kubernetes/scripts/ipvs.sh ] ; then 
-  mkdir -p /etc/sysconfig/modules/
-  cat > /etc/sysconfig/modules/ipvs.modules <<EOF
-#!/bin/bash
-/sbin/modprobe -- nf_conntrack_ipv4
-ipvs_modules_dir="/lib/modules/\`uname -r\`/kernel/net/netfilter/ipvs"
-for i in \`ls \$ipvs_modules_dir | sed  -r 's#(.*).ko(.*)#\1#'\`; do
-    /sbin/modinfo -F filename \$i  &> /dev/null
-    if [ \$? -eq 0 ]; then
-        /sbin/modprobe \$i
-    fi
-done
-EOF
-  chmod 755 /etc/sysconfig/modules/ipvs.modules && bash /etc/sysconfig/modules/ipvs.modules && lsmod | grep -e ip_vs -e nf_conntrack_ipv4 -e br_netfilter
-  touch /etc/kubernetes/scripts/ipvs.sh
-fi
+# # 开启IPVS
+# if ! [ -e /etc/kubernetes/scripts/ipvs.sh ] ; then 
+#   mkdir -p /etc/sysconfig/modules/
+#   cat > /etc/sysconfig/modules/ipvs.modules <<EOF
+# #!/bin/bash
+# /sbin/modprobe -- nf_conntrack_ipv4
+# ipvs_modules_dir="/lib/modules/\`uname -r\`/kernel/net/netfilter/ipvs"
+# for i in \`ls \$ipvs_modules_dir | sed  -r 's#(.*).ko(.*)#\1#'\`; do
+#     /sbin/modinfo -F filename \$i  &> /dev/null
+#     if [ \$? -eq 0 ]; then
+#         /sbin/modprobe \$i
+#     fi
+# done
+# EOF
+#   chmod 755 /etc/sysconfig/modules/ipvs.modules && bash /etc/sysconfig/modules/ipvs.modules && lsmod | grep -e ip_vs -e nf_conntrack_ipv4 -e br_netfilter
+#   touch /etc/kubernetes/scripts/ipvs.sh
+# fi
 
 if ! [ -e /etc/modules-load.d/k8s.conf ] ; then 
   cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
@@ -68,7 +68,7 @@ EOF
 
 fi
 
-if ! [ -e /etc/modules-load.d/k8s.conf ] ; then 
+if ! [ -e /etc/sysctl.d/k8s.conf ] ; then 
   # sysctl params required by setup, params persist across reboots
   cat <<EOF | tee /etc/sysctl.d/k8s.conf
 net.bridge.bridge-nf-call-iptables  = 1
