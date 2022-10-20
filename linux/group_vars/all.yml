@@ -17,7 +17,7 @@ REGISTRY_LOCAL: 'registry.beagle.default:6444/k8s'
 ## DOCKER_DATA_PATH ， docker将数据存储至此目录，转移后docker将数据存储至额外的硬盘，避免系统盘被占满
 # DOCKER_DATA_PATH: "/data/kubernetes/docker"
 ## DOCKER_VERSION , docker的安装版本
-DOCKER_VERSION: '20.10.18'
+DOCKER_VERSION: '20.10.19'
 
 ## K8S_ARCH, 服务器的CPU架构
 ## 可选值：amd64，arm64，ppc64le，mips64le
@@ -82,9 +82,6 @@ K8S_IMAGES:
   BUSYBOX:
     NAME: busybox
     VERSION: '1.34'
-  NERDCTL:
-    NAME: nerdctl
-    VERSION: 'v0.23.0'
   DEVOPS_DOCKER_IMAGES:
     NAME: devops-docker-images
     VERSION: '1.0'

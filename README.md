@@ -48,17 +48,17 @@ export HTTP_SERVER=https://cache.wodcloud.com/kubernetes/k8s
 # 平台架构
 export TARGET_ARCH=amd64
 # Docker版本
-export DOCKER_VERSION=20.10.18
+export DOCKER_VERSION=20.10.19
 
 # 下载文件
-# docker、containerd安装包与脚本 ， docker-20.10.18.tgz 68MB
+# docker、containerd安装包与脚本 ， docker-20.10.19.tgz 68MB
 mkdir -p /opt/docker
-curl $HTTP_SERVER/docker/install-20.sh > /opt/docker/install-20.sh
-curl $HTTP_SERVER/docker/uninstall-20.sh > /opt/docker/uninstall-20.sh
+curl $HTTP_SERVER/docker/install.sh > /opt/docker/install.sh
+curl $HTTP_SERVER/docker/uninstall.sh > /opt/docker/uninstall.sh
 curl $HTTP_SERVER/docker/$TARGET_ARCH/docker-$DOCKER_VERSION.tgz > /opt/docker/docker-$DOCKER_VERSION.tgz
 
 # 安装Docker
-bash /opt/docker/install-20.sh
+bash /opt/docker/install.sh
 ```
 
 ### 准备 ansible 镜像与 k8s 镜像

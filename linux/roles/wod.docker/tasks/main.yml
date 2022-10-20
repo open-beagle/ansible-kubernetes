@@ -12,12 +12,12 @@
     dest: /opt/docker
   when: need_copy_files is failed
 
-- name: template install-20.sh
-  template: src=install-20.sh.tmpl dest=/opt/docker/install-20.sh mode=0755
+- name: template install.sh
+  template: src=install.sh dest=/opt/docker/install.sh mode=0755
 
-- name: template uninstall-20.sh
-  template: src=uninstall-20.sh dest=/opt/docker/uninstall-20.sh mode=0755
+- name: template uninstall.sh
+  template: src=uninstall.sh dest=/opt/docker/uninstall.sh mode=0755
 
 - name: /opt/docker/install.sh
-  raw: /opt/docker/install-20.sh
+  raw: /opt/docker/install.sh
   when: need_copy_files is failed

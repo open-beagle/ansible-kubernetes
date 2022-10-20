@@ -7,3 +7,4 @@ gateway-*
 envoy-*
 
 .registry/
+linux/roles/wod.docker/templates/*.sh
