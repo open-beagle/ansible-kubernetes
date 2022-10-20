@@ -28,7 +28,7 @@ export K8S_VERSION=v1.24.7
 docker run \
 -t \
 --rm \
--v /etc/kubernetes/config/hosts.ini:/etc/ansible/hosts \
+-v /etc/kubernetes/ansible/hosts.ini:/etc/ansible/hosts \
 -w /etc/ansible/linux \
 registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:$K8S_VERSION-$TARGET_ARCH \
 ansible-playbook 1.install.yml \
