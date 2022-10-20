@@ -159,7 +159,7 @@ steps:
       - mc alias set cache --api=S3v4 https://cache.wodcloud.com $S3_ACCESS_KEY $S3_SECRET_KEY
       - mc cp --recursive .tmp/ cache/kubernetes/k8s/ansible/
       - mc cp install.sh cache/kubernetes/install.sh
-      - mc cp install.sh cache/kubernetes/install-offline.sh
+      - mc cp install-offline.sh cache/kubernetes/install-offline.sh
       
 ---
 kind: pipeline
