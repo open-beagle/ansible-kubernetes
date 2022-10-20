@@ -38,6 +38,7 @@ docker load -i /etc/kubernetes/downloads/ansible-kubernetes-$K8S_VERSION-$TARGET
 fi
 
 docker run \
+-t \
 --rm \
 -v /etc/kubernetes/config/hosts.ini:/etc/ansible/hosts \
 -v /etc/kubernetes/downloads/ansible-kubernetes-images-$K8S_VERSION-$TARGET_ARCH.tgz:/etc/ansible/linux/roles/wod.registry/files/images/ansible-kubernetes-images-$K8S_VERSION-$TARGET_ARCH.tgz \

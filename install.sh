@@ -26,6 +26,7 @@ fi
 export K8S_VERSION=v1.24.7
 
 docker run \
+-t \
 --rm \
 -v /etc/kubernetes/config/hosts.ini:/etc/ansible/hosts \
 -w /etc/ansible/linux \
