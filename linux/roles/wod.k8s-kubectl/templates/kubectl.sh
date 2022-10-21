@@ -30,3 +30,7 @@ fi
 if ! [ -x "$(command -v kubectl)" ]; then
   ln -s /opt/bin/kubectl /usr/bin/kubectl
 fi
+
+if ! (grep -q "source <(/opt/bin/kubectl completion bash)" ~/.bashrc); then
+  echo "source <(/opt/bin/kubectl completion bash)" >> ~/.bashrc
+fi

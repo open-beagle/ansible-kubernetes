@@ -8,3 +8,7 @@ envoy-*
 
 .registry/
 linux/roles/wod.docker/templates/*.sh
+
+# kernel
+*.deb
+*.rpm

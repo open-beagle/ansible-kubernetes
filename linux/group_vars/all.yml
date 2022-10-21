@@ -7,7 +7,7 @@ HOST_IP: "{{ ansible_facts[IFACE]['ipv4']['address'] }}"
 
 ## HTTP_SERVER , HTTP服务器
 ## 调试安装过程种使用的文件下载服务器，二进制安装包存储在这里
-HTTP_SERVER: 'https://cache.wodcloud.com/kubernetes/k8s'
+HTTP_SERVER: 'https://cache.wodcloud.com/kubernetes'
 
 ## REGISTRY_LOCAL , Docker镜像服务器
 ## 安装过程种使用的容器镜像服务器

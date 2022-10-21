@@ -24,11 +24,11 @@
 mkdir -p /etc/kubernetes/ansible && \
 cat > /etc/kubernetes/ansible/hosts.ini <<\EOF
 [master]
-ubuntu-01 ansible_ssh_host=192.168.1.200 ansible_ssh_port=22 ansible_ssh_user=root ansible_python_interpreter=/opt/bin/python
+ubuntu-01 ansible_ssh_host=192.168.1.201 ansible_ssh_port=22 ansible_ssh_user=root ansible_python_interpreter=/opt/bin/python
 
 [node]
-ubuntu-02 ansible_ssh_host=192.168.1.201 ansible_ssh_port=22 ansible_ssh_user=root ansible_python_interpreter=/opt/bin/python
-ubuntu-03 ansible_ssh_host=192.168.1.202 ansible_ssh_port=22 ansible_ssh_user=root ansible_python_interpreter=/opt/bin/python
+ubuntu-02 ansible_ssh_host=192.168.1.202 ansible_ssh_port=22 ansible_ssh_user=root ansible_python_interpreter=/opt/bin/python
+ubuntu-03 ansible_ssh_host=192.168.1.203 ansible_ssh_port=22 ansible_ssh_user=root ansible_python_interpreter=/opt/bin/python
 EOF
 ```
 
@@ -117,18 +117,18 @@ ubuntu-03   Ready    <none>   79s   v1.24.7-beagle
 
 root@ubuntu-01:~# /opt/bin/kubectl get pod -A -o wide
 NAMESPACE     NAME                                READY   STATUS    RESTARTS   AGE   IP              NODE        NOMINATED NODE   READINESS GATES
-kube-system   cilium-2zq4f                        1/1     Running   0          76s   192.168.1.201   ubuntu-02   <none>           <none>
-kube-system   cilium-7tjl8                        1/1     Running   0          76s   192.168.1.202   ubuntu-03   <none>           <none>
-kube-system   cilium-f8gcp                        1/1     Running   0          76s   192.168.1.200   ubuntu-01   <none>           <none>
-kube-system   cilium-operator-7877c885b7-47ld8    1/1     Running   0          76s   192.168.1.201   ubuntu-02   <none>           <none>
-kube-system   cilium-operator-7877c885b7-phjpf    1/1     Running   0          76s   192.168.1.202   ubuntu-03   <none>           <none>
+kube-system   cilium-2zq4f                        1/1     Running   0          76s   192.168.1.202   ubuntu-02   <none>           <none>
+kube-system   cilium-7tjl8                        1/1     Running   0          76s   192.168.1.203   ubuntu-03   <none>           <none>
+kube-system   cilium-f8gcp                        1/1     Running   0          76s   192.168.1.201   ubuntu-01   <none>           <none>
+kube-system   cilium-operator-7877c885b7-47ld8    1/1     Running   0          76s   192.168.1.202   ubuntu-02   <none>           <none>
+kube-system   cilium-operator-7877c885b7-phjpf    1/1     Running   0          76s   192.168.1.203   ubuntu-03   <none>           <none>
 kube-system   coredns-78dcd56fdf-ztqf6            1/1     Running   0          74s   10.2.0.134      ubuntu-01   <none>           <none>
-kube-system   etcd-ubuntu-01                      1/1     Running   0          97s   192.168.1.200   ubuntu-01   <none>           <none>
+kube-system   etcd-ubuntu-01                      1/1     Running   0          97s   192.168.1.201   ubuntu-01   <none>           <none>
 kube-system   hubble-relay-84bff94f74-kclr9       1/1     Running   0          76s   10.2.0.234      ubuntu-01   <none>           <none>
 kube-system   hubble-ui-596749dfc4-v2cxd          2/2     Running   0          76s   10.2.0.248      ubuntu-01   <none>           <none>
-kube-system   kube-apiserver-ubuntu-01            1/1     Running   0          89s   192.168.1.200   ubuntu-01   <none>           <none>
-kube-system   kube-controller-manager-ubuntu-01   1/1     Running   0          99s   192.168.1.200   ubuntu-01   <none>           <none>
-kube-system   kube-scheduler-ubuntu-01            1/1     Running   0          99s   192.168.1.200   ubuntu-01   <none>           <none>
+kube-system   kube-apiserver-ubuntu-01            1/1     Running   0          89s   192.168.1.201   ubuntu-01   <none>           <none>
+kube-system   kube-controller-manager-ubuntu-01   1/1     Running   0          99s   192.168.1.201   ubuntu-01   <none>           <none>
+kube-system   kube-scheduler-ubuntu-01            1/1     Running   0          99s   192.168.1.201   ubuntu-01   <none>           <none>
 ```
 
 ## FAQ

@@ -32,6 +32,13 @@ if ! [ -e /etc/kubernetes/scripts/timezone.sh ] ; then
   touch /etc/kubernetes/scripts/timezone.sh
 fi
 
+# mkdir
+if ! [ -e /usr/bin/mkdir ] ; then 
+  if [ -e /bin/mkdir ] ; then 
+    ln -s /bin/mkdir /usr/bin/mkdir
+  fi
+fi
+
 # 关闭swap分区
 if ! [ -e /etc/kubernetes/scripts/swap.sh ] ; then 
   swapoff -a && sysctl -w vm.swappiness=0

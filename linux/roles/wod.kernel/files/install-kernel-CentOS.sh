@@ -25,10 +25,10 @@ fi
 mkdir -p /etc/kubernetes/downloads
 
 if [ "$TARGET_ARCH" = "amd64" ]; then
-  if ! [ "$LOCAL_KERNEL" = "5.10" ]; then
-  curl $HTTP_SERVER/kernel/rpm/v5.10.2/$TARGET_ARCH/v5.0.0kernel-ml-5.10.2-1.el7.elrepo.x86_64.rpm > /etc/kubernetes/downloads/v5.0.0kernel-ml-5.10.2-1.el7.elrepo.x86_64.rpm
+  if ! [ "$LOCAL_KERNEL" = "5.4" ]; then
+  curl $HTTP_SERVER/kernel/rpm/v5.4/$TARGET_ARCH/kernel-lt-5.4.219-1.el7.elrepo.x86_64.rpm > /etc/kubernetes/downloads/kernel-lt-5.4.219-1.el7.elrepo.x86_64.rpm
 
-  rpm -Uvh /etc/kubernetes/downloads/v5.0.0kernel-ml-5.10.2-1.el7.elrepo.x86_64.rpm
+  rpm -Uvh /etc/kubernetes/downloads/kernel-lt-5.4.219-1.el7.elrepo.x86_64.rpm
 
   grub2-set-default 0
 

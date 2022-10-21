@@ -30,6 +30,9 @@ ap 1.install.yml \
 # 检查内核
 ansible all -m shell -a 'uname -r'
 
+# 安装内核
+ansible all -m shell -a 'curl -sfL https://cache.wodcloud.com/kubernetes/kernel/install-Ubuntu.sh | sh -'
+
 # 重新安装docker
 ansible all -m shell -a 'rm -rf /opt/docker'
 ```
@@ -83,7 +86,7 @@ registry.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0
 docker run -it --rm \
 -v $PWD/:$PWD/ \
 -e CI_WORKSPACE=$PWD \
--e PLUGIN_TARGET=192.168.1.200:6444,192.168.1.201:6444,192.168.1.202:6444 \
+-e PLUGIN_TARGET=192.168.1.201:6444,192.168.1.202:6444,192.168.1.203:6444 \
 -e PLUGIN_TLS=insecure \
 -e PLUGIN_USER=beagle \
 -e PLUGIN_PASS=beagle \

@@ -5,7 +5,7 @@
   script: "{{ lookup('first_found', findme)}}"
   vars:
     findme:
-      - install-{{ ansible_distribution }}.sh
+      - install-kernel-{{ ansible_distribution }}.sh
       - install.sh
   when: 
-  - ansible_kernel is version('5.7','<')
+  - ansible_kernel is version('5.4','<')

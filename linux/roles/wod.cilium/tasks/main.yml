@@ -15,8 +15,7 @@
       when:
         - need_addons_proxy is failed
   when:
-    - ansible_kernel is version('4.9','>=')
-    - ansible_kernel is version('5.3','<')
+    - ansible_kernel is version('5.4','<')
 
 - name: mkdir -p /etc/kubernetes/charts
   raw: mkdir -p /etc/kubernetes/charts
