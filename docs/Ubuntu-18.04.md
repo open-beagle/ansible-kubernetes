@@ -1,5 +1,7 @@
 # Ubuntu 18.04
 
+前置条件
+
 - 确保内核Linux Kernel >= 5.4
 
 ## 升级内核
@@ -7,7 +9,7 @@
 ### 在线安装内核
 
 ```bash
-curl -sfL https://cache.wodcloud.com/kubernetes/kernel/install-Ubuntu.sh | sh -
+curl -sfL https://cache.wodcloud.com/kubernetes/kernel/install-kernel-Ubuntu.sh | sh -
 ```
 
 ### 离线安装内核
@@ -32,6 +34,10 @@ dpkg -i /etc/kubernetes/ansible/$LINUX_IMAGE.deb
 
 # 重启服务器
 reboot
+
+# 检查内核
+# 5.4.219-0504219-generic
+uname -ar
 ```
 
 ### 调试代码安装内核
@@ -41,11 +47,19 @@ reboot
 ```bash
 # 使用代码安装
 docker run \
--it --rm \
+-t --rm \
 -v $PWD/:/etc/ansible \
 -v $PWD/.vscode/hosts.ini:/etc/ansible/hosts \
 -w /etc/ansible/linux \
---entrypoint=bash \
 registry.cn-qingdao.aliyuncs.com/wod/ansible:2 \
-ap 5.kernel.yml
+ansible-playbook 5.kernel.yml
+
+# 检查服务器内核
+docker run \
+-t --rm \
+-v $PWD/:/etc/ansible \
+-v $PWD/.vscode/hosts.ini:/etc/ansible/hosts \
+-w /etc/ansible/linux \
+registry.cn-qingdao.aliyuncs.com/wod/ansible:2 \
+ansible all -m shell -a 'uname -r'
 ```

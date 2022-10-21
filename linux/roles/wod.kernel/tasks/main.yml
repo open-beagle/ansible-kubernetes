@@ -9,3 +9,9 @@
       - install.sh
   when: 
   - ansible_kernel is version('5.4','<')
+
+- name: reboot linux
+  reboot:
+    test_command: uptime
+  when: 
+  - ansible_kernel is version('5.4','<')

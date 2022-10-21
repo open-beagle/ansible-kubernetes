@@ -42,15 +42,12 @@ if [ "$TARGET_ARCH" = "amd64" ]; then
     if ! [ -e /etc/kubernetes/ansible/$LINUX_IMAGE.deb ]; then
       curl $HTTP_SERVER/kernel/deb/v5.4/$TARGET_ARCH/$LINUX_IMAGE.deb > /etc/kubernetes/ansible/$LINUX_IMAGE.deb
     fi
-  fi
 
-  dpkg -i /etc/kubernetes/ansible/$LINUX_MODULES.deb
-  dpkg -i /etc/kubernetes/ansible/$LINUX_HEADERS.deb
-  dpkg -i /etc/kubernetes/ansible/$LINUX_HEADERS_GENERIC.deb
-  dpkg -i /etc/kubernetes/ansible/$LINUX_IMAGE.deb
-  
-  shutdown -r 0
-  exit 0
+    dpkg -i /etc/kubernetes/ansible/$LINUX_MODULES.deb
+    dpkg -i /etc/kubernetes/ansible/$LINUX_HEADERS.deb
+    dpkg -i /etc/kubernetes/ansible/$LINUX_HEADERS_GENERIC.deb
+    dpkg -i /etc/kubernetes/ansible/$LINUX_IMAGE.deb
+
   fi
 fi
 
@@ -69,11 +66,9 @@ if [ "$TARGET_ARCH" = "arm64" ]; then
       curl $HTTP_SERVER/kernel/deb/v5.4/$TARGET_ARCH/$LINUX_IMAGE.deb > /etc/kubernetes/ansible/$LINUX_IMAGE.deb
     fi
 
-  dpkg -i /etc/kubernetes/ansible/$LINUX_MODULES.deb
-  dpkg -i /etc/kubernetes/ansible/$LINUX_HEADERS.deb
-  dpkg -i /etc/kubernetes/ansible/$LINUX_IMAGE.deb
+    dpkg -i /etc/kubernetes/ansible/$LINUX_MODULES.deb
+    dpkg -i /etc/kubernetes/ansible/$LINUX_HEADERS.deb
+    dpkg -i /etc/kubernetes/ansible/$LINUX_IMAGE.deb
 
-  shutdown -r 0
-  exit 0
   fi
 fi

@@ -22,18 +22,15 @@ else
   TARGET_ARCH="unsupported"
 fi
 
-mkdir -p /etc/kubernetes/downloads
+mkdir -p /etc/kubernetes/ansible
 
+LINUX_KERNEL="kernel-lt-5.4.219-1.el7.elrepo.x86_64"
 if [ "$TARGET_ARCH" = "amd64" ]; then
   if ! [ "$LOCAL_KERNEL" = "5.4" ]; then
-  curl $HTTP_SERVER/kernel/rpm/v5.4/$TARGET_ARCH/kernel-lt-5.4.219-1.el7.elrepo.x86_64.rpm > /etc/kubernetes/downloads/kernel-lt-5.4.219-1.el7.elrepo.x86_64.rpm
-
-  rpm -Uvh /etc/kubernetes/downloads/kernel-lt-5.4.219-1.el7.elrepo.x86_64.rpm
-
-  grub2-set-default 0
-
-  reboot -f
-
-  exit 1
+    if ! [ -e /etc/kubernetes/ansible/$LINUX_KERNEL.rpm ]; then
+      curl $HTTP_SERVER/kernel/rpm/v5.4/$TARGET_ARCH/$LINUX_KERNEL.rpm > /etc/kubernetes/downloads/$LINUX_KERNEL.rpm
+    fi
+    rpm -Uvh /etc/kubernetes/ansible/$LINUX_KERNEL.rpm
+    grub2-set-default 0
   fi
 fi
