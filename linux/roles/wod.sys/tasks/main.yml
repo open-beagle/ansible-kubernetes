@@ -12,3 +12,7 @@
 - name: RedHat SELINUX set
   when: "ansible_distribution == 'RedHat'"
   script: centos.sh
+
+- name: UOS Firewall set
+  when: "ansible_distribution == 'UnionTech'"
+  script: uniontech.sh
