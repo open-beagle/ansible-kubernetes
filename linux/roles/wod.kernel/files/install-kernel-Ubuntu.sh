@@ -50,7 +50,6 @@ if [ "$TARGET_ARCH" = "amd64" ]; then
     dpkg -i /etc/kubernetes/ansible/$LINUX_HEADERS.deb
     dpkg -i /etc/kubernetes/ansible/$LINUX_IMAGE.deb
 
-
   fi
 fi
 
@@ -69,7 +68,6 @@ if [ "$TARGET_ARCH" = "arm64" ]; then
     dpkg -i /etc/kubernetes/ansible/$LINUX_MODULES.deb
     dpkg -i /etc/kubernetes/ansible/$LINUX_HEADERS.deb
     dpkg -i /etc/kubernetes/ansible/$LINUX_IMAGE.deb
-
 
   fi
 fi
