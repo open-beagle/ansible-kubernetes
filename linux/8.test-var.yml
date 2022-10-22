@@ -2,3 +2,9 @@
   tasks: 
   - name: Show debug info 
     debug: var=K8S_ADVERTISE_IP verbosity=0
+
+  - name: Show ansible_distribution info 
+    debug: var=ansible_distribution verbosity=0
+
+  - name: Show ansible_kernel info 
+    debug: var=ansible_kernel verbosity=0

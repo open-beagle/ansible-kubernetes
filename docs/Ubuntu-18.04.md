@@ -17,19 +17,23 @@ curl -sfL https://cache.wodcloud.com/kubernetes/kernel/install-kernel-Ubuntu.sh 
 ```bash
 # 准备内核文件
 mkdir -p /etc/kubernetes/ansible
-LINUX_MODULES="linux-modules-5.4.219-0504219-generic_5.4.219-0504219.202210171633_amd64"
-LINUX_HEADERS="linux-headers-5.4.219-0504219_5.4.219-0504219.202210171633_all"
-LINUX_HEADERS_GENERIC="linux-headers-5.4.219-0504219-generic_5.4.219-0504219.202210171633_amd64"
-LINUX_IMAGE="linux-image-unsigned-5.4.219-0504219-generic_5.4.219-0504219.202210171633_amd64"
-curl $HTTP_SERVER/kernel/deb/v5.4/$TARGET_ARCH/$LINUX_MODULES.deb > /etc/kubernetes/ansible/$LINUX_MODULES.deb
+HTTP_SERVER=https://cache.wodcloud.com/kubernetes
+TARGET_ARCH="amd64"
+KERNEL_VERSION="5.4.219-0504219"
+KERNEL_RELEASE="202210171633"
+LINUX_HEADERS_ALL="linux-headers-${KERNEL_VERSION}_${KERNEL_VERSION}.${KERNEL_RELEASE}_all"
+LINUX_HEADERS="linux-headers-${KERNEL_VERSION}-generic_${KERNEL_VERSION}.${KERNEL_RELEASE}_${TARGET_ARCH}"
+LINUX_IMAGE="linux-image-unsigned-${KERNEL_VERSION}-generic_${KERNEL_VERSION}.${KERNEL_RELEASE}_${TARGET_ARCH}"
+LINUX_MODULES="linux-modules-${KERNEL_VERSION}-generic_${KERNEL_VERSION}.${KERNEL_RELEASE}_${TARGET_ARCH}"
+curl $HTTP_SERVER/kernel/deb/v5.4/$TARGET_ARCH/$LINUX_HEADERS_ALL.deb > /etc/kubernetes/ansible/$LINUX_HEADERS_ALL.deb
 curl $HTTP_SERVER/kernel/deb/v5.4/$TARGET_ARCH/$LINUX_HEADERS.deb > /etc/kubernetes/ansible/$LINUX_HEADERS.deb
-curl $HTTP_SERVER/kernel/deb/v5.4/$TARGET_ARCH/$LINUX_HEADERS_GENERIC.deb > /etc/kubernetes/ansible/$LINUX_HEADERS_GENERIC.deb
 curl $HTTP_SERVER/kernel/deb/v5.4/$TARGET_ARCH/$LINUX_IMAGE.deb > /etc/kubernetes/ansible/$LINUX_IMAGE.deb
+curl $HTTP_SERVER/kernel/deb/v5.4/$TARGET_ARCH/$LINUX_MODULES.deb > /etc/kubernetes/ansible/$LINUX_MODULES.deb
 
 # 安装内核
 dpkg -i /etc/kubernetes/ansible/$LINUX_MODULES.deb
+dpkg -i /etc/kubernetes/ansible/$LINUX_HEADERS_ALL.deb
 dpkg -i /etc/kubernetes/ansible/$LINUX_HEADERS.deb
-dpkg -i /etc/kubernetes/ansible/$LINUX_HEADERS_GENERIC.deb
 dpkg -i /etc/kubernetes/ansible/$LINUX_IMAGE.deb
 
 # 重启服务器
@@ -61,5 +65,5 @@ docker run \
 -v $PWD/.vscode/hosts.ini:/etc/ansible/hosts \
 -w /etc/ansible/linux \
 registry.cn-qingdao.aliyuncs.com/wod/ansible:2 \
-ansible all -m shell -a 'uname -r'
+ansible-playbook 8.test-var.yml
 ```
