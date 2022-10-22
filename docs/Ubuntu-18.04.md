@@ -9,7 +9,7 @@
 ### 在线安装内核
 
 ```bash
-curl -sfL https://cache.wodcloud.com/kubernetes/kernel/install-kernel-Ubuntu.sh | sh -
+sudo curl -sfL https://cache.wodcloud.com/kubernetes/kernel/install-kernel-Ubuntu.sh | sh -
 ```
 
 ### 离线安装内核
