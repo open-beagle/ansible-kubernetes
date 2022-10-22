@@ -37,6 +37,19 @@ steps:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/templates/install.sh
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
 
+  - name: ansible-docker-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    environment:
+      DOCKER_VERSION: 20.10.19
+      ITEM_TAG: v1.24.7-amd64
+    commands:
+      - mkdir -p .tmp/amd64 .tmp/docker/amd64
+      - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/amd64/docker-$DOCKER_VERSION.tgz
+      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/amd64/install.sh
+      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/amd64/uninstall.sh
+      - tar czvf .tmp/amd64/ansible-docker-v1.24.7-amd64.tgz -C .tmp/docker/amd64 .
+      - rm -rf .tmp/docker
+
   - name: install-registry-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/registry:v2.8.1-amd64
     commands:
@@ -74,6 +87,19 @@ steps:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/templates/install.sh
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
+
+  - name: ansible-docker-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    environment:
+      DOCKER_VERSION: 20.10.19
+      ITEM_TAG: v1.24.7-arm64
+    commands:
+      - mkdir -p .tmp/arm64 .tmp/docker/arm64
+      - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/arm64/docker-$DOCKER_VERSION.tgz
+      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/arm64/install.sh
+      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/arm64/uninstall.sh
+      - tar czvf .tmp/arm64/ansible-docker-$ITEM_TAG.tgz -C .tmp/docker/arm64 .
+      - rm -rf .tmp/docker
 
   - name: install-registry-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/registry:v2.8.1-arm64
@@ -131,19 +157,6 @@ steps:
       - docker pull $REGISTRY_REMOTE/$ITEM_REPO:$ITEM_TAG 
       - docker save $REGISTRY_REMOTE/$ITEM_REPO:$ITEM_TAG | gzip > .tmp/amd64/$ITEM_REPO-$ITEM_TAG.tgz
 
-  - name: ansible-docker-amd64
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
-    environment:
-      DOCKER_VERSION: 20.10.19
-      ITEM_TAG: v1.24.7-amd64
-    commands:
-      - mkdir -p .tmp/docker/amd64
-      - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/amd64/docker-$DOCKER_VERSION.tgz
-      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/amd64/install.sh
-      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/amd64/uninstall.sh
-      - tar czvf .tmp/amd64/ansible-docker-v1.24.7-amd64.tgz -C .tmp/docker/amd64 .
-      - rm -rf .tmp/docker
-
   - name: ansible-kubernetes-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     volumes:
@@ -157,19 +170,6 @@ steps:
       - mkdir -p .tmp/arm64
       - docker pull $REGISTRY_REMOTE/$ITEM_REPO:$ITEM_TAG 
       - docker save $REGISTRY_REMOTE/$ITEM_REPO:$ITEM_TAG | gzip > .tmp/arm64/$ITEM_REPO-$ITEM_TAG.tgz
-
-  - name: ansible-docker-arm64
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
-    environment:
-      DOCKER_VERSION: 20.10.19
-      ITEM_TAG: v1.24.7-arm64
-    commands:
-      - mkdir -p .tmp/docker/arm64
-      - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/arm64/docker-$DOCKER_VERSION.tgz
-      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/arm64/install.sh
-      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/arm64/uninstall.sh
-      - tar czvf .tmp/arm64/ansible-docker-$ITEM_TAG.tgz -C .tmp/docker/arm64 .
-      - rm -rf .tmp/docker
 
   - name: minio
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-minio:1.0
