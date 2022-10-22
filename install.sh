@@ -6,24 +6,19 @@ set -ex
 export HTTP_SERVER=https://cache.wodcloud.com/kubernetes
 # 平台架构
 export TARGET_ARCH=amd64
-# Docker版本
-export DOCKER_VERSION=20.10.19
+# K8S版本
+export K8S_VERSION=v1.24.7
 
-if ! [ -e /opt/docker/VERSION-$DOCKER_VERSION.md ]; then
-
+if ! [ -e /etc/kubernetes/ansible/ansible-docker-$K8S_VERSION-$TARGET_ARCH.tgz ]; then
+mkdir -p /opt/docker /etc/kubernetes/ansible
 # 下载文件
-# docker、containerd安装包与脚本 ， docker-20.10.19.tgz 68MB
-mkdir -p /opt/docker
-curl $HTTP_SERVER/k8s/docker/install.sh > /opt/docker/install.sh
-curl $HTTP_SERVER/k8s/docker/uninstall.sh > /opt/docker/uninstall.sh
-curl $HTTP_SERVER/k8s/docker/$TARGET_ARCH/docker-$DOCKER_VERSION.tgz > /opt/docker/docker-$DOCKER_VERSION.tgz
-
+# ansible-docker-$K8S_VERSION-$TARGET_ARCH.tgz 68MB
+curl $HTTP_SERVER/k8s/ansible/$TARGET_ARCH/ansible-docker-$K8S_VERSION-$TARGET_ARCH.tgz > /etc/kubernetes/ansible/ansible-docker-$K8S_VERSION-$TARGET_ARCH.tgz
+# 解压文件
+tar xzvf /etc/kubernetes/ansible/ansible-docker-$K8S_VERSION-$TARGET_ARCH.tgz -C /opt/docker
 # 安装Docker
 bash /opt/docker/install.sh
 fi
-
-# K8S版本
-export K8S_VERSION=v1.24.7
 
 docker run \
 -t \
