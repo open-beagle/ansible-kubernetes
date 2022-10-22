@@ -43,12 +43,8 @@ if ! [ -e /etc/kubernetes/downloads/etcdctl-linux-$REGISTRY_VERSION_ETCDCTL ]; t
   mv /etc/kubernetes/downloads/etcdctl /etc/kubernetes/downloads/etcdctl-linux-$REGISTRY_VERSION_ETCDCTL
 
   chmod +x /etc/kubernetes/downloads/etcdctl-linux-$REGISTRY_VERSION_ETCDCTL
-  rm -rf /opt/bin/etcdctl
+  rm -rf /opt/bin/etcdctl /usr/local/bin/etcdctl
   ln -s /etc/kubernetes/downloads/etcdctl-linux-$REGISTRY_VERSION_ETCDCTL /opt/bin/etcdctl
+  ln -s /etc/kubernetes/downloads/etcdctl-linux-$REGISTRY_VERSION_ETCDCTL /usr/local/bin/etcdctl
   
 fi
-
-if ! [ -x "$(command -v etcdctl)" ]; then
-  rm -rf /opt/bin/etcdctl
-  ln -s /etc/kubernetes/downloads/etcdctl-linux-$REGISTRY_VERSION_ETCDCTL /opt/bin/etcdctl
-fi  

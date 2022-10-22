@@ -18,18 +18,15 @@ if ! [ -e /etc/kubernetes/downloads/kubectl-linux-$REGISTRY_VERSION ]; then
     -c 'cp /usr/local/bin/kubectl /data/output/kubectl'
   mv /etc/kubernetes/downloads/kubectl /etc/kubernetes/downloads/kubectl-linux-$REGISTRY_VERSION
   chmod +x /etc/kubernetes/downloads/kubectl-linux-$REGISTRY_VERSION
-  rm -rf /opt/bin/kubectl
-  ln -s /etc/kubernetes/downloads/kubectl-linux-$REGISTRY_VERSION /opt/bin/kubectl      
+  rm -rf /opt/bin/kubectl /usr/local/bin/kubectl
+  ln -s /etc/kubernetes/downloads/kubectl-linux-$REGISTRY_VERSION /opt/bin/kubectl
+  ln -s /etc/kubernetes/downloads/kubectl-linux-$REGISTRY_VERSION /usr/local/bin/kubectl
 fi
 
 /opt/bin/kubectl config set-cluster kubernetes --server=https://{{ K8S_MASTER_HOST }}:{{ K8S_MASTER_PORT }} --certificate-authority=/etc/kubernetes/ssl/ca.crt
 /opt/bin/kubectl config set-credentials default --client-certificate=/etc/kubernetes/ssl/admin.crt --client-key=/etc/kubernetes/ssl/admin.key
 /opt/bin/kubectl config set-context kubernetes --cluster=kubernetes --user=default
 /opt/bin/kubectl config use-context kubernetes  
-
-if ! [ -x "$(command -v kubectl)" ]; then
-  ln -s /opt/bin/kubectl /usr/bin/kubectl
-fi
 
 if ! (grep -q "source <(/opt/bin/kubectl completion bash)" ~/.bashrc); then
   echo "source <(/opt/bin/kubectl completion bash)" >> ~/.bashrc

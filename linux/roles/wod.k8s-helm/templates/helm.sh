@@ -34,11 +34,8 @@ if ! [ -e /etc/kubernetes/downloads/helm-linux-$REGISTRY_VERSION ]; then
     -c 'cp /usr/local/bin/helm /tmp/downloads/helm'
   mv /etc/kubernetes/downloads/helm /etc/kubernetes/downloads/helm-linux-$REGISTRY_VERSION
   chmod +x /etc/kubernetes/downloads/helm-linux-$REGISTRY_VERSION
-  rm -rf /opt/bin/helm
+  rm -rf /opt/bin/helm /usr/local/bin/helm
   ln -s /etc/kubernetes/downloads/helm-linux-$REGISTRY_VERSION /opt/bin/helm
+  ln -s /etc/kubernetes/downloads/helm-linux-$REGISTRY_VERSION /usr/local/bin/helm
   
-fi
-
-if ! [ -x "$(command -v helm)" ]; then
-  ln -s /opt/bin/helm /usr/bin/helm
 fi
