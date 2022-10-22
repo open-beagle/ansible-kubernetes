@@ -35,7 +35,7 @@ EOF
 ## 在线一键安装 kubernetes 集群
 
 ```bash
-curl -sfL https://cache.wodcloud.com/kubernetes/install.sh | sh -
+sudo curl -sfL https://cache.wodcloud.com/kubernetes/install.sh | sh -
 ```
 
 ## 安装一个离线 kubernetes 集群
