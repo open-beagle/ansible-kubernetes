@@ -24,11 +24,11 @@
 mkdir -p /etc/kubernetes/ansible && \
 cat > /etc/kubernetes/ansible/hosts.ini <<\EOF
 [master]
-ubuntu-01 ansible_ssh_host=192.168.1.201 ansible_ssh_port=22 ansible_ssh_user=root
+beagle-01 ansible_ssh_host=192.168.1.201 ansible_ssh_port=22 ansible_ssh_user=root
 
 [node]
-ubuntu-02 ansible_ssh_host=192.168.1.202 ansible_ssh_port=22 ansible_ssh_user=root
-ubuntu-03 ansible_ssh_host=192.168.1.203 ansible_ssh_port=22 ansible_ssh_user=root
+beagle-02 ansible_ssh_host=192.168.1.202 ansible_ssh_port=22 ansible_ssh_user=root
+beagle-03 ansible_ssh_host=192.168.1.203 ansible_ssh_port=22 ansible_ssh_user=root
 EOF
 ```
 
@@ -101,34 +101,34 @@ ansible-playbook 1.install.yml
 
 ```bash
 PLAY RECAP *******************************************************************************************************
-ubuntu-01                  : ok=85   changed=65   unreachable=0    failed=0    skipped=23   rescued=0    ignored=6
-ubuntu-02                  : ok=37   changed=32   unreachable=0    failed=0    skipped=6    rescued=0    ignored=1
-ubuntu-03                  : ok=37   changed=32   unreachable=0    failed=0    skipped=6    rescued=0    ignored=1
+beagle-01                  : ok=85   changed=65   unreachable=0    failed=0    skipped=23   rescued=0    ignored=6
+beagle-02                  : ok=37   changed=32   unreachable=0    failed=0    skipped=6    rescued=0    ignored=1
+beagle-03                  : ok=37   changed=32   unreachable=0    failed=0    skipped=6    rescued=0    ignored=1
 ```
 
 ### 验证安装
 
 ```bash
-root@ubuntu-01:~# /opt/bin/kubectl get node
+root@beagle-01:~# /opt/bin/kubectl get node
 NAME        STATUS   ROLES    AGE   VERSION
-ubuntu-01   Ready    master   93s   v1.24.7-beagle
-ubuntu-02   Ready    <none>   79s   v1.24.7-beagle
-ubuntu-03   Ready    <none>   79s   v1.24.7-beagle
+beagle-01   Ready    master   93s   v1.24.7-beagle
+beagle-02   Ready    <none>   79s   v1.24.7-beagle
+beagle-03   Ready    <none>   79s   v1.24.7-beagle
 
-root@ubuntu-01:~# /opt/bin/kubectl get pod -A -o wide
+root@beagle-01:~# /opt/bin/kubectl get pod -A -o wide
 NAMESPACE     NAME                                READY   STATUS    RESTARTS   AGE   IP              NODE        NOMINATED NODE   READINESS GATES
-kube-system   cilium-2zq4f                        1/1     Running   0          76s   192.168.1.202   ubuntu-02   <none>           <none>
-kube-system   cilium-7tjl8                        1/1     Running   0          76s   192.168.1.203   ubuntu-03   <none>           <none>
-kube-system   cilium-f8gcp                        1/1     Running   0          76s   192.168.1.201   ubuntu-01   <none>           <none>
-kube-system   cilium-operator-7877c885b7-47ld8    1/1     Running   0          76s   192.168.1.202   ubuntu-02   <none>           <none>
-kube-system   cilium-operator-7877c885b7-phjpf    1/1     Running   0          76s   192.168.1.203   ubuntu-03   <none>           <none>
-kube-system   coredns-78dcd56fdf-ztqf6            1/1     Running   0          74s   10.2.0.134      ubuntu-01   <none>           <none>
-kube-system   etcd-ubuntu-01                      1/1     Running   0          97s   192.168.1.201   ubuntu-01   <none>           <none>
-kube-system   hubble-relay-84bff94f74-kclr9       1/1     Running   0          76s   10.2.0.234      ubuntu-01   <none>           <none>
-kube-system   hubble-ui-596749dfc4-v2cxd          2/2     Running   0          76s   10.2.0.248      ubuntu-01   <none>           <none>
-kube-system   kube-apiserver-ubuntu-01            1/1     Running   0          89s   192.168.1.201   ubuntu-01   <none>           <none>
-kube-system   kube-controller-manager-ubuntu-01   1/1     Running   0          99s   192.168.1.201   ubuntu-01   <none>           <none>
-kube-system   kube-scheduler-ubuntu-01            1/1     Running   0          99s   192.168.1.201   ubuntu-01   <none>           <none>
+kube-system   cilium-2zq4f                        1/1     Running   0          76s   192.168.1.202   beagle-02   <none>           <none>
+kube-system   cilium-7tjl8                        1/1     Running   0          76s   192.168.1.203   beagle-03   <none>           <none>
+kube-system   cilium-f8gcp                        1/1     Running   0          76s   192.168.1.201   beagle-01   <none>           <none>
+kube-system   cilium-operator-7877c885b7-47ld8    1/1     Running   0          76s   192.168.1.202   beagle-02   <none>           <none>
+kube-system   cilium-operator-7877c885b7-phjpf    1/1     Running   0          76s   192.168.1.203   beagle-03   <none>           <none>
+kube-system   coredns-78dcd56fdf-ztqf6            1/1     Running   0          74s   10.2.0.134      beagle-01   <none>           <none>
+kube-system   etcd-beagle-01                      1/1     Running   0          97s   192.168.1.201   beagle-01   <none>           <none>
+kube-system   hubble-relay-84bff94f74-kclr9       1/1     Running   0          76s   10.2.0.234      beagle-01   <none>           <none>
+kube-system   hubble-ui-596749dfc4-v2cxd          2/2     Running   0          76s   10.2.0.248      beagle-01   <none>           <none>
+kube-system   kube-apiserver-beagle-01            1/1     Running   0          89s   192.168.1.201   beagle-01   <none>           <none>
+kube-system   kube-controller-manager-beagle-01   1/1     Running   0          99s   192.168.1.201   beagle-01   <none>           <none>
+kube-system   kube-scheduler-beagle-01            1/1     Running   0          99s   192.168.1.201   beagle-01   <none>           <none>
 ```
 
 ## FAQ
