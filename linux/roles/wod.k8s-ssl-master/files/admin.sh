@@ -9,6 +9,6 @@ if ! [ -e /etc/kubernetes/ssl/admin.key ]; then
 fi
 
 if ! [ -e /etc/kubernetes/ssl/admin.crt ]; then
-  openssl req -new -key admin.key -out admin.csr -subj "/CN=admin/C=CN/ST=BeiJing/L=Beijing/O=system:masters/OU=System" -config admin.cnf 
+  openssl req -new -key admin.key -out admin.csr -subj "/CN=kubernetes-admin/C=CN/ST=BeiJing/L=Beijing/O=system:masters/OU=System" -config admin.cnf 
   openssl x509 -req -in admin.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out admin.crt -days 36500 -extensions v3_req -extfile admin.cnf
 fi
