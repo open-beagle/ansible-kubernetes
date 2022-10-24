@@ -1,0 +1,23 @@
+---
+apiVersion: kubelet.config.k8s.io/v1beta1
+kind: KubeletConfiguration
+authentication:
+  anonymous:
+    enabled: false
+  webhook:
+    enabled: true
+  x509:
+    clientCAFile: /etc/kubernetes/ssl/ca.crt
+authorization:
+  mode: Webhook
+cgroupDriver: systemd
+clusterDNS:
+  - {{ K8S_DNS_SERVICE_IP }}
+clusterDomain: cluster.local
+staticPodPath: /etc/kubernetes/manifests
+maxPods: {{ K8S_NODE_MAXPODS }}
+failSwapOn: false
+featureGates:
+  ExpandPersistentVolumes: true
+allowedUnsafeSysctls:
+  - 'net.*'

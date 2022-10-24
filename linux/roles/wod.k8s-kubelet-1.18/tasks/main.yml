@@ -1,0 +1,23 @@
+
+- name: mkdir -p /etc/kubernetes/config
+  raw: mkdir -p /etc/kubernetes/config
+
+- name: template kubelet.sh
+  template: src=scripts/kubelet.sh dest=/etc/kubernetes/scripts/kubelet.sh mode=0755
+
+- name: template config/kubelet.yaml
+  template: src=config/kubelet.yaml dest=/etc/kubernetes/config/kubelet.yaml
+
+- name: template config/kubelet.conf
+  template: src=config/kubelet.conf dest=/etc/kubernetes/config/kubelet.conf
+
+- name: template services/k8s-kubelet.service
+  template: src=services/kubelet.service dest=/etc/systemd/system/k8s-kubelet.service
+
+- name: /etc/kubernetes/scripts/kubelet.sh
+  raw: /etc/kubernetes/scripts/kubelet.sh
+  register: kubelet
+  until: kubelet.rc == 0
+  retries: 30
+  delay: 5
+  ignore_errors: true

@@ -37,6 +37,20 @@ ansible all -m shell -a 'curl -sfL https://cache.wodcloud.com/kubernetes/kernel/
 ansible all -m shell -a 'rm -rf /opt/docker'
 ```
 
+## Debug 1.18
+
+```bash
+docker run \
+-it --rm \
+-v $PWD/:/etc/ansible \
+-v $PWD/.vscode/hosts.ini:/etc/ansible/hosts \
+-w /etc/ansible/linux \
+registry.cn-qingdao.aliyuncs.com/wod/ansible:2 \
+ansible-playbook 2.install-1.18.yml \
+--extra-vars "@vars/1.18.yml" \
+--extra-vars "REGISTRY_LOCAL=registry.cn-qingdao.aliyuncs.com/wod"
+```
+
 ## Components
 
 ### kubectl 自动完成
@@ -97,15 +111,15 @@ registry.beagle.default:6444/k8s/devops-docker-images:1.0
 
 ### Pause Image
 
-- kubelet 的pod-infra-container-image参数是专门给DockerShim用的，已过期
-- 需要设置/etc/containerd/config.toml的节
+- kubelet 的 pod-infra-container-image 参数是专门给 DockerShim 用的，已过期
+- 需要设置/etc/containerd/config.toml 的节
 
 ```toml
 [plugins."io.containerd.grpc.v1.cri"]
   sandbox_image = "registry.k8s.io/pause:3.2"
 ```
 
-- 设置过后重启Containerd方能生效。
+- 设置过后重启 Containerd 方能生效。
 
 ```bash
 systemctl restart containerd
