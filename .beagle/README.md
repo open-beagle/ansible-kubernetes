@@ -49,6 +49,16 @@ registry.cn-qingdao.aliyuncs.com/wod/ansible:2 \
 ansible-playbook 2.install-1.18.yml \
 --extra-vars "@vars/1.18.yml" \
 --extra-vars "REGISTRY_LOCAL=registry.cn-qingdao.aliyuncs.com/wod"
+
+docker run \
+-it --rm \
+-v $PWD/:/etc/ansible \
+-v $PWD/.vscode/hosts.ini:/etc/ansible/hosts \
+-w /etc/ansible/linux \
+registry.cn-qingdao.aliyuncs.com/wod/ansible:2 \
+ansible-playbook 2.install-1.18.yml \
+--extra-vars "@vars/1.20.yml" \
+--extra-vars "REGISTRY_LOCAL=registry.cn-qingdao.aliyuncs.com/wod"
 ```
 
 ## Components
