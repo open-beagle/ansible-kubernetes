@@ -48,10 +48,10 @@ export HTTP_SERVER=https://cache.wodcloud.com/kubernetes/k8s
 # 平台架构
 export TARGET_ARCH=amd64
 # Docker版本
-export DOCKER_VERSION=20.10.19
+export DOCKER_VERSION=20.10.21
 
 # 下载文件
-# docker、containerd安装包与脚本 ， docker-20.10.19.tgz 68MB
+# docker、containerd安装包与脚本 ， docker-20.10.21.tgz 68MB
 mkdir -p /opt/docker
 curl $HTTP_SERVER/docker/install.sh > /opt/docker/install.sh
 curl $HTTP_SERVER/docker/uninstall.sh > /opt/docker/uninstall.sh

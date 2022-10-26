@@ -1,12 +1,14 @@
 #!/bin/bash 
 
--ex
+set -ex
+
+TARGETARCH=amd64
 
 CILIUM_VERSION=1.11.9
 curl https://cache.wodcloud.com/kubernetes/k8s/charts/beagle-cilium-$CILIUM_VERSION.tgz > ./linux/roles/wod.cilium/files/beagle-cilium-$CILIUM_VERSION.tgz
 
-DOCKER_VERSION=20.10.19
-curl https://cache.wodcloud.com/kubernetes/k8s/docker/amd64/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
+DOCKER_VERSION=20.10.21
+curl https://cache.wodcloud.com/kubernetes/k8s/docker/$TARGETARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
 curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/templates/install.sh
 curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
 

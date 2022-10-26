@@ -30,7 +30,7 @@ steps:
   - name: install-docker-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      DOCKER_VERSION: 20.10.19
+      DOCKER_VERSION: 20.10.21
       ARCH: amd64
     commands:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
@@ -40,7 +40,7 @@ steps:
   - name: ansible-docker-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     environment:
-      DOCKER_VERSION: 20.10.19
+      DOCKER_VERSION: 20.10.21
       ITEM_TAG: v1.24.7-amd64
     commands:
       - mkdir -p .tmp/amd64 .tmp/docker/amd64
@@ -81,7 +81,7 @@ steps:
   - name: install-docker-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      DOCKER_VERSION: 20.10.19
+      DOCKER_VERSION: 20.10.21
       ARCH: arm64
     commands:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
@@ -91,7 +91,7 @@ steps:
   - name: ansible-docker-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     environment:
-      DOCKER_VERSION: 20.10.19
+      DOCKER_VERSION: 20.10.21
       ITEM_TAG: v1.24.7-arm64
     commands:
       - mkdir -p .tmp/arm64 .tmp/docker/arm64

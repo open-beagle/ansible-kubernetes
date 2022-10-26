@@ -17,7 +17,7 @@ K8S_IMAGES:
     VERSION: 'v1.18.20-beagle'
   KUBECTL:
     NAME: kubectl
-    VERSION: 'v1.24.7-beagle'
+    VERSION: 'v1.18.20-beagle'
   PAUSE:
     NAME: pause
     VERSION: '3.7'
