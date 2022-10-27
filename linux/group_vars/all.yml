@@ -23,26 +23,29 @@ DOCKER_VERSION: '20.10.21'
 ## 可选值：amd64，arm64，ppc64le，mips64le
 K8S_ARCH: 'amd64'
 
+# K8S_VERSION , k8s版本
+K8S_VERSION: "1.24.7"
+
 # 镜像
 K8S_IMAGES:
   KUBELET:
     NAME: kubelet
-    VERSION: 'v1.24.7-beagle'
+    VERSION: 'v{{ K8S_VERSION }}-beagle'
   KUBE-APISERVER:
     NAME: kube-apiserver
-    VERSION: 'v1.24.7-beagle'
+    VERSION: 'v{{ K8S_VERSION }}-beagle'
   KUBE-CONTROLLER-MANAGER:
     NAME: kube-controller-manager
-    VERSION: 'v1.24.7-beagle'
+    VERSION: 'v{{ K8S_VERSION }}-beagle'
   KUBE-SCHEDULER:
     NAME: kube-scheduler
-    VERSION: 'v1.24.7-beagle'
+    VERSION: 'v{{ K8S_VERSION }}-beagle'
   KUBE-PROXY:
     NAME: kube-proxy
-    VERSION: 'v1.24.7-beagle'
+    VERSION: 'v{{ K8S_VERSION }}-beagle'
   KUBECTL:
     NAME: kubectl
-    VERSION: 'v1.24.7-beagle'
+    VERSION: 'v{{ K8S_VERSION }}-beagle'
   PAUSE:
     NAME: pause
     VERSION: '3.7'

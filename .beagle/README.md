@@ -37,27 +37,40 @@ ansible all -m shell -a 'curl -sfL https://cache.wodcloud.com/kubernetes/kernel/
 ansible all -m shell -a 'rm -rf /opt/docker'
 ```
 
-## Debug 1.18
+## Debug Multi Version
 
 ```bash
+# 1.20.15
 docker run \
 -it --rm \
 -v $PWD/:/etc/ansible \
 -v $PWD/.vscode/hosts.ini:/etc/ansible/hosts \
 -w /etc/ansible/linux \
 registry.cn-qingdao.aliyuncs.com/wod/ansible:2 \
-ansible-playbook 2.install-1.18.yml \
---extra-vars "@vars/1.18.yml" \
+ansible-playbook 1.install.yml \
+--extra-vars "K8S_VERSION=1.20.15" \
 --extra-vars "REGISTRY_LOCAL=registry.cn-qingdao.aliyuncs.com/wod"
 
+# 1.22.15
 docker run \
 -it --rm \
 -v $PWD/:/etc/ansible \
 -v $PWD/.vscode/hosts.ini:/etc/ansible/hosts \
 -w /etc/ansible/linux \
 registry.cn-qingdao.aliyuncs.com/wod/ansible:2 \
-ansible-playbook 2.install-1.18.yml \
---extra-vars "@vars/1.20.yml" \
+ansible-playbook 1.install.yml \
+--extra-vars "K8S_VERSION=1.22.15" \
+--extra-vars "REGISTRY_LOCAL=registry.cn-qingdao.aliyuncs.com/wod"
+
+# 1.24.7
+docker run \
+-it --rm \
+-v $PWD/:/etc/ansible \
+-v $PWD/.vscode/hosts.ini:/etc/ansible/hosts \
+-w /etc/ansible/linux \
+registry.cn-qingdao.aliyuncs.com/wod/ansible:2 \
+ansible-playbook 1.install.yml \
+--extra-vars "K8S_VERSION=1.24.7" \
 --extra-vars "REGISTRY_LOCAL=registry.cn-qingdao.aliyuncs.com/wod"
 ```
 
