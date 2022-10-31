@@ -2,7 +2,7 @@
 
 前置条件
 
-- 确保内核Linux Kernel >= 5.4
+- 确保内核 Linux Kernel >= 5.4
 
 ## 升级内核
 
@@ -66,4 +66,23 @@ docker run \
 -w /etc/ansible/linux \
 registry.cn-qingdao.aliyuncs.com/wod/ansible:2 \
 ansible-playbook 8.test-var.yml
+```
+
+### 遗留问题
+
+kubectl logs
+
+```bash
+root@ubuntu-01:~# kubectl -n kube-system logs etcd-ubuntu-01
+Error from server (Forbidden): Forbidden (user=apiserver, verb=get, resource=nodes, subresource=proxy) ( pods/log etcd-ubuntu-01)
+```
+
+coredns 1.9.x 不支持 kubernetes1.18
+
+```log
+[INFO] plugin/kubernetes: Watching Endpoints instead of EndpointSlices in k8s versions < 1.19
+.:53
+[INFO] plugin/reload: Running configuration SHA512 = 6cc3d0a283849dcbd45151a5e077162ef86558ca2582e55a36d0bd75a3120433b05e598ffd4cae90ee883e3e43a3ae0c9c6aae0bac7951ad9431ec4179defa68
+CoreDNS-1.9.4
+linux/amd64, go1.19.1,
 ```
