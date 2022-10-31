@@ -9,6 +9,24 @@ TARGET_ARCH="${TARGET_ARCH:-amd64}"
 # K8S版本
 K8S_VERSION="${K8S_VERSION:-1.24.7}"
 
+LOCAL_KERNEL=$(uname -r | head -c 3)
+LOCAL_ARCH=$(uname -m)
+
+if [ "$LOCAL_ARCH" = "x86_64" ]; then
+  TARGET_ARCH="amd64"
+elif [ "$(echo $LOCAL_ARCH | head -c 5)" = "armv8" ]; then
+  TARGET_ARCH="arm64"
+elif [ "$LOCAL_ARCH" = "aarch64" ]; then
+  TARGET_ARCH="arm64"
+elif [ "$LOCAL_ARCH" = "ppc64le" ]; then
+  TARGET_ARCH="ppc64le"
+elif [ "$LOCAL_ARCH" = "mips64" ]; then
+  TARGET_ARCH="mips64le"
+else
+  echo "This system's architecture $(LOCAL_ARCH) isn't supported"
+  TARGET_ARCH="unsupported"
+fi
+
 if ! [ -e /etc/kubernetes/ansible/ansible-docker-$K8S_VERSION-$TARGET_ARCH.tgz ]; then
 mkdir -p /opt/docker /etc/kubernetes/ansible
 # 下载文件
