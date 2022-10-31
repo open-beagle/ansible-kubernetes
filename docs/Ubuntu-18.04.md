@@ -70,13 +70,6 @@ ansible-playbook 8.test-var.yml
 
 ### 遗留问题
 
-kubectl logs
-
-```bash
-root@ubuntu-01:~# kubectl -n kube-system logs etcd-ubuntu-01
-Error from server (Forbidden): Forbidden (user=apiserver, verb=get, resource=nodes, subresource=proxy) ( pods/log etcd-ubuntu-01)
-```
-
 coredns 1.9.x 不支持 kubernetes1.18
 
 ```log
