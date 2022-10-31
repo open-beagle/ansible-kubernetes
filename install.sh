@@ -3,11 +3,11 @@
 set -ex
 
 # HTTPS服务器
-export HTTP_SERVER=https://cache.wodcloud.com/kubernetes
+HTTP_SERVER="${HTTP_SERVER:-https://cache.wodcloud.com/kubernetes}"
 # 平台架构
-export TARGET_ARCH=amd64
+TARGET_ARCH="${TARGET_ARCH:-amd64}"
 # K8S版本
-export K8S_VERSION=v1.24.7
+K8S_VERSION="${K8S_VERSION:-1.24.7}"
 
 if ! [ -e /etc/kubernetes/ansible/ansible-docker-$K8S_VERSION-$TARGET_ARCH.tgz ]; then
 mkdir -p /opt/docker /etc/kubernetes/ansible

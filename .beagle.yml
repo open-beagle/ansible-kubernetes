@@ -87,6 +87,7 @@ steps:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/templates/install.sh
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
+      - sed -i -e 's/K8S_ARCH: amd64/K8S_ARCH: arm64/' linux/group_vars/all.yml
 
   - name: ansible-docker-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
