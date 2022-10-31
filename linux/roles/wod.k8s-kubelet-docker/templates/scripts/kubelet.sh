@@ -21,6 +21,13 @@ if ! (grep -q $PAUSE_IMAGE /etc/containerd/config.toml) ; then
   systemctl restart containerd
 fi
 
+docker info | grep "Cgroup Driver" > /etc/kubernetes/config/.kubelet
+if (grep -q "systemd" /etc/kubernetes/config/.kubelet) ; then 
+  if ! (grep -q "systemd" /etc/kubernetes/config/kubelet.yaml) ; then 
+    echo "cgroupDriver: systemd" >> /etc/kubernetes/config/kubelet.yaml
+  fi
+fi
+
 if ! [ -e /etc/kubernetes/downloads/kubelet-$REGISTRY_VERSION ]; then
   rm -rf /opt/bin/kubelet
   docker run -v /etc/kubernetes/downloads:/data/output \

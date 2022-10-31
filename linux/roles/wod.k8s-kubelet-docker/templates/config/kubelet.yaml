@@ -10,7 +10,6 @@ authentication:
     clientCAFile: /etc/kubernetes/ssl/ca.crt
 authorization:
   mode: Webhook
-cgroupDriver: systemd
 clusterDNS:
   - {{ K8S_DNS_SERVICE_IP }}
 clusterDomain: cluster.local

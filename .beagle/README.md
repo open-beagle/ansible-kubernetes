@@ -40,6 +40,18 @@ ansible all -m shell -a 'rm -rf /opt/docker'
 ## Debug Multi Version
 
 ```bash
+# 1.18.20
+# 仅测试通过Ubuntu 18.04
+docker run \
+-it --rm \
+-v $PWD/:/etc/ansible \
+-v $PWD/.vscode/hosts.ini:/etc/ansible/hosts \
+-w /etc/ansible/linux \
+registry.cn-qingdao.aliyuncs.com/wod/ansible:2 \
+ansible-playbook 1.install.yml \
+--extra-vars "K8S_VERSION=1.18.20" \
+--extra-vars "REGISTRY_LOCAL=registry.cn-qingdao.aliyuncs.com/wod"
+
 # 1.20.15
 docker run \
 -it --rm \

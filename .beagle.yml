@@ -241,7 +241,7 @@ steps:
 
 ---
 kind: pipeline
-name: images
+name: images-v1.20
 
 trigger:
   branch:
@@ -293,7 +293,7 @@ steps:
 
 ---
 kind: pipeline
-name: images
+name: images-v1.22
 
 trigger:
   branch:
