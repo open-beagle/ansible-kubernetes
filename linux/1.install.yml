@@ -34,7 +34,12 @@
     - role: wod.k8s-ssl-kubelet
     - role: wod.envoy
     - role: wod.docker-login
+    - role: wod.k8s-kubelet-docker
+      when: 
+        - K8S_VERSION is version('1.23','<=')
     - role: wod.k8s-kubelet
+      when: 
+        - K8S_VERSION is version('1.23','>')
     - role: wod.k8s-cni
 
 - hosts: master
