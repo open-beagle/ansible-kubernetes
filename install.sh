@@ -19,9 +19,11 @@ elif [ "$(echo $LOCAL_ARCH | head -c 5)" = "armv8" ]; then
 elif [ "$LOCAL_ARCH" = "aarch64" ]; then
   TARGET_ARCH="arm64"
 elif [ "$LOCAL_ARCH" = "ppc64le" ]; then
-  TARGET_ARCH="ppc64le"
+  # TARGET_ARCH="ppc64le"
+  TARGET_ARCH="unsupported"
 elif [ "$LOCAL_ARCH" = "mips64" ]; then
-  TARGET_ARCH="mips64le"
+  # TARGET_ARCH="mips64le"
+  TARGET_ARCH="unsupported"
 else
   echo "This system's architecture $(LOCAL_ARCH) isn't supported"
   TARGET_ARCH="unsupported"
