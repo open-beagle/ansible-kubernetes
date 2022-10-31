@@ -49,7 +49,7 @@ docker run \
 -w /etc/ansible/linux \
 registry.cn-qingdao.aliyuncs.com/wod/ansible:2 \
 ansible-playbook 1.install.yml \
---extra-vars "K8S_VERSION=1.18.20" \
+--extra-vars "K8S_VERSION=v1.18.20" \
 --extra-vars "REGISTRY_LOCAL=registry.cn-qingdao.aliyuncs.com/wod"
 
 # 1.20.15
@@ -60,7 +60,7 @@ docker run \
 -w /etc/ansible/linux \
 registry.cn-qingdao.aliyuncs.com/wod/ansible:2 \
 ansible-playbook 1.install.yml \
---extra-vars "K8S_VERSION=1.20.15" \
+--extra-vars "K8S_VERSION=v1.20.15" \
 --extra-vars "REGISTRY_LOCAL=registry.cn-qingdao.aliyuncs.com/wod"
 
 # 1.22.15
@@ -71,7 +71,7 @@ docker run \
 -w /etc/ansible/linux \
 registry.cn-qingdao.aliyuncs.com/wod/ansible:2 \
 ansible-playbook 1.install.yml \
---extra-vars "K8S_VERSION=1.22.15" \
+--extra-vars "K8S_VERSION=v1.22.15" \
 --extra-vars "REGISTRY_LOCAL=registry.cn-qingdao.aliyuncs.com/wod"
 
 # 1.24.7
@@ -82,7 +82,7 @@ docker run \
 -w /etc/ansible/linux \
 registry.cn-qingdao.aliyuncs.com/wod/ansible:2 \
 ansible-playbook 1.install.yml \
---extra-vars "K8S_VERSION=1.24.7" \
+--extra-vars "K8S_VERSION=v1.24.7" \
 --extra-vars "REGISTRY_LOCAL=registry.cn-qingdao.aliyuncs.com/wod"
 ```
 

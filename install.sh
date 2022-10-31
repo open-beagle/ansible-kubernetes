@@ -7,7 +7,7 @@ HTTP_SERVER="${HTTP_SERVER:-https://cache.wodcloud.com/kubernetes}"
 # 平台架构
 TARGET_ARCH="${TARGET_ARCH:-amd64}"
 # K8S版本
-K8S_VERSION="${K8S_VERSION:-1.24.7}"
+K8S_VERSION="${K8S_VERSION:-v1.24.7}"
 
 LOCAL_KERNEL=$(uname -r | head -c 3)
 LOCAL_ARCH=$(uname -m)
