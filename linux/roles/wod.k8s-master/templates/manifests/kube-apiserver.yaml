@@ -30,8 +30,8 @@ spec:
     - --service-account-issuer=https://kubernetes.default.svc.cluster.local
     - --service-account-key-file=/etc/kubernetes/ssl/apiserver.pub
     - --service-account-signing-key-file=/etc/kubernetes/ssl/apiserver.key
-    - --kubelet-client-certificate=/etc/kubernetes/ssl/apiserver.crt
-    - --kubelet-client-key=/etc/kubernetes/ssl/apiserver.key
+    - --kubelet-client-certificate=/etc/kubernetes/ssl/admin.crt
+    - --kubelet-client-key=/etc/kubernetes/ssl/admin.key
     - --kubelet-preferred-address-types=InternalIP,ExternalDNS,ExternalIP
     - --runtime-config=extensions/v1beta1=true,extensions/v1beta1/networkpolicies=true,rbac.authorization.k8s.io/v1beta1=true
     - --token-auth-file=/etc/kubernetes/ssl/token.csv
