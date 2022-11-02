@@ -11,23 +11,23 @@ metadata:
     kubernetes.io/bootstrapping: rbac-defaults
   name: system:coredns
 rules:
-- apiGroups:
-  - ""
-  resources:
-  - endpoints
-  - services
-  - pods
-  - namespaces
-  verbs:
-  - list
-  - watch
-- apiGroups:
-  - "discovery.k8s.io"
-  resources:
-  - endpointslices
-  verbs:
-  - list
-  - watch
+  - apiGroups:
+    - ""
+    resources:
+    - endpoints
+    - services
+    - pods
+    - namespaces
+    verbs:
+    - list
+    - watch
+  - apiGroups:
+    - discovery.k8s.io
+    resources:
+    - endpointslices
+    verbs:
+    - list
+    - watch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -64,10 +64,12 @@ data:
         kubernetes cluster.local {{ K8S_SERVICE_IP_RANGE }} {
           fallthrough in-addr.arpa ip6.arpa
         }
-        forward . /etc/resolv.conf {
-        }
+        # forward . UPSTREAMNAMESERVER {
+        #   max_concurrent 1000
+        # }
         prometheus :9153
         cache 30
+        loop
         reload
         loadbalance
     } 
