@@ -14,6 +14,18 @@ clone:
   disable: true
 
 steps:
+  - name: s3-cache
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-s3-cache:1.0
+    settings:
+      restore: true
+      mount:
+        - ./.git
+      endpoint: https://cache.wodcloud.com
+      access_key:
+        from_secret: ACCESS_KEY_MINIO
+      secret_key:
+        from_secret: SECRET_KEY_MINIO
+
   - name: fetch
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-git:1.0
     settings:
