@@ -92,7 +92,7 @@ docker run \
 -v /etc/kubernetes/ansible/hosts.ini:/etc/ansible/hosts \
 -v /etc/kubernetes/ansible/ansible-kubernetes-images-$K8S_VERSION-$TARGET_ARCH.tgz:/etc/ansible/linux/roles/wod.registry/files/images/ansible-kubernetes-images-$K8S_VERSION-$TARGET_ARCH.tgz \
 -w /etc/ansible/linux \
-registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.24.7-$TARGET_ARCH \
+registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:$K8S_VERSION-$TARGET_ARCH \
 ansible-playbook 1.install.yml
 ```
 
