@@ -1,1 +1,1 @@
-{{ K8S_ADMIN_TOKEN }},admin,1
+{{ K8S_ADMIN_TOKEN }},kubernetes-admin,1,"system:masters"
