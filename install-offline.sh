@@ -32,7 +32,7 @@ fi
 if ! [ -e /etc/kubernetes/ansible/ansible-docker-$K8S_VERSION-$TARGET_ARCH.tgz ]; then
 mkdir -p /opt/docker /etc/kubernetes/ansible
 # 下载文件
-# ansible-docker-$K8S_VERSION-$TARGET_ARCH.tgz 68MB
+# ansible-docker-v1.24.7-amd64.tgz 68MB
 curl $HTTP_SERVER/k8s/ansible/$TARGET_ARCH/ansible-docker-$K8S_VERSION-$TARGET_ARCH.tgz > /etc/kubernetes/ansible/ansible-docker-$K8S_VERSION-$TARGET_ARCH.tgz
 # 解压文件
 tar xzvf /etc/kubernetes/ansible/ansible-docker-$K8S_VERSION-$TARGET_ARCH.tgz -C /opt/docker
@@ -43,7 +43,7 @@ fi
 if ! [ -e /etc/kubernetes/ansible/ansible-kubernetes-images-$K8S_VERSION-$TARGET_ARCH.tgz ]; then
 mkdir -p /etc/kubernetes/ansible
 # 下载文件
-# 安装镜像 ansible-kubernetes-images-v1.24.7-amd64.tgz 1526MB
+# 依赖镜像 ansible-kubernetes-images-v1.24.7-amd64.tgz 1526MB
 curl $HTTP_SERVER/k8s/ansible/$TARGET_ARCH/ansible-kubernetes-images-$K8S_VERSION-$TARGET_ARCH.tgz > /etc/kubernetes/ansible/ansible-kubernetes-images-$K8S_VERSION-$TARGET_ARCH.tgz
 fi
 

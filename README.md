@@ -41,28 +41,7 @@ sudo curl -sfL https://cache.wodcloud.com/kubernetes/install.sh | sh -
 
 ## 安装一个离线 kubernetes 集群
 
-## 安装 Docker
-
-```bash
-# HTTPS服务器
-export HTTP_SERVER=https://cache.wodcloud.com/kubernetes/k8s
-# 平台架构
-export TARGET_ARCH=amd64
-# Docker版本
-export DOCKER_VERSION=20.10.21
-
-# 下载文件
-# docker、containerd安装包与脚本 ， docker-20.10.21.tgz 68MB
-mkdir -p /opt/docker
-curl $HTTP_SERVER/docker/install.sh > /opt/docker/install.sh
-curl $HTTP_SERVER/docker/uninstall.sh > /opt/docker/uninstall.sh
-curl $HTTP_SERVER/docker/$TARGET_ARCH/docker-$DOCKER_VERSION.tgz > /opt/docker/docker-$DOCKER_VERSION.tgz
-
-# 安装Docker
-bash /opt/docker/install.sh
-```
-
-### 准备 ansible 镜像与 k8s 镜像
+## 准备文件
 
 ```bash
 # HTTPS服务器
@@ -72,28 +51,16 @@ export TARGET_ARCH=amd64
 # K8S版本
 export K8S_VERSION=v1.24.7
 
+mkdir -p /etc/kubernetes/ansible
 # 下载文件
-# 安装镜像 ansible-kubernetes-images-v1.24.7-amd64.tgz 1526MB
-# 安装脚本 ansible-kubernetes-v1.24.7-amd64.tgz 276MB
+curl $HTTP_SERVER/ansible/$TARGET_ARCH/ansible-docker-$K8S_VERSION-$TARGET_ARCH.tgz > /etc/kubernetes/ansible/ansible-docker-$K8S_VERSION-$TARGET_ARCH.tgz
 curl $HTTP_SERVER/ansible/$TARGET_ARCH/ansible-kubernetes-images-$K8S_VERSION-$TARGET_ARCH.tgz > /etc/kubernetes/ansible/ansible-kubernetes-images-$K8S_VERSION-$TARGET_ARCH.tgz
 curl $HTTP_SERVER/ansible/$TARGET_ARCH/ansible-kubernetes-$K8S_VERSION-$TARGET_ARCH.tgz > /etc/kubernetes/ansible/ansible-kubernetes-$K8S_VERSION-$TARGET_ARCH.tgz
+# 下载脚本
+curl $HTTP_SERVER/ansible/$TARGET_ARCH/ansible-kubernetes-$K8S_VERSION.sh > /etc/kubernetes/ansible/ansible-kubernetes-$K8S_VERSION.sh
 
-# 加载镜像
-docker load -i /etc/kubernetes/ansible/ansible-kubernetes-$K8S_VERSION-$TARGET_ARCH.tgz
-```
-
-### 安装 k8s
-
-```bash
-export TARGET_ARCH=amd64 && \
-export K8S_VERSION=v1.24.7 && \
-docker run \
--it --rm \
--v /etc/kubernetes/ansible/hosts.ini:/etc/ansible/hosts \
--v /etc/kubernetes/ansible/ansible-kubernetes-images-$K8S_VERSION-$TARGET_ARCH.tgz:/etc/ansible/linux/roles/wod.registry/files/images/ansible-kubernetes-images-$K8S_VERSION-$TARGET_ARCH.tgz \
--w /etc/ansible/linux \
-registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:$K8S_VERSION-$TARGET_ARCH \
-ansible-playbook 1.install.yml
+# 执行脚本
+bash /etc/kubernetes/ansible/ansible-kubernetes-$K8S_VERSION.sh
 ```
 
 ### 完成安装

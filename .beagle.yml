@@ -167,6 +167,7 @@ steps:
       ITEM_TAG: v1.24.7-amd64
     commands:
       - mkdir -p .tmp/amd64
+      - cp install-offline.sh .tmp/amd64/$ITEM_REPO-$ITEM_TAG.sh
       - docker pull $REGISTRY_REMOTE/$ITEM_REPO:$ITEM_TAG 
       - docker save $REGISTRY_REMOTE/$ITEM_REPO:$ITEM_TAG | gzip > .tmp/amd64/$ITEM_REPO-$ITEM_TAG.tgz
 
@@ -181,6 +182,7 @@ steps:
       ITEM_TAG: v1.24.7-arm64
     commands:
       - mkdir -p .tmp/arm64
+      - cp install-offline.sh .tmp/arm64/$ITEM_REPO-$ITEM_TAG.sh
       - docker pull $REGISTRY_REMOTE/$ITEM_REPO:$ITEM_TAG 
       - docker save $REGISTRY_REMOTE/$ITEM_REPO:$ITEM_TAG | gzip > .tmp/arm64/$ITEM_REPO-$ITEM_TAG.tgz
 
