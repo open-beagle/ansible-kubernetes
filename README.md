@@ -39,7 +39,7 @@ EOF
 sudo curl -sfL https://cache.wodcloud.com/kubernetes/install.sh | sh -
 ```
 
-## 安装一个离线 kubernetes 集群
+## 离线一键安装 kubernetes 集群
 
 ## 准备文件
 
@@ -60,6 +60,7 @@ curl $HTTP_SERVER/ansible/$TARGET_ARCH/ansible-kubernetes-$K8S_VERSION-$TARGET_A
 curl $HTTP_SERVER/ansible/$TARGET_ARCH/ansible-kubernetes-$K8S_VERSION.sh > /etc/kubernetes/ansible/ansible-kubernetes-$K8S_VERSION.sh
 
 # 执行脚本
+# bash /etc/kubernetes/ansible/ansible-kubernetes-v1.24.7.sh
 bash /etc/kubernetes/ansible/ansible-kubernetes-$K8S_VERSION.sh
 ```
 

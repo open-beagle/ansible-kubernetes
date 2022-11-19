@@ -30,10 +30,14 @@ else
 fi
 
 if ! [ -e /etc/kubernetes/ansible/ansible-docker-$K8S_VERSION-$TARGET_ARCH.tgz ]; then
-mkdir -p /opt/docker /etc/kubernetes/ansible
+mkdir -p /etc/kubernetes/ansible
 # 下载文件
 # ansible-docker-v1.24.7-amd64.tgz 68MB
 curl $HTTP_SERVER/k8s/ansible/$TARGET_ARCH/ansible-docker-$K8S_VERSION-$TARGET_ARCH.tgz > /etc/kubernetes/ansible/ansible-docker-$K8S_VERSION-$TARGET_ARCH.tgz
+fi
+
+if ! [ -e /opt/bin/docker ]; then
+mkdir -p /opt/docker
 # 解压文件
 tar xzvf /etc/kubernetes/ansible/ansible-docker-$K8S_VERSION-$TARGET_ARCH.tgz -C /opt/docker
 # 安装Docker
