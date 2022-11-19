@@ -2,7 +2,8 @@
 
 前置条件
 
-- 确保内核 Linux Kernel >= 5.4
+- 确保内核Linux Kernel >= 5.4
+- Ubuntu18.04.06操作系统默认内核为4.15，采用cgroupfs作为cgroup驱动，可以安装kubernetes1.18
 
 ## 升级内核
 
