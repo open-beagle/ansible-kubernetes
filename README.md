@@ -78,13 +78,13 @@ beagle-03                  : ok=37   changed=32   unreachable=0    failed=0    s
 ### 验证安装
 
 ```bash
-root@beagle-01:~# /opt/bin/kubectl get node
+root@beagle-01:~# kubectl get node
 NAME        STATUS   ROLES    AGE   VERSION
 beagle-01   Ready    master   93s   v1.24.7-beagle
 beagle-02   Ready    <none>   79s   v1.24.7-beagle
 beagle-03   Ready    <none>   79s   v1.24.7-beagle
 
-root@beagle-01:~# /opt/bin/kubectl get pod -A -o wide
+root@beagle-01:~# kubectl get pod -A -o wide
 NAMESPACE     NAME                                READY   STATUS    RESTARTS   AGE   IP              NODE        NOMINATED NODE   READINESS GATES
 kube-system   cilium-2zq4f                        1/1     Running   0          76s   192.168.1.202   beagle-02   <none>           <none>
 kube-system   cilium-7tjl8                        1/1     Running   0          76s   192.168.1.203   beagle-03   <none>           <none>
