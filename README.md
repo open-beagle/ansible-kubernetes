@@ -20,6 +20,8 @@
 
 ## 准备 hosts 文件
 
+请参考[Ansible.md](./docs/Ansible.md)
+
 ```bash
 mkdir -p /etc/kubernetes/ansible && \
 rm -rf /etc/kubernetes/ansible/hosts.ini && \
@@ -114,7 +116,7 @@ ERRO[0095] error waiting for container: unexpected EOF
 
 ### Ubuntu 18.04如何安装
 
-尽量升级内核至5.4以上。
+尽量升级内核至5.4以上。请参考[Ubuntu-18.04.md](./docs/Ubuntu-18.04.md)
 
 - Linux Kernel 4.10.x 时，将会默认安装Flannel网络插件
 - 升级Linux Kernel 5.4.x 时，将会默认安装Cilium网络插件

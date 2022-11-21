@@ -120,13 +120,13 @@ docker run -it --rm \
 -v $PWD/:$PWD/ \
 -e CI_WORKSPACE=$PWD \
 -e PLUGIN_SOURCE=registry.cn-qingdao.aliyuncs.com/wod \
--e PLUGIN_YAML=linux/group_vars/all.yml \
+-e PLUGIN_YAML=linux/vars/1.24.yml \
 -e PLUGIN_IMAGE=K8S_IMAGES \
 -e PLUGIN_ARCH=amd64 \
 -e PLUGIN_GROUP=k8s \
 -e PLUGIN_RELEASE=linux/roles/wod.registry/files/images/ansible-kubernetes-images-v1.24.8-amd64.tgz \
 -w $PWD \
-registry.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0
+registry.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0.1
 ```
 
 ### Update Images
