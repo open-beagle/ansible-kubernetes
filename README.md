@@ -8,7 +8,7 @@
 
 ### 限制条件
 
-- Linux Kernel >= 5.10 , 推荐 Ubuntu 22.04
+- Linux Kernel >= 5.4 , 推荐 Ubuntu 22.04
 
 ### 核心组件
 
@@ -111,3 +111,10 @@ ERRO[0095] error waiting for container: unexpected EOF
 - 此任务为离线安装，准备镜像 Registry 服务，初始化认证参数时，需要重启 Containerd，重启 Containerd 导致退出容器。
 - 如果安装服务器同时在本机上安装 K8S 节点则会导致中断。
 - 忽略此错误，继续运行脚本 ansible-playbook 1.install.yml 可以解决问题。
+
+### Ubuntu 18.04如何安装
+
+尽量升级内核至5.4以上。
+
+- Linux Kernel 4.10.x 时，将会默认安装Flannel网络插件
+- 升级Linux Kernel 5.4.x 时，将会默认安装Cilium网络插件
