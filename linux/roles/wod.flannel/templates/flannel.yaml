@@ -1,83 +1,31 @@
-
----
-apiVersion: policy/v1beta1
-kind: PodSecurityPolicy
-metadata:
-  name: psp.flannel.unprivileged
-  annotations:
-    seccomp.security.alpha.kubernetes.io/allowedProfileNames: docker/default
-    seccomp.security.alpha.kubernetes.io/defaultProfileName: docker/default
-    apparmor.security.beta.kubernetes.io/allowedProfileNames: runtime/default
-    apparmor.security.beta.kubernetes.io/defaultProfileName: runtime/default
-spec:
-  privileged: false
-  volumes:
-    - configMap
-    - secret
-    - emptyDir
-    - hostPath
-  allowedHostPaths:
-    - pathPrefix: "/etc/cni/net.d"
-    - pathPrefix: "/etc/kube-flannel"
-    - pathPrefix: "/run/flannel"
-  readOnlyRootFilesystem: false
-  # Users and groups
-  runAsUser:
-    rule: RunAsAny
-  supplementalGroups:
-    rule: RunAsAny
-  fsGroup:
-    rule: RunAsAny
-  # Privilege Escalation
-  allowPrivilegeEscalation: false
-  defaultAllowPrivilegeEscalation: false
-  # Capabilities
-  allowedCapabilities: ['NET_ADMIN']
-  defaultAddCapabilities: []
-  requiredDropCapabilities: []
-  # Host namespaces
-  hostPID: false
-  hostIPC: false
-  hostNetwork: true
-  hostPorts:
-  - min: 0
-    max: 65535
-  # SELinux
-  seLinux:
-    # SELinux is unused in CaaSP
-    rule: 'RunAsAny'
 ---
 kind: ClusterRole
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: flannel
 rules:
-  - apiGroups: ['extensions']
-    resources: ['podsecuritypolicies']
-    verbs: ['use']
-    resourceNames: ['psp.flannel.unprivileged']
-  - apiGroups:
-      - ""
-    resources:
-      - pods
-    verbs:
-      - get
-  - apiGroups:
-      - ""
-    resources:
-      - nodes
-    verbs:
-      - list
-      - watch
-  - apiGroups:
-      - ""
-    resources:
-      - nodes/status
-    verbs:
-      - patch
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  verbs:
+  - get
+- apiGroups:
+  - ""
+  resources:
+  - nodes
+  verbs:
+  - list
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - nodes/status
+  verbs:
+  - patch
 ---
 kind: ClusterRoleBinding
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: flannel
 roleRef:
@@ -85,9 +33,9 @@ roleRef:
   kind: ClusterRole
   name: flannel
 subjects:
-- kind: ServiceAccount
-  name: flannel
-  namespace: kube-system
+  - kind: ServiceAccount
+    name: flannel
+    namespace: kube-system
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -130,26 +78,7 @@ data:
       "Backend": {
         "Type": "vxlan"
       }
-    }
-  kubeconfig.conf: |-
-    apiVersion: v1
-    kind: Config
-    clusters:
-    - cluster:
-        certificate-authority: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-        server: https://{{ K8S_MASTER_HOST }}:{{ K8S_MASTER_PORT }}
-      name: default
-    contexts:
-    - context:
-        cluster: default
-        namespace: default
-        user: default
-      name: default
-    current-context: default
-    users:
-    - name: default
-      user:
-        tokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token      
+    }   
 ---
 apiVersion: apps/v1
 kind: DaemonSet
@@ -171,11 +100,24 @@ spec:
         app.bd-apaas.com/cluster-component: network
     spec:
       hostNetwork: true
+      priorityClassName: system-node-critical
       tolerations:
       - operator: Exists
         effect: NoSchedule
       serviceAccountName: flannel
       initContainers:
+      - name: install-cni-plugin
+       #image: flannelcni/flannel-cni-plugin:v1.1.0 for ppc64le and mips64le (dockerhub limitations may apply)
+        image: {{ REGISTRY_LOCAL }}/{{ K8S_IMAGES["FLANNEL-CNI-PLUGIN"]["NAME"] }}:{{ K8S_IMAGES["FLANNEL-CNI-PLUGIN"]["VERSION"] }}{{ "-%s" | format(K8S_ARCH) | replace("-amd64", "") }}
+        command:
+        - cp
+        args:
+        - -f
+        - /flannel
+        - /opt/cni/bin/flannel
+        volumeMounts:
+        - name: cni-plugin
+          mountPath: /opt/cni/bin
       - name: install-cni
         image: {{ REGISTRY_LOCAL }}/{{ K8S_IMAGES["FLANNEL"]["NAME"] }}:{{ K8S_IMAGES["FLANNEL"]["VERSION"] }}{{ "-%s" | format(K8S_ARCH) | replace("-amd64", "") }}
         command:
@@ -196,8 +138,7 @@ spec:
         - /opt/bin/flanneld
         args:
         - --ip-masq
-        - --kube-subnet-mgr
-        - --kubeconfig-file=/etc/kube-flannel/kubeconfig.conf        
+        - --kube-subnet-mgr       
         resources:
           requests:
             cpu: "100m"
@@ -208,7 +149,7 @@ spec:
         securityContext:
           privileged: false
           capabilities:
-             add: ["NET_ADMIN"]
+            add: ["NET_ADMIN", "NET_RAW"]
         env:
         - name: POD_NAME
           valueFrom:
@@ -218,18 +159,29 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
+        - name: EVENT_QUEUE_DEPTH
+          value: "5000"
         volumeMounts:
         - name: run
           mountPath: /run/flannel
         - name: flannel-cfg
           mountPath: /etc/kube-flannel/
+        - name: xtables-lock
+          mountPath: /run/xtables.lock
       volumes:
-        - name: run
-          hostPath:
-            path: /run/flannel
-        - name: cni
-          hostPath:
-            path: /etc/cni/net.d
-        - name: flannel-cfg
-          configMap:
-            name: kube-flannel-cfg       
+      - name: run
+        hostPath:
+          path: /run/flannel
+      - name: cni-plugin
+        hostPath:
+          path: /opt/cni/bin
+      - name: cni
+        hostPath:
+          path: /etc/cni/net.d
+      - name: flannel-cfg
+        configMap:
+          name: kube-flannel-cfg
+      - name: xtables-lock
+        hostPath:
+          path: /run/xtables.lock
+          type: FileOrCreate

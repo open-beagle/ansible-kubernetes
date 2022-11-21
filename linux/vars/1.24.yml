@@ -2,22 +2,22 @@
 K8S_IMAGES:
   KUBELET:
     NAME: kubelet
-    VERSION: 'v1.24.7-beagle'
+    VERSION: 'v1.24.8-beagle'
   KUBE-APISERVER:
     NAME: kube-apiserver
-    VERSION: 'v1.24.7-beagle'
+    VERSION: 'v1.24.8-beagle'
   KUBE-CONTROLLER-MANAGER:
     NAME: kube-controller-manager
-    VERSION: 'v1.24.7-beagle'
+    VERSION: 'v1.24.8-beagle'
   KUBE-SCHEDULER:
     NAME: kube-scheduler
-    VERSION: 'v1.24.7-beagle'
+    VERSION: 'v1.24.8-beagle'
   KUBE-PROXY:
     NAME: kube-proxy
-    VERSION: 'v1.24.7-beagle'
+    VERSION: 'v1.24.8-beagle'
   KUBECTL:
     NAME: kubectl
-    VERSION: 'v1.24.7-beagle'
+    VERSION: 'v1.24.8-beagle'
   PAUSE:
     NAME: pause
     VERSION: '3.7'
@@ -33,6 +33,9 @@ K8S_IMAGES:
   FLANNEL:
     NAME: flannel
     VERSION: 'v0.19.2'
+  FLANNEL-CNI-PLUGIN:
+    NAME: flannel-cni-plugin
+    VERSION: 'v1.2.0'
   CILIUM:
     NAME: cilium
     VERSION: '1.11.9'

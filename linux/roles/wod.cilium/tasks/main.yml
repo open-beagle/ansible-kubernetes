@@ -38,7 +38,7 @@
     - need_addons_cilium is failed
 
 - name: template beagle-cilium.md
-  template: src=beagle-cilium.md dest=/etc/kubernetes/charts/beagle-cilium.md
+  template: src=beagle-cilium.md dest=/etc/kubernetes/charts/beagle-cilium-{{ BEAGLE_CILIUM_VERSION }}.md
   when:
     - need_addons_cilium is failed
 

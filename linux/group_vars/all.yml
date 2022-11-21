@@ -24,7 +24,7 @@ DOCKER_VERSION: '20.10.21'
 K8S_ARCH: amd64
 
 # K8S_VERSION , k8s版本
-K8S_VERSION: "1.24.7"
+K8S_VERSION: "1.24.8"
 
 # 镜像
 K8S_IMAGES:
@@ -61,6 +61,9 @@ K8S_IMAGES:
   FLANNEL:
     NAME: flannel
     VERSION: 'v0.19.2'
+  FLANNEL-CNI-PLUGIN:
+    NAME: flannel-cni-plugin
+    VERSION: 'v1.2.0'
   CILIUM:
     NAME: cilium
     VERSION: '1.11.9'

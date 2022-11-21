@@ -14,15 +14,15 @@
 #   when: 
 #   - need_addons_rbac_admin is failed
 
-- name: check need coredns.yml
-  raw: stat /etc/kubernetes/addons/kube-system/coredns.yml
+- name: check need coredns.yaml
+  raw: stat /etc/kubernetes/addons/kube-system/coredns.yaml
   register: need_addons_dns
   ignore_errors: True
 
-- name: template coredns.yml
-  template: src=coredns.yml dest=/etc/kubernetes/addons/kube-system/coredns.yml
+- name: template coredns.yaml
+  template: src=coredns.yaml dest=/etc/kubernetes/addons/kube-system/coredns.yaml
 
-- name: kubectl create -f coredns.yml
-  raw: /opt/bin/kubectl create -f /etc/kubernetes/addons/kube-system/coredns.yml
+- name: kubectl create -f coredns.yaml
+  raw: /opt/bin/kubectl create -f /etc/kubernetes/addons/kube-system/coredns.yaml
   when: 
   - need_addons_dns is failed

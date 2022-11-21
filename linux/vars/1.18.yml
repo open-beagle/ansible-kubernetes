@@ -33,6 +33,9 @@ K8S_IMAGES:
   FLANNEL:
     NAME: flannel
     VERSION: 'v0.19.2'
+  FLANNEL-CNI-PLUGIN:
+    NAME: flannel-cni-plugin
+    VERSION: 'v1.2.0'
   CILIUM:
     NAME: cilium
     VERSION: '1.11.9'
