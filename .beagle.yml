@@ -170,7 +170,7 @@ steps:
       - mkdir -p .tmp/$ITEM_ARCH
       - cp install-offline.sh .tmp/$ITEM_ARCH/$ITEM_REPO-$ITEM_TAG.sh
       - docker pull $REGISTRY_REMOTE/$ITEM_REPO:$ITEM_TAG-$ITEM_ARCH
-      - docker save $REGISTRY_REMOTE/$ITEM_REPO:$ITEM_TAG-$ITEM_ARCH | gzip > .tmp/amd64/$ITEM_REPO-$ITEM_TAG-$ITEM_ARCH.tgz
+      - docker save $REGISTRY_REMOTE/$ITEM_REPO:$ITEM_TAG-$ITEM_ARCH | gzip > .tmp/$ITEM_ARCH/$ITEM_REPO-$ITEM_TAG-$ITEM_ARCH.tgz
 
   - name: ansible-kubernetes-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
@@ -187,7 +187,7 @@ steps:
       - cp install-offline.sh .tmp/$ITEM_ARCH/$ITEM_REPO-$ITEM_TAG.sh
       - sed -i --expression "s?-amd64?-$ITEM_ARCH?" .tmp/$ITEM_ARCH/$ITEM_REPO-$ITEM_TAG.sh
       - docker pull $REGISTRY_REMOTE/$ITEM_REPO:$ITEM_TAG-$ITEM_ARCH
-      - docker save $REGISTRY_REMOTE/$ITEM_REPO:$ITEM_TAG-$ITEM_ARCH | gzip > .tmp/amd64/$ITEM_REPO-$ITEM_TAG-$ITEM_ARCH.tgz
+      - docker save $REGISTRY_REMOTE/$ITEM_REPO:$ITEM_TAG-$ITEM_ARCH | gzip > .tmp/$ITEM_ARCH/$ITEM_REPO-$ITEM_TAG-$ITEM_ARCH.tgz
 
   - name: minio
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-minio:1.0
