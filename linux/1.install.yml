@@ -11,6 +11,8 @@
     - wod.docker
 
 - hosts: master
+  vars:
+    K8S_VERSION_NUM: "{{ K8S_VERSION | replace('v', '') }}"
   roles:
     - role: wod.k8s-ssl-master
     - role: wod.k8s-ssl-kubelet
@@ -21,25 +23,27 @@
     - role: wod.k8s-etcd
     - role: wod.k8s-master
     - role: wod.k8s-kubelet-docker
-      when: 
-        - K8S_VERSION is version('1.23','<=')
+      when:
+        - K8S_VERSION_NUM is version('1.24','<')
     - role: wod.k8s-kubelet
-      when: 
-        - K8S_VERSION is version('1.23','>')
+      when:
+        - K8S_VERSION_NUM is version('1.24','>=')
     - role: wod.k8s-kubectl
     - role: wod.k8s-label
 
 - hosts: node
+  vars:
+    K8S_VERSION_NUM: "{{ K8S_VERSION | replace('v', '') }}"
   roles:
     - role: wod.k8s-ssl-kubelet
     - role: wod.envoy
     - role: wod.docker-login
     - role: wod.k8s-kubelet-docker
-      when: 
-        - K8S_VERSION is version('1.23','<=')
+      when:
+        - K8S_VERSION_NUM is version('1.24','<')
     - role: wod.k8s-kubelet
-      when: 
-        - K8S_VERSION is version('1.23','>')
+      when:
+        - K8S_VERSION_NUM is version('1.24','>=')
     - role: wod.k8s-cni
 
 - hosts: master
@@ -55,7 +59,7 @@
       when:
         - "inventory_hostname == groups['master'][0]"
         - "K8S_NETWORK_PLUGIN == 'cilium'"
-        - ansible_kernel is version('5.3','>')
+        - ansible_kernel is version('5.4','>=')
     - role: wod.flannel
       when:
         - "inventory_hostname == groups['master'][0]"
