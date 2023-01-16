@@ -19,14 +19,14 @@ K8S_DATA_PATH: "/var/lib"
 ## DOCKER_DATA_PATH ， docker将数据存储至此目录，转移后docker将数据存储至额外的硬盘，避免系统盘被占满
 # DOCKER_DATA_PATH: "/data/kubernetes"
 ## DOCKER_VERSION , docker的安装版本
-DOCKER_VERSION: '20.10.21'
+DOCKER_VERSION: '20.10.22'
 
 ## K8S_ARCH, 服务器的CPU架构
 ## 可选值：amd64，arm64，ppc64le，mips64le
 K8S_ARCH: amd64
 
 # K8S_VERSION , k8s版本
-K8S_VERSION: "v1.24.8"
+K8S_VERSION: "v1.24.9"
 
 # 镜像
 K8S_IMAGES:
