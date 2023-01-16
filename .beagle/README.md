@@ -40,8 +40,7 @@ ansible all -m shell -a 'rm -rf /opt/docker'
 ## Debug Multi Version
 
 ```bash
-# 1.18.20
-# 仅测试通过Ubuntu 18.04
+# 1.26
 docker run \
 -it --rm \
 -v $PWD/:/etc/ansible \
@@ -49,10 +48,10 @@ docker run \
 -w /etc/ansible/linux \
 registry.cn-qingdao.aliyuncs.com/wod/ansible:2 \
 ansible-playbook 1.install.yml \
---extra-vars "K8S_VERSION=v1.18.20" \
+--extra-vars "K8S_VERSION=v1.26.0" \
 --extra-vars "REGISTRY_LOCAL=registry.cn-qingdao.aliyuncs.com/wod"
 
-# 1.20.15
+# 1.24
 docker run \
 -it --rm \
 -v $PWD/:/etc/ansible \
@@ -60,10 +59,10 @@ docker run \
 -w /etc/ansible/linux \
 registry.cn-qingdao.aliyuncs.com/wod/ansible:2 \
 ansible-playbook 1.install.yml \
---extra-vars "K8S_VERSION=v1.20.15" \
+--extra-vars "K8S_VERSION=v1.24.9" \
 --extra-vars "REGISTRY_LOCAL=registry.cn-qingdao.aliyuncs.com/wod"
 
-# 1.22.15
+# 1.22
 docker run \
 -it --rm \
 -v $PWD/:/etc/ansible \
@@ -74,7 +73,7 @@ ansible-playbook 1.install.yml \
 --extra-vars "K8S_VERSION=v1.22.15" \
 --extra-vars "REGISTRY_LOCAL=registry.cn-qingdao.aliyuncs.com/wod"
 
-# 1.24.8
+# 1.20
 docker run \
 -it --rm \
 -v $PWD/:/etc/ansible \
@@ -82,7 +81,19 @@ docker run \
 -w /etc/ansible/linux \
 registry.cn-qingdao.aliyuncs.com/wod/ansible:2 \
 ansible-playbook 1.install.yml \
---extra-vars "K8S_VERSION=v1.24.9" \
+--extra-vars "K8S_VERSION=v1.20.15" \
+--extra-vars "REGISTRY_LOCAL=registry.cn-qingdao.aliyuncs.com/wod"
+
+# 1.18
+# 仅测试通过Ubuntu 18.04
+docker run \
+-it --rm \
+-v $PWD/:/etc/ansible \
+-v $PWD/.vscode/hosts.ini:/etc/ansible/hosts \
+-w /etc/ansible/linux \
+registry.cn-qingdao.aliyuncs.com/wod/ansible:2 \
+ansible-playbook 1.install.yml \
+--extra-vars "K8S_VERSION=v1.18.20" \
 --extra-vars "REGISTRY_LOCAL=registry.cn-qingdao.aliyuncs.com/wod"
 ```
 
@@ -124,7 +135,7 @@ docker run -it --rm \
 -e PLUGIN_IMAGE=K8S_IMAGES \
 -e PLUGIN_ARCH=amd64 \
 -e PLUGIN_GROUP=k8s \
--e PLUGIN_RELEASE=linux/roles/wod.registry/files/images/ansible-kubernetes-images-v1.24.9-amd64.tgz \
+-e PLUGIN_RELEASE=linux/roles/wod.registry/files/images/ansible-kubernetes-images-v1.26.0-amd64.tgz \
 -w $PWD \
 registry.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0.1
 ```
@@ -139,7 +150,7 @@ docker run -it --rm \
 -e PLUGIN_TLS=insecure \
 -e PLUGIN_USER=beagle \
 -e PLUGIN_PASS=beagle \
--e PLUGIN_RELEASE=$PWD/beagle-kubernetes-images-v1.24.9-amd64.tgz \
+-e PLUGIN_RELEASE=$PWD/beagle-kubernetes-images-v1.26.0-amd64.tgz \
 -w $PWD \
 registry.beagle.default:6444/k8s/devops-docker-images:1.0
 ```

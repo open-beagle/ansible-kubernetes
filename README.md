@@ -51,7 +51,7 @@ export HTTP_SERVER=https://cache.wodcloud.com/kubernetes/k8s
 # 平台架构
 export TARGET_ARCH=amd64
 # K8S版本
-export K8S_VERSION=v1.24.9
+export K8S_VERSION=v1.26.0
 
 mkdir -p /etc/kubernetes/ansible
 # 下载文件
@@ -62,7 +62,7 @@ curl $HTTP_SERVER/ansible/$TARGET_ARCH/ansible-kubernetes-$K8S_VERSION-$TARGET_A
 curl $HTTP_SERVER/ansible/$TARGET_ARCH/ansible-kubernetes-$K8S_VERSION.sh > /etc/kubernetes/ansible/ansible-kubernetes-$K8S_VERSION.sh
 
 # 执行脚本
-# bash /etc/kubernetes/ansible/ansible-kubernetes-v1.24.9.sh
+# bash /etc/kubernetes/ansible/ansible-kubernetes-v1.26.0.sh
 bash /etc/kubernetes/ansible/ansible-kubernetes-$K8S_VERSION.sh
 ```
 
@@ -82,9 +82,9 @@ beagle-03                  : ok=37   changed=32   unreachable=0    failed=0    s
 ```bash
 root@beagle-01:~# kubectl get node
 NAME        STATUS   ROLES    AGE   VERSION
-beagle-01   Ready    master   93s   v1.24.9-beagle
-beagle-02   Ready    <none>   79s   v1.24.9-beagle
-beagle-03   Ready    <none>   79s   v1.24.9-beagle
+beagle-01   Ready    master   93s   v1.26.0-beagle
+beagle-02   Ready    <none>   79s   v1.26.0-beagle
+beagle-03   Ready    <none>   79s   v1.26.0-beagle
 
 root@beagle-01:~# kubectl get pod -A -o wide
 NAMESPACE     NAME                                READY   STATUS    RESTARTS   AGE   IP              NODE        NOMINATED NODE   READINESS GATES
