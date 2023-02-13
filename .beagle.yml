@@ -68,9 +68,9 @@ steps:
       - cp /usr/local/bin/registry linux/roles/wod.registry/files/bin/registry-v2.8.1
 
   - name: install-envoy-amd64
-    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:1.23.1-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:1.23.4-amd64
     commands:
-      - cp /usr/local/bin/envoy linux/roles/wod.envoy/files/envoy-1.23.1
+      - cp /usr/local/bin/envoy linux/roles/wod.envoy/files/envoy-1.23.4
 
   - name: docker-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
@@ -120,9 +120,9 @@ steps:
       - cp /usr/local/bin/registry linux/roles/wod.registry/files/bin/registry-v2.8.1
 
   - name: install-envoy-arm64
-    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:1.23.1-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:1.23.4-arm64
     commands:
-      - cp /usr/local/bin/envoy linux/roles/wod.envoy/files/envoy-1.23.1
+      - cp /usr/local/bin/envoy linux/roles/wod.envoy/files/envoy-1.23.4
 
   - name: docker-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0

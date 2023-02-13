@@ -24,7 +24,7 @@ docker run -it --rm \
   -c "cp /usr/local/bin/registry /data/output/registry-$REGISTRY_VERSION"
 
 rm -rf ./linux/roles/wod.envoy/files/envoy-*
-ENVOY_VERSION=1.23.1
+ENVOY_VERSION=1.23.4
 docker run -it --rm \
   --entrypoint=sh \
   -e ENVOY_VERSION=$ENVOY_VERSION \
