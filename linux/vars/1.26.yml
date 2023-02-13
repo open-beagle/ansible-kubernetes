@@ -2,49 +2,49 @@
 K8S_IMAGES:
   KUBELET:
     NAME: kubelet
-    VERSION: 'v1.26.9-beagle'
+    VERSION: 'v1.26.1-beagle'
   KUBE-APISERVER:
     NAME: kube-apiserver
-    VERSION: 'v1.26.9-beagle'
+    VERSION: 'v1.26.1-beagle'
   KUBE-CONTROLLER-MANAGER:
     NAME: kube-controller-manager
-    VERSION: 'v1.26.9-beagle'
+    VERSION: 'v1.26.1-beagle'
   KUBE-SCHEDULER:
     NAME: kube-scheduler
-    VERSION: 'v1.26.9-beagle'
+    VERSION: 'v1.26.1-beagle'
   KUBE-PROXY:
     NAME: kube-proxy
-    VERSION: 'v1.26.9-beagle'
+    VERSION: 'v1.26.1-beagle'
   KUBECTL:
     NAME: kubectl
-    VERSION: 'v1.26.9-beagle'
+    VERSION: 'v1.26.1-beagle'
   PAUSE:
     NAME: pause
     VERSION: '3.7'
   KUBE-CNI-PLUGINS:
     NAME: kube-cni-plugins
-    VERSION: 'v1.1.1'
+    VERSION: 'v1.2.0'
   ETCD:
     NAME: etcd
-    VERSION: 'v3.5.5'
+    VERSION: 'v3.5.6'
   ETCDCTL:
     NAME: etcdctl
-    VERSION: 'v3.5.5'
+    VERSION: 'v3.5.6'
   FLANNEL:
     NAME: flannel
-    VERSION: 'v0.19.2'
+    VERSION: 'v0.20.2'
   FLANNEL-CNI-PLUGIN:
     NAME: flannel-cni-plugin
-    VERSION: 'v1.2.0'
+    VERSION: 'v1.1.2'
   CILIUM:
     NAME: cilium
-    VERSION: '1.11.9'
+    VERSION: '1.11.13'
   CILIUM-OPERATOR:
     NAME: cilium-operator-generic
-    VERSION: '1.11.9'
+    VERSION: '1.11.13'
   CILIUM-HUBBLE-RELAY:
     NAME: cilium-hubble-relay
-    VERSION: '1.11.9'
+    VERSION: '1.11.13'
   CILIUM-HUBBLE-UI:
     NAME: cilium-hubble-ui
     VERSION: '0.9.2'
@@ -53,10 +53,10 @@ K8S_IMAGES:
     VERSION: '0.9.2'
   COREDNS:
     NAME: coredns
-    VERSION: 'v1.9.4'
+    VERSION: 'v1.10.1'
   HELM:
     NAME: helm
-    VERSION: 'v3.10.0'
+    VERSION: 'v3.11.1'
   BUSYBOX:
     NAME: busybox
     VERSION: '1.34'

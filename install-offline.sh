@@ -7,7 +7,7 @@ HTTP_SERVER="${HTTP_SERVER:-https://cache.wodcloud.com/kubernetes}"
 # 平台架构
 TARGET_ARCH="${TARGET_ARCH:-amd64}"
 # K8S版本
-K8S_VERSION="${K8S_VERSION:-v1.26.0}"
+K8S_VERSION="${K8S_VERSION:-v1.26.1}"
 
 LOCAL_KERNEL=$(uname -r | head -c 3)
 LOCAL_ARCH=$(uname -m)
@@ -32,7 +32,7 @@ fi
 if ! [ -e /etc/kubernetes/ansible/ansible-docker-$K8S_VERSION-$TARGET_ARCH.tgz ]; then
 mkdir -p /etc/kubernetes/ansible
 # 下载文件
-# ansible-docker-v1.26.0-amd64.tgz 68MB
+# ansible-docker-v1.26.1-amd64.tgz 68MB
 curl $HTTP_SERVER/k8s/ansible/$TARGET_ARCH/ansible-docker-$K8S_VERSION-$TARGET_ARCH.tgz > /etc/kubernetes/ansible/ansible-docker-$K8S_VERSION-$TARGET_ARCH.tgz
 fi
 
@@ -47,14 +47,14 @@ fi
 if ! [ -e /etc/kubernetes/ansible/ansible-kubernetes-images-$K8S_VERSION-$TARGET_ARCH.tgz ]; then
 mkdir -p /etc/kubernetes/ansible
 # 下载文件
-# 依赖镜像 ansible-kubernetes-images-v1.26.0-amd64.tgz 1526MB
+# 依赖镜像 ansible-kubernetes-images-v1.26.1-amd64.tgz 1526MB
 curl $HTTP_SERVER/k8s/ansible/$TARGET_ARCH/ansible-kubernetes-images-$K8S_VERSION-$TARGET_ARCH.tgz > /etc/kubernetes/ansible/ansible-kubernetes-images-$K8S_VERSION-$TARGET_ARCH.tgz
 fi
 
 if ! [ -e /etc/kubernetes/ansible/ansible-kubernetes-$K8S_VERSION-$TARGET_ARCH.tgz ]; then
 mkdir -p /etc/kubernetes/ansible
 # 下载文件
-# 安装脚本 ansible-kubernetes-v1.26.0-amd64.tgz 276MB
+# 安装脚本 ansible-kubernetes-v1.26.1-amd64.tgz 276MB
 curl $HTTP_SERVER/k8s/ansible/$TARGET_ARCH/ansible-kubernetes-$K8S_VERSION-$TARGET_ARCH.tgz > /etc/kubernetes/ansible/ansible-kubernetes-$K8S_VERSION-$TARGET_ARCH.tgz
 fi
 

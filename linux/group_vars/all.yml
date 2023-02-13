@@ -19,14 +19,14 @@ K8S_DATA_PATH: "/var/lib"
 ## DOCKER_DATA_PATH ， docker将数据存储至此目录，转移后docker将数据存储至额外的硬盘，避免系统盘被占满
 # DOCKER_DATA_PATH: "/data/kubernetes"
 ## DOCKER_VERSION , docker的安装版本
-DOCKER_VERSION: '20.10.22'
+DOCKER_VERSION: '20.10.23'
 
 ## K8S_ARCH, 服务器的CPU架构
 ## 可选值：amd64，arm64，ppc64le，mips64le
 K8S_ARCH: amd64
 
 # K8S_VERSION , k8s版本
-K8S_VERSION: "v1.26.0"
+K8S_VERSION: "v1.26.1"
 
 # 镜像
 K8S_IMAGES:
@@ -53,28 +53,28 @@ K8S_IMAGES:
     VERSION: '3.7'
   KUBE-CNI-PLUGINS:
     NAME: kube-cni-plugins
-    VERSION: 'v1.1.1'
+    VERSION: 'v1.2.0'
   ETCD:
     NAME: etcd
-    VERSION: 'v3.5.5'
+    VERSION: 'v3.5.6'
   ETCDCTL:
     NAME: etcdctl
-    VERSION: 'v3.5.5'
+    VERSION: 'v3.5.6'
   FLANNEL:
     NAME: flannel
-    VERSION: 'v0.19.2'
+    VERSION: 'v0.20.2'
   FLANNEL-CNI-PLUGIN:
     NAME: flannel-cni-plugin
-    VERSION: 'v1.2.0'
+    VERSION: 'v1.1.2'
   CILIUM:
     NAME: cilium
-    VERSION: '1.11.9'
+    VERSION: '1.11.13'
   CILIUM-OPERATOR:
     NAME: cilium-operator-generic
-    VERSION: '1.11.9'
+    VERSION: '1.11.13'
   CILIUM-HUBBLE-RELAY:
     NAME: cilium-hubble-relay
-    VERSION: '1.11.9'
+    VERSION: '1.11.13'
   CILIUM-HUBBLE-UI:
     NAME: cilium-hubble-ui
     VERSION: '0.9.2'
@@ -86,7 +86,7 @@ K8S_IMAGES:
     VERSION: 'v1.9.4'
   HELM:
     NAME: helm
-    VERSION: 'v3.10.0'
+    VERSION: 'v3.11.1'
   BUSYBOX:
     NAME: busybox
     VERSION: '1.34'
