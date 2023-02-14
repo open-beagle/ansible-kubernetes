@@ -6,9 +6,9 @@ trigger:
     - dev
 
 volumes:
-  - name: docker
-    host:
-      path: /var/run/docker.sock
+- name: docker
+  host:
+    path: /var/run/docker.sock
 
 clone:
   disable: true
