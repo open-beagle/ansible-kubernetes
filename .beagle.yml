@@ -38,9 +38,12 @@ steps:
       K8S_VERSION: v1.26.1
       K8S_RELEASE: v1.26
     commands:
-      - sed -i --expression "s?K8S_VERSION:.*?K8S_VERSION: \"$K8S_VERSION\"?" linux/group_vars/all.yml
-      - sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\${K8S_VERSION:-$K8S_VERSION}\"?" install-offline.sh
-      - sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\${K8S_VERSION:-$K8S_VERSION}\"?" install.sh
+      - |
+        sed -i --expression "s?K8S_VERSION:.*?K8S_VERSION: \"$K8S_VERSION\"?" linux/group_vars/all.yml
+      - |
+        sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\${K8S_VERSION:-$K8S_VERSION}\"?" install-offline.sh
+      - |
+        sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\${K8S_VERSION:-$K8S_VERSION}\"?" install.sh
 
   - name: curl
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
@@ -255,9 +258,12 @@ steps:
       K8S_VERSION: v1.26.1
       K8S_RELEASE: v1.26
     commands:
-      - sed -i --expression "s?K8S_VERSION:.*?K8S_VERSION: \"$K8S_VERSION\"?" linux/group_vars/all.yml
-      - sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\${K8S_VERSION:-$K8S_VERSION}\"?" install-offline.sh
-      - sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\${K8S_VERSION:-$K8S_VERSION}\"?" install.sh
+      - |
+        sed -i --expression "s?K8S_VERSION:.*?K8S_VERSION: \"$K8S_VERSION\"?" linux/group_vars/all.yml
+      - |
+        sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\${K8S_VERSION:-$K8S_VERSION}\"?" install-offline.sh
+      - |
+        sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\${K8S_VERSION:-$K8S_VERSION}\"?" install.sh
 
   - name: curl
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
@@ -568,9 +574,12 @@ steps:
       K8S_VERSION: v1.24.9
       K8S_RELEASE: v1.24
     commands:
-      - sed -i --expression "s?K8S_VERSION:.*?K8S_VERSION: \"$K8S_VERSION\"?" linux/group_vars/all.yml
-      - sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\${K8S_VERSION:-$K8S_VERSION}\"?" install-offline.sh
-      - sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\${K8S_VERSION:-$K8S_VERSION}\"?" install.sh
+      - |
+        sed -i --expression "s?K8S_VERSION:.*?K8S_VERSION: \"$K8S_VERSION\"?" linux/group_vars/all.yml
+      - |
+        sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\${K8S_VERSION:-$K8S_VERSION}\"?" install-offline.sh
+      - |
+        sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\${K8S_VERSION:-$K8S_VERSION}\"?" install.sh
 
   - name: curl
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
@@ -836,9 +845,12 @@ steps:
       K8S_VERSION: v1.22.16
       K8S_RELEASE: v1.22
     commands:
-      - sed -i --expression "s?K8S_VERSION:.*?K8S_VERSION: \"$K8S_VERSION\"?" linux/group_vars/all.yml
-      - sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\${K8S_VERSION:-$K8S_VERSION}\"?" install-offline.sh
-      - sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\${K8S_VERSION:-$K8S_VERSION}\"?" install.sh
+      - |
+        sed -i --expression "s?K8S_VERSION:.*?K8S_VERSION: \"$K8S_VERSION\"?" linux/group_vars/all.yml
+      - |
+        sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\${K8S_VERSION:-$K8S_VERSION}\"?" install-offline.sh
+      - |
+        sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\${K8S_VERSION:-$K8S_VERSION}\"?" install.sh
 
   - name: curl
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
@@ -1104,9 +1116,12 @@ steps:
       K8S_VERSION: v1.20.15
       K8S_RELEASE: v1.20
     commands:
-      - sed -i --expression "s?K8S_VERSION:.*?K8S_VERSION: \"$K8S_VERSION\"?" linux/group_vars/all.yml
-      - sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\${K8S_VERSION:-$K8S_VERSION}\"?" install-offline.sh
-      - sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\${K8S_VERSION:-$K8S_VERSION}\"?" install.sh
+      - |
+        sed -i --expression "s?K8S_VERSION:.*?K8S_VERSION: \"$K8S_VERSION\"?" linux/group_vars/all.yml
+      - |
+        sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\${K8S_VERSION:-$K8S_VERSION}\"?" install-offline.sh
+      - |
+        sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\${K8S_VERSION:-$K8S_VERSION}\"?" install.sh
 
   - name: curl
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
@@ -1372,9 +1387,12 @@ steps:
       K8S_VERSION: v1.18.20
       K8S_RELEASE: v1.18
     commands:
-      - sed -i --expression "s?K8S_VERSION:.*?K8S_VERSION: \"$K8S_VERSION\"?" linux/group_vars/all.yml
-      - sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\${K8S_VERSION:-$K8S_VERSION}\"?" install-offline.sh
-      - sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\${K8S_VERSION:-$K8S_VERSION}\"?" install.sh
+      - |
+        sed -i --expression "s?K8S_VERSION:.*?K8S_VERSION: \"$K8S_VERSION\"?" linux/group_vars/all.yml
+      - |
+        sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\${K8S_VERSION:-$K8S_VERSION}\"?" install-offline.sh
+      - |
+        sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\${K8S_VERSION:-$K8S_VERSION}\"?" install.sh
 
   - name: curl
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
