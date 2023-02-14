@@ -8,6 +8,8 @@ docs/
 
 linux/vars
 
+.tmp/
+
 .beagle.yml
 .gitattributes
 .gitignore
