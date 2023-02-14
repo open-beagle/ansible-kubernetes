@@ -142,8 +142,8 @@ steps:
       DOCKER_VERSION: 20.10.23
       K8S_VERSION: v1.26.1
       K8S_ARCH: amd64
+      K8S_RELEASE: ${K8S_VERSION%.*}
     commands:
-      - export K8S_RELEASE="${K8S_VERSION%.*}"
       - mkdir -p .tmp/$K8S_RELEASE .tmp/docker/$K8S_ARCH
       - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
       - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
