@@ -143,12 +143,12 @@ steps:
       K8S_VERSION: v1.26.1
       K8S_ARCH: amd64
     commands:
-      - export K8S_RELEASE_VERSION=${K8S_VERSION%.*}
-      - mkdir -p .tmp/$K8S_RELEASE_VERSION .tmp/docker/$K8S_ARCH
+      - export K8S_RELEASE="${K8S_VERSION%.*}"
+      - mkdir -p .tmp/$K8S_RELEASE .tmp/docker/$K8S_ARCH
       - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
       - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
       - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
-      - tar czvf .tmp/$K8S_RELEASE_VERSION/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
+      - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
       - rm -rf .tmp/docker
 
   - name: ansible-kubernetes-amd64
@@ -162,11 +162,11 @@ steps:
       K8S_VERSION: v1.26.1
       K8S_ARCH: amd64
     commands:
-      - export K8S_RELEASE_VERSION=${K8S_VERSION%.*}
-      - mkdir -p .tmp/$K8S_RELEASE_VERSION/$ITEM_ARCH
-      - cp install-offline.sh .tmp/$K8S_RELEASE_VERSION/$ITEM_ARCH/$ITEM_REPO-$K8S_VERSION.sh
+      - export K8S_RELEASE="${K8S_VERSION%.*}"
+      - mkdir -p .tmp/$K8S_RELEASE/$ITEM_ARCH
+      - cp install-offline.sh .tmp/$K8S_RELEASE/$ITEM_ARCH/$ITEM_REPO-$K8S_VERSION.sh
       - docker pull $REGISTRY_REMOTE/$ITEM_REPO:$K8S_VERSION-$K8S_ARCH
-      - docker save $REGISTRY_REMOTE/$ITEM_REPO:$K8S_VERSION-$K8S_ARCH | gzip > .tmp/$K8S_RELEASE_VERSION/$ITEM_ARCH/$ITEM_REPO-$K8S_VERSION-$K8S_ARCH.tgz
+      - docker save $REGISTRY_REMOTE/$ITEM_REPO:$K8S_VERSION-$K8S_ARCH | gzip > .tmp/$K8S_RELEASE/$ITEM_ARCH/$ITEM_REPO-$K8S_VERSION-$K8S_ARCH.tgz
 
   - name: ansible-docker-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
@@ -175,12 +175,12 @@ steps:
       K8S_VERSION: v1.26.1
       K8S_ARCH: arm64
     commands:
-      - export K8S_RELEASE_VERSION=${K8S_VERSION%.*}
-      - mkdir -p .tmp/$K8S_RELEASE_VERSION .tmp/docker/$K8S_ARCH
+      - export K8S_RELEASE="${K8S_VERSION%.*}"
+      - mkdir -p .tmp/$K8S_RELEASE .tmp/docker/$K8S_ARCH
       - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
       - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
       - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
-      - tar czvf .tmp/$K8S_RELEASE_VERSION/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
+      - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
       - rm -rf .tmp/docker
 
   - name: ansible-kubernetes-arm64
@@ -194,11 +194,11 @@ steps:
       K8S_VERSION: v1.26.1
       K8S_ARCH: arm64
     commands:
-      - export K8S_RELEASE_VERSION=${K8S_VERSION%.*}
-      - mkdir -p .tmp/$K8S_RELEASE_VERSION/$ITEM_ARCH
-      - cp install-offline.sh .tmp/$K8S_RELEASE_VERSION/$ITEM_ARCH/$ITEM_REPO-$K8S_VERSION.sh
+      - export K8S_RELEASE="${K8S_VERSION%.*}"
+      - mkdir -p .tmp/$K8S_RELEASE/$ITEM_ARCH
+      - cp install-offline.sh .tmp/$K8S_RELEASE/$ITEM_ARCH/$ITEM_REPO-$K8S_VERSION.sh
       - docker pull $REGISTRY_REMOTE/$ITEM_REPO:$K8S_VERSION-$K8S_ARCH
-      - docker save $REGISTRY_REMOTE/$ITEM_REPO:$K8S_VERSION-$K8S_ARCH | gzip > .tmp/$K8S_RELEASE_VERSION/$ITEM_ARCH/$ITEM_REPO-$K8S_VERSION-$K8S_ARCH.tgz
+      - docker save $REGISTRY_REMOTE/$ITEM_REPO:$K8S_VERSION-$K8S_ARCH | gzip > .tmp/$K8S_RELEASE/$ITEM_ARCH/$ITEM_REPO-$K8S_VERSION-$K8S_ARCH.tgz
 
   - name: minio
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-minio:1.0
