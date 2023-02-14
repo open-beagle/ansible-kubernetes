@@ -62,6 +62,21 @@ steps:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/templates/install.sh
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
 
+  - name: ansible-docker-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    environment:
+      DOCKER_VERSION: 20.10.23
+      K8S_VERSION: v1.26.1
+      K8S_RELEASE: v1.26
+      K8S_ARCH: amd64
+    commands:
+      - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
+      - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
+      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
+      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
+      - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
+      - rm -rf .tmp/docker
+
   - name: install-registry-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/registry:v2.8.1-amd64
     commands:
@@ -100,6 +115,21 @@ steps:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/templates/install.sh
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
       - "sed -i -e 's/K8S_ARCH: amd64/K8S_ARCH: arm64/' linux/group_vars/all.yml"
+
+  - name: ansible-docker-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    environment:
+      DOCKER_VERSION: 20.10.23
+      K8S_VERSION: v1.26.1
+      K8S_RELEASE: v1.26
+      K8S_ARCH: arm64
+    commands:
+      - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
+      - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
+      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
+      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
+      - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
+      - rm -rf .tmp/docker
 
   - name: install-registry-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/registry:v2.8.1-arm64
@@ -140,21 +170,6 @@ steps:
       password:
         from_secret: REGISTRY_PASSWORD_ALIYUN
 
-  - name: ansible-docker-amd64
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
-    environment:
-      DOCKER_VERSION: 20.10.23
-      K8S_VERSION: v1.26.1
-      K8S_RELEASE: v1.26
-      K8S_ARCH: amd64
-    commands:
-      - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
-      - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
-      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
-      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
-      - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
-      - rm -rf .tmp/docker
-
   - name: ansible-kubernetes-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     volumes:
@@ -171,21 +186,6 @@ steps:
       - cp install-offline.sh .tmp/$K8S_RELEASE/$K8S_ARCH/$K8S_REPO-$K8S_VERSION.sh
       - docker pull $REGISTRY_REMOTE/$K8S_REPO:$K8S_VERSION-$K8S_ARCH
       - docker save $REGISTRY_REMOTE/$K8S_REPO:$K8S_VERSION-$K8S_ARCH | gzip > .tmp/$K8S_RELEASE/$K8S_ARCH/$K8S_REPO-$K8S_VERSION-$K8S_ARCH.tgz
-
-  - name: ansible-docker-arm64
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
-    environment:
-      DOCKER_VERSION: 20.10.23
-      K8S_VERSION: v1.26.1
-      K8S_RELEASE: v1.26
-      K8S_ARCH: arm64
-    commands:
-      - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
-      - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
-      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
-      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
-      - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
-      - rm -rf .tmp/docker
 
   - name: ansible-kubernetes-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
@@ -282,6 +282,21 @@ steps:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/templates/install.sh
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
 
+  - name: ansible-docker-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    environment:
+      DOCKER_VERSION: 20.10.23
+      K8S_VERSION: v1.26.1
+      K8S_RELEASE: v1.26
+      K8S_ARCH: amd64
+    commands:
+      - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
+      - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
+      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
+      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
+      - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
+      - rm -rf .tmp/docker
+
   - name: install-registry-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/registry:v2.8.1-amd64
     commands:
@@ -320,6 +335,21 @@ steps:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/templates/install.sh
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
       - "sed -i -e 's/K8S_ARCH: amd64/K8S_ARCH: arm64/' linux/group_vars/all.yml"
+
+  - name: ansible-docker-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    environment:
+      DOCKER_VERSION: 20.10.23
+      K8S_VERSION: v1.26.1
+      K8S_RELEASE: v1.26
+      K8S_ARCH: arm64
+    commands:
+      - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
+      - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
+      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
+      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
+      - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
+      - rm -rf .tmp/docker
 
   - name: install-registry-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/registry:v2.8.1-arm64
@@ -393,21 +423,6 @@ steps:
       password:
         from_secret: REGISTRY_PASSWORD_ALIYUN
 
-  - name: ansible-docker-amd64
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
-    environment:
-      DOCKER_VERSION: 20.10.23
-      K8S_VERSION: v1.26.1
-      K8S_RELEASE: v1.26
-      K8S_ARCH: amd64
-    commands:
-      - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
-      - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
-      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
-      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
-      - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
-      - rm -rf .tmp/docker
-
   - name: ansible-kubernetes-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     volumes:
@@ -434,21 +449,6 @@ steps:
       arch: amd64
       group: k8s
       release: .tmp/v1.26/amd64/ansible-kubernetes-images-v1.26.1-amd64.tgz
-
-  - name: ansible-docker-arm64
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
-    environment:
-      DOCKER_VERSION: 20.10.23
-      K8S_VERSION: v1.26.1
-      K8S_RELEASE: v1.26
-      K8S_ARCH: arm64
-    commands:
-      - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
-      - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
-      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
-      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
-      - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
-      - rm -rf .tmp/docker
 
   - name: ansible-kubernetes-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
@@ -598,6 +598,21 @@ steps:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/templates/install.sh
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
 
+  - name: ansible-docker-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    environment:
+      DOCKER_VERSION: 20.10.23
+      K8S_VERSION: v1.24.9
+      K8S_RELEASE: v1.24
+      K8S_ARCH: amd64
+    commands:
+      - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
+      - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
+      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
+      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
+      - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
+      - rm -rf .tmp/docker
+
   - name: install-registry-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/registry:v2.8.1-amd64
     commands:
@@ -636,6 +651,21 @@ steps:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/templates/install.sh
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
       - "sed -i -e 's/K8S_ARCH: amd64/K8S_ARCH: arm64/' linux/group_vars/all.yml"
+
+  - name: ansible-docker-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    environment:
+      DOCKER_VERSION: 20.10.23
+      K8S_VERSION: v1.24.9
+      K8S_RELEASE: v1.24
+      K8S_ARCH: arm64
+    commands:
+      - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
+      - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
+      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
+      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
+      - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
+      - rm -rf .tmp/docker
 
   - name: install-registry-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/registry:v2.8.1-arm64
@@ -709,21 +739,6 @@ steps:
       password:
         from_secret: REGISTRY_PASSWORD_ALIYUN
 
-  - name: ansible-docker-amd64
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
-    environment:
-      DOCKER_VERSION: 20.10.23
-      K8S_VERSION: v1.24.9
-      K8S_RELEASE: v1.24
-      K8S_ARCH: amd64
-    commands:
-      - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
-      - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
-      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
-      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
-      - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
-      - rm -rf .tmp/docker
-
   - name: ansible-kubernetes-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     volumes:
@@ -750,21 +765,6 @@ steps:
       arch: amd64
       group: k8s
       release: .tmp/v1.24/amd64/ansible-kubernetes-images-v1.24.9-amd64.tgz
-
-  - name: ansible-docker-arm64
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
-    environment:
-      DOCKER_VERSION: 20.10.23
-      K8S_VERSION: v1.24.9
-      K8S_RELEASE: v1.24
-      K8S_ARCH: arm64
-    commands:
-      - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
-      - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
-      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
-      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
-      - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
-      - rm -rf .tmp/docker
 
   - name: ansible-kubernetes-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
@@ -869,6 +869,21 @@ steps:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/templates/install.sh
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
 
+  - name: ansible-docker-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    environment:
+      DOCKER_VERSION: 20.10.23
+      K8S_VERSION: v1.22.16
+      K8S_RELEASE: v1.22
+      K8S_ARCH: amd64
+    commands:
+      - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
+      - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
+      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
+      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
+      - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
+      - rm -rf .tmp/docker
+
   - name: install-registry-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/registry:v2.8.1-amd64
     commands:
@@ -907,6 +922,21 @@ steps:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/templates/install.sh
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
       - "sed -i -e 's/K8S_ARCH: amd64/K8S_ARCH: arm64/' linux/group_vars/all.yml"
+
+  - name: ansible-docker-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    environment:
+      DOCKER_VERSION: 20.10.23
+      K8S_VERSION: v1.22.16
+      K8S_RELEASE: v1.22
+      K8S_ARCH: arm64
+    commands:
+      - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
+      - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
+      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
+      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
+      - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
+      - rm -rf .tmp/docker
 
   - name: install-registry-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/registry:v2.8.1-arm64
@@ -980,21 +1010,6 @@ steps:
       password:
         from_secret: REGISTRY_PASSWORD_ALIYUN
 
-  - name: ansible-docker-amd64
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
-    environment:
-      DOCKER_VERSION: 20.10.23
-      K8S_VERSION: v1.22.16
-      K8S_RELEASE: v1.22
-      K8S_ARCH: amd64
-    commands:
-      - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
-      - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
-      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
-      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
-      - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
-      - rm -rf .tmp/docker
-
   - name: ansible-kubernetes-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     volumes:
@@ -1021,21 +1036,6 @@ steps:
       arch: amd64
       group: k8s
       release: .tmp/v1.22/amd64/ansible-kubernetes-images-v1.22.16-amd64.tgz
-
-  - name: ansible-docker-arm64
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
-    environment:
-      DOCKER_VERSION: 20.10.23
-      K8S_VERSION: v1.22.16
-      K8S_RELEASE: v1.22
-      K8S_ARCH: arm64
-    commands:
-      - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
-      - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
-      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
-      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
-      - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
-      - rm -rf .tmp/docker
 
   - name: ansible-kubernetes-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
@@ -1140,6 +1140,21 @@ steps:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/templates/install.sh
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
 
+  - name: ansible-docker-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    environment:
+      DOCKER_VERSION: 20.10.23
+      K8S_VERSION: v1.20.15
+      K8S_RELEASE: v1.20
+      K8S_ARCH: amd64
+    commands:
+      - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
+      - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
+      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
+      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
+      - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
+      - rm -rf .tmp/docker
+
   - name: install-registry-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/registry:v2.8.1-amd64
     commands:
@@ -1178,6 +1193,21 @@ steps:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/templates/install.sh
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
       - "sed -i -e 's/K8S_ARCH: amd64/K8S_ARCH: arm64/' linux/group_vars/all.yml"
+
+  - name: ansible-docker-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    environment:
+      DOCKER_VERSION: 20.10.23
+      K8S_VERSION: v1.20.15
+      K8S_RELEASE: v1.20
+      K8S_ARCH: arm64
+    commands:
+      - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
+      - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
+      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
+      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
+      - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
+      - rm -rf .tmp/docker
 
   - name: install-registry-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/registry:v2.8.1-arm64
@@ -1251,21 +1281,6 @@ steps:
       password:
         from_secret: REGISTRY_PASSWORD_ALIYUN
 
-  - name: ansible-docker-amd64
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
-    environment:
-      DOCKER_VERSION: 20.10.23
-      K8S_VERSION: v1.20.15
-      K8S_RELEASE: v1.20
-      K8S_ARCH: amd64
-    commands:
-      - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
-      - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
-      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
-      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
-      - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
-      - rm -rf .tmp/docker
-
   - name: ansible-kubernetes-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     volumes:
@@ -1292,21 +1307,6 @@ steps:
       arch: amd64
       group: k8s
       release: .tmp/v1.20/amd64/ansible-kubernetes-images-v1.20.15-amd64.tgz
-
-  - name: ansible-docker-arm64
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
-    environment:
-      DOCKER_VERSION: 20.10.23
-      K8S_VERSION: v1.20.15
-      K8S_RELEASE: v1.20
-      K8S_ARCH: arm64
-    commands:
-      - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
-      - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
-      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
-      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
-      - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
-      - rm -rf .tmp/docker
 
   - name: ansible-kubernetes-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
@@ -1411,6 +1411,21 @@ steps:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/templates/install.sh
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
 
+  - name: ansible-docker-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    environment:
+      DOCKER_VERSION: 20.10.23
+      K8S_VERSION: v1.18.20
+      K8S_RELEASE: v1.18
+      K8S_ARCH: amd64
+    commands:
+      - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
+      - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
+      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
+      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
+      - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
+      - rm -rf .tmp/docker
+
   - name: install-registry-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/registry:v2.8.1-amd64
     commands:
@@ -1450,6 +1465,21 @@ steps:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
       - "sed -i -e 's/K8S_ARCH: amd64/K8S_ARCH: arm64/' linux/group_vars/all.yml"
 
+  - name: ansible-docker-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    environment:
+      DOCKER_VERSION: 20.10.23
+      K8S_VERSION: v1.18.20
+      K8S_RELEASE: v1.18
+      K8S_ARCH: arm64
+    commands:
+      - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
+      - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
+      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
+      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
+      - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
+      - rm -rf .tmp/docker
+      
   - name: install-registry-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/registry:v2.8.1-arm64
     commands:
@@ -1522,21 +1552,6 @@ steps:
       password:
         from_secret: REGISTRY_PASSWORD_ALIYUN
 
-  - name: ansible-docker-amd64
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
-    environment:
-      DOCKER_VERSION: 20.10.23
-      K8S_VERSION: v1.18.20
-      K8S_RELEASE: v1.18
-      K8S_ARCH: amd64
-    commands:
-      - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
-      - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
-      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
-      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
-      - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
-      - rm -rf .tmp/docker
-
   - name: ansible-kubernetes-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     volumes:
@@ -1563,21 +1578,6 @@ steps:
       arch: amd64
       group: k8s
       release: .tmp/v1.18/amd64/ansible-kubernetes-images-v1.18.20-amd64.tgz
-
-  - name: ansible-docker-arm64
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
-    environment:
-      DOCKER_VERSION: 20.10.23
-      K8S_VERSION: v1.18.20
-      K8S_RELEASE: v1.18
-      K8S_ARCH: arm64
-    commands:
-      - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
-      - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
-      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
-      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
-      - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
-      - rm -rf .tmp/docker
 
   - name: ansible-kubernetes-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
