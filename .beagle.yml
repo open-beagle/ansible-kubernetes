@@ -41,9 +41,9 @@ steps:
       - |
         sed -i --expression "s?K8S_VERSION:.*?K8S_VERSION: \"$K8S_VERSION\"?" linux/group_vars/all.yml
       - |
-        sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\${K8S_VERSION:-$K8S_VERSION}\"?" install-offline.sh
+        sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\$\{K8S_VERSION\:\-$K8S_VERSION\}\"?" install-offline.sh
       - |
-        sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\${K8S_VERSION:-$K8S_VERSION}\"?" install.sh
+        sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\$\{K8S_VERSION\:\-$K8S_VERSION\}\"?" install.sh
 
   - name: curl
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
@@ -261,9 +261,9 @@ steps:
       - |
         sed -i --expression "s?K8S_VERSION:.*?K8S_VERSION: \"$K8S_VERSION\"?" linux/group_vars/all.yml
       - |
-        sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\${K8S_VERSION:-$K8S_VERSION}\"?" install-offline.sh
+        sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\$\{K8S_VERSION\:\-$K8S_VERSION\}\"?" install-offline.sh
       - |
-        sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\${K8S_VERSION:-$K8S_VERSION}\"?" install.sh
+        sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\$\{K8S_VERSION\:\-$K8S_VERSION\}\"?" install.sh
 
   - name: curl
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
@@ -577,9 +577,9 @@ steps:
       - |
         sed -i --expression "s?K8S_VERSION:.*?K8S_VERSION: \"$K8S_VERSION\"?" linux/group_vars/all.yml
       - |
-        sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\${K8S_VERSION:-$K8S_VERSION}\"?" install-offline.sh
+        sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\$\{K8S_VERSION\:\-$K8S_VERSION\}\"?" install-offline.sh
       - |
-        sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\${K8S_VERSION:-$K8S_VERSION}\"?" install.sh
+        sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\$\{K8S_VERSION\:\-$K8S_VERSION\}\"?" install.sh
 
   - name: curl
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
@@ -848,9 +848,9 @@ steps:
       - |
         sed -i --expression "s?K8S_VERSION:.*?K8S_VERSION: \"$K8S_VERSION\"?" linux/group_vars/all.yml
       - |
-        sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\${K8S_VERSION:-$K8S_VERSION}\"?" install-offline.sh
+        sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\$\{K8S_VERSION\:\-$K8S_VERSION\}\"?" install-offline.sh
       - |
-        sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\${K8S_VERSION:-$K8S_VERSION}\"?" install.sh
+        sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\$\{K8S_VERSION\:\-$K8S_VERSION\}\"?" install.sh
 
   - name: curl
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
@@ -1119,9 +1119,9 @@ steps:
       - |
         sed -i --expression "s?K8S_VERSION:.*?K8S_VERSION: \"$K8S_VERSION\"?" linux/group_vars/all.yml
       - |
-        sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\${K8S_VERSION:-$K8S_VERSION}\"?" install-offline.sh
+        sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\$\{K8S_VERSION\:\-$K8S_VERSION\}\"?" install-offline.sh
       - |
-        sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\${K8S_VERSION:-$K8S_VERSION}\"?" install.sh
+        sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\$\{K8S_VERSION\:\-$K8S_VERSION\}\"?" install.sh
 
   - name: curl
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
@@ -1390,9 +1390,9 @@ steps:
       - |
         sed -i --expression "s?K8S_VERSION:.*?K8S_VERSION: \"$K8S_VERSION\"?" linux/group_vars/all.yml
       - |
-        sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\${K8S_VERSION:-$K8S_VERSION}\"?" install-offline.sh
+        sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\$\{K8S_VERSION\:\-$K8S_VERSION\}\"?" install-offline.sh
       - |
-        sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\${K8S_VERSION:-$K8S_VERSION}\"?" install.sh
+        sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\$\{K8S_VERSION\:\-$K8S_VERSION\}\"?" install.sh
 
   - name: curl
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
