@@ -5,6 +5,9 @@
 
 .beagle/
 docs/
+
+linux/vars
+
 .beagle.yml
 .gitattributes
 .gitignore

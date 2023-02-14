@@ -8,6 +8,8 @@ HTTP_SERVER="${HTTP_SERVER:-https://cache.wodcloud.com/kubernetes}"
 TARGET_ARCH="${TARGET_ARCH:-amd64}"
 # K8S版本
 K8S_VERSION="${K8S_VERSION:-v1.26.1}"
+# K8S发布版本
+K8S_RELEASE="${K8S_VERSION%.*}"
 
 LOCAL_KERNEL=$(uname -r | head -c 3)
 LOCAL_ARCH=$(uname -m)
@@ -32,8 +34,8 @@ fi
 if ! [ -e /etc/kubernetes/ansible/ansible-docker-$K8S_VERSION-$TARGET_ARCH.tgz ]; then
 mkdir -p /etc/kubernetes/ansible
 # 下载文件
-# ansible-docker-v1.26.1-amd64.tgz 68MB
-curl $HTTP_SERVER/k8s/ansible/$TARGET_ARCH/ansible-docker-$K8S_VERSION-$TARGET_ARCH.tgz > /etc/kubernetes/ansible/ansible-docker-$K8S_VERSION-$TARGET_ARCH.tgz
+# ansible-docker-$K8S_VERSION-amd64.tgz 68MB
+curl $HTTP_SERVER/k8s/ansible/$K8S_RELEASE/$TARGET_ARCH/ansible-docker-$K8S_VERSION-$TARGET_ARCH.tgz > /etc/kubernetes/ansible/ansible-docker-$K8S_VERSION-$TARGET_ARCH.tgz
 fi
 
 if ! [ -e /opt/bin/docker ]; then
