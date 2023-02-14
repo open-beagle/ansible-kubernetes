@@ -36,6 +36,7 @@ steps:
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
       K8S_VERSION: v1.26.1
+      K8S_RELEASE: v1.26
     commands:
       - 'sed -i --expression "s?K8S_VERSION:.*?K8S_VERSION: \"$K8S_VERSION\"?" linux/group_vars/all.yml'
       - 'sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\${K8S_VERSION:-$K8S_VERSION}\"?" install-offline.sh'
@@ -209,7 +210,7 @@ steps:
         from_secret: SECRET_KEY_MINIO
     commands:
       - mc alias set cache --api=S3v4 https://cache.wodcloud.com $S3_ACCESS_KEY $S3_SECRET_KEY
-      - mc cp --recursive .tmp/v1.26 cache/kubernetes/k8s/ansible/
+      - mc cp --recursive .tmp/1.26 cache/kubernetes/k8s/ansible/1.26
 
 ---
 kind: pipeline
@@ -523,7 +524,1079 @@ steps:
         from_secret: REGISTRY_USER_ALIYUN
       password:
         from_secret: REGISTRY_PASSWORD_ALIYUN
-        
+
+---
+kind: pipeline
+name: release-1.24
+
+trigger:
+  branch:
+    - release-1.24
+
+volumes:
+  - name: docker
+    host:
+      path: /var/run/docker.sock
+
+clone:
+  disable: true
+
+steps:
+  - name: s3-cache
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-s3-cache:1.0
+    settings:
+      restore: true
+      mount:
+        - ./.git
+      endpoint: https://cache.wodcloud.com
+      access_key:
+        from_secret: ACCESS_KEY_MINIO
+      secret_key:
+        from_secret: SECRET_KEY_MINIO
+
+  - name: fetch
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-git:1.0
+    settings:
+      proxy:
+        from_secret: SOCKS5_PROXY
+
+  - name: version
+    image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
+    environment:
+      K8S_VERSION: v1.24.9
+      K8S_RELEASE: v1.24
+    commands:
+      - 'sed -i --expression "s?K8S_VERSION:.*?K8S_VERSION: \"$K8S_VERSION\"?" linux/group_vars/all.yml'
+      - 'sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\${K8S_VERSION:-$K8S_VERSION}\"?" install-offline.sh'
+      - 'sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\${K8S_VERSION:-$K8S_VERSION}\"?" install.sh'
+
+  - name: curl
+    image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
+    environment:
+      CILIUM_VERSION: 1.11.13
+    commands:
+      - curl https://cache.wodcloud.com/kubernetes/k8s/charts/beagle-cilium-$CILIUM_VERSION.tgz > ./linux/roles/wod.cilium/files/beagle-cilium-$CILIUM_VERSION.tgz
+
+  - name: install-docker-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
+    environment:
+      DOCKER_VERSION: 20.10.23
+      ARCH: amd64
+    commands:
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/templates/install.sh
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
+
+  - name: install-registry-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/registry:v2.8.1-amd64
+    commands:
+      - cp /usr/local/bin/registry linux/roles/wod.registry/files/bin/registry-v2.8.1
+
+  - name: install-envoy-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:1.23.4-amd64
+    commands:
+      - cp /usr/local/bin/envoy linux/roles/wod.envoy/files/envoy-1.23.4
+
+  - name: docker-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    volumes:
+      - name: docker
+        path: /var/run/docker.sock
+    settings:
+      dockerfile: .beagle/dockerfile
+      base: registry.cn-qingdao.aliyuncs.com/wod/ansible:2-amd64
+      repo: wod/ansible-kubernetes
+      version: v1.24.9
+      channel: amd64
+      args: 'TARGETOS=linux,TARGETARCH=amd64'
+      registry: registry.cn-qingdao.aliyuncs.com
+      registry_user:
+        from_secret: REGISTRY_USER_ALIYUN
+      registry_password:
+        from_secret: REGISTRY_PASSWORD_ALIYUN
+
+  - name: install-docker-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
+    environment:
+      DOCKER_VERSION: 20.10.23
+      ARCH: arm64
+    commands:
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/templates/install.sh
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
+      - "sed -i -e 's/K8S_ARCH: amd64/K8S_ARCH: arm64/' linux/group_vars/all.yml"
+
+  - name: install-registry-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/registry:v2.8.1-arm64
+    commands:
+      - cp /usr/local/bin/registry linux/roles/wod.registry/files/bin/registry-v2.8.1
+
+  - name: install-envoy-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:1.23.4-arm64
+    commands:
+      - cp /usr/local/bin/envoy linux/roles/wod.envoy/files/envoy-1.23.4
+
+  - name: docker-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    volumes:
+      - name: docker
+        path: /var/run/docker.sock
+    settings:
+      dockerfile: .beagle/dockerfile
+      base: registry.cn-qingdao.aliyuncs.com/wod/ansible:2-arm64
+      repo: wod/ansible-kubernetes
+      version: v1.24.9
+      channel: arm64
+      args: 'TARGETOS=linux,TARGETARCH=arm64'
+      registry: registry.cn-qingdao.aliyuncs.com
+      registry_user:
+        from_secret: REGISTRY_USER_ALIYUN
+      registry_password:
+        from_secret: REGISTRY_PASSWORD_ALIYUN
+
+  - name: docker-arch
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-manifest:1.0
+    settings:
+      platforms: linux/amd64,linux/arm64
+      template: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.24.9-ARCH
+      target: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.24.9
+      username:
+        from_secret: REGISTRY_USER_ALIYUN
+      password:
+        from_secret: REGISTRY_PASSWORD_ALIYUN
+
+  - name: harbor-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-tag:1.0
+    settings:
+      source: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.24.9-amd64
+      target: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.24-amd64
+      registry: registry.cn-qingdao.aliyuncs.com
+      registry_user:
+        from_secret: REGISTRY_USER_ALIYUN
+      registry_password:
+        from_secret: REGISTRY_PASSWORD_ALIYUN
+
+  - name: harbor-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-tag:1.0
+    settings:
+      source: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.24.9-arm64
+      target: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.24-arm64
+      registry: registry.cn-qingdao.aliyuncs.com
+      registry_user:
+        from_secret: REGISTRY_USER_ALIYUN
+      registry_password:
+        from_secret: REGISTRY_PASSWORD_ALIYUN
+
+  - name: harbor-arch
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-manifest:1.0
+    settings:
+      platforms: linux/amd64,linux/arm64
+      template: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.24-ARCH
+      target: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.24
+      username:
+        from_secret: REGISTRY_USER_ALIYUN
+      password:
+        from_secret: REGISTRY_PASSWORD_ALIYUN
+
+  - name: ansible-docker-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    environment:
+      DOCKER_VERSION: 20.10.23
+      K8S_VERSION: v1.24.9
+      K8S_RELEASE: v1.24
+      K8S_ARCH: amd64
+    commands:
+      - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
+      - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
+      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
+      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
+      - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
+      - rm -rf .tmp/docker
+
+  - name: ansible-kubernetes-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    volumes:
+      - name: docker
+        path: /var/run/docker.sock
+    environment:
+      REGISTRY_REMOTE: registry.cn-qingdao.aliyuncs.com/wod
+      K8S_REPO: ansible-kubernetes
+      K8S_VERSION: v1.24.9
+      K8S_RELEASE: v1.24
+      K8S_ARCH: amd64
+    commands:
+      - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH
+      - cp install-offline.sh .tmp/$K8S_RELEASE/$K8S_ARCH/$K8S_REPO-$K8S_VERSION.sh
+      - docker pull $REGISTRY_REMOTE/$K8S_REPO:$K8S_VERSION-$K8S_ARCH
+      - docker save $REGISTRY_REMOTE/$K8S_REPO:$K8S_VERSION-$K8S_ARCH | gzip > .tmp/$K8S_RELEASE/$K8S_ARCH/$K8S_REPO-$K8S_VERSION-$K8S_ARCH.tgz
+
+  - name: ansible-kubernetes-images-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0
+    settings:
+      source: registry.cn-qingdao.aliyuncs.com/wod
+      yaml: linux/vars/1.24.yml
+      image: K8S_IMAGES
+      arch: amd64
+      group: k8s
+      release: .tmp/v1.24/amd64/ansible-kubernetes-images-v1.24.9-amd64.tgz
+
+  - name: ansible-docker-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    environment:
+      DOCKER_VERSION: 20.10.23
+      K8S_VERSION: v1.24.9
+      K8S_RELEASE: v1.24
+      K8S_ARCH: arm64
+    commands:
+      - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
+      - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
+      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
+      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
+      - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
+      - rm -rf .tmp/docker
+
+  - name: ansible-kubernetes-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    volumes:
+      - name: docker
+        path: /var/run/docker.sock
+    environment:
+      REGISTRY_REMOTE: registry.cn-qingdao.aliyuncs.com/wod
+      K8S_REPO: ansible-kubernetes
+      K8S_VERSION: v1.24.9
+      K8S_RELEASE: v1.24
+      K8S_ARCH: arm64
+    commands:
+      - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH
+      - cp install-offline.sh .tmp/$K8S_RELEASE/$K8S_ARCH/$K8S_REPO-$K8S_VERSION.sh
+      - docker pull $REGISTRY_REMOTE/$K8S_REPO:$K8S_VERSION-$K8S_ARCH
+      - docker save $REGISTRY_REMOTE/$K8S_REPO:$K8S_VERSION-$K8S_ARCH | gzip > .tmp/$K8S_RELEASE/$K8S_ARCH/$K8S_REPO-$K8S_VERSION-$K8S_ARCH.tgz
+
+  - name: ansible-kubernetes-images-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0
+    settings:
+      source: registry.cn-qingdao.aliyuncs.com/wod
+      yaml: linux/vars/1.24.yml
+      image: K8S_IMAGES
+      arch: arm64
+      group: k8s
+      release: .tmp/v1.24/arm64/ansible-kubernetes-images-v1.24.9-arm64.tgz
+
+  - name: minio
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-minio:1.0
+    environment:
+      S3_ACCESS_KEY: 
+        from_secret: ACCESS_KEY_MINIO
+      S3_SECRET_KEY: 
+        from_secret: SECRET_KEY_MINIO
+    commands:
+      - mc alias set cache --api=S3v4 https://cache.wodcloud.com $S3_ACCESS_KEY $S3_SECRET_KEY
+      - mc cp --recursive .tmp/v1.24 cache/kubernetes/k8s/ansible
+
+---
+kind: pipeline
+name: release-1.22
+
+trigger:
+  branch:
+    - release-1.22
+
+volumes:
+  - name: docker
+    host:
+      path: /var/run/docker.sock
+
+clone:
+  disable: true
+
+steps:
+  - name: s3-cache
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-s3-cache:1.0
+    settings:
+      restore: true
+      mount:
+        - ./.git
+      endpoint: https://cache.wodcloud.com
+      access_key:
+        from_secret: ACCESS_KEY_MINIO
+      secret_key:
+        from_secret: SECRET_KEY_MINIO
+
+  - name: fetch
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-git:1.0
+    settings:
+      proxy:
+        from_secret: SOCKS5_PROXY
+
+  - name: version
+    image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
+    environment:
+      K8S_VERSION: v1.22.15
+      K8S_RELEASE: v1.22
+    commands:
+      - 'sed -i --expression "s?K8S_VERSION:.*?K8S_VERSION: \"$K8S_VERSION\"?" linux/group_vars/all.yml'
+      - 'sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\${K8S_VERSION:-$K8S_VERSION}\"?" install-offline.sh'
+      - 'sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\${K8S_VERSION:-$K8S_VERSION}\"?" install.sh'
+
+  - name: curl
+    image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
+    environment:
+      CILIUM_VERSION: 1.11.13
+    commands:
+      - curl https://cache.wodcloud.com/kubernetes/k8s/charts/beagle-cilium-$CILIUM_VERSION.tgz > ./linux/roles/wod.cilium/files/beagle-cilium-$CILIUM_VERSION.tgz
+
+  - name: install-docker-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
+    environment:
+      DOCKER_VERSION: 20.10.23
+      ARCH: amd64
+    commands:
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/templates/install.sh
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
+
+  - name: install-registry-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/registry:v2.8.1-amd64
+    commands:
+      - cp /usr/local/bin/registry linux/roles/wod.registry/files/bin/registry-v2.8.1
+
+  - name: install-envoy-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:1.23.4-amd64
+    commands:
+      - cp /usr/local/bin/envoy linux/roles/wod.envoy/files/envoy-1.23.4
+
+  - name: docker-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    volumes:
+      - name: docker
+        path: /var/run/docker.sock
+    settings:
+      dockerfile: .beagle/dockerfile
+      base: registry.cn-qingdao.aliyuncs.com/wod/ansible:2-amd64
+      repo: wod/ansible-kubernetes
+      version: v1.22.15
+      channel: amd64
+      args: 'TARGETOS=linux,TARGETARCH=amd64'
+      registry: registry.cn-qingdao.aliyuncs.com
+      registry_user:
+        from_secret: REGISTRY_USER_ALIYUN
+      registry_password:
+        from_secret: REGISTRY_PASSWORD_ALIYUN
+
+  - name: install-docker-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
+    environment:
+      DOCKER_VERSION: 20.10.23
+      ARCH: arm64
+    commands:
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/templates/install.sh
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
+      - "sed -i -e 's/K8S_ARCH: amd64/K8S_ARCH: arm64/' linux/group_vars/all.yml"
+
+  - name: install-registry-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/registry:v2.8.1-arm64
+    commands:
+      - cp /usr/local/bin/registry linux/roles/wod.registry/files/bin/registry-v2.8.1
+
+  - name: install-envoy-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:1.23.4-arm64
+    commands:
+      - cp /usr/local/bin/envoy linux/roles/wod.envoy/files/envoy-1.23.4
+
+  - name: docker-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    volumes:
+      - name: docker
+        path: /var/run/docker.sock
+    settings:
+      dockerfile: .beagle/dockerfile
+      base: registry.cn-qingdao.aliyuncs.com/wod/ansible:2-arm64
+      repo: wod/ansible-kubernetes
+      version: v1.22.15
+      channel: arm64
+      args: 'TARGETOS=linux,TARGETARCH=arm64'
+      registry: registry.cn-qingdao.aliyuncs.com
+      registry_user:
+        from_secret: REGISTRY_USER_ALIYUN
+      registry_password:
+        from_secret: REGISTRY_PASSWORD_ALIYUN
+
+  - name: docker-arch
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-manifest:1.0
+    settings:
+      platforms: linux/amd64,linux/arm64
+      template: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.22.15-ARCH
+      target: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.22.15
+      username:
+        from_secret: REGISTRY_USER_ALIYUN
+      password:
+        from_secret: REGISTRY_PASSWORD_ALIYUN
+
+  - name: harbor-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-tag:1.0
+    settings:
+      source: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.22.15-amd64
+      target: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.22-amd64
+      registry: registry.cn-qingdao.aliyuncs.com
+      registry_user:
+        from_secret: REGISTRY_USER_ALIYUN
+      registry_password:
+        from_secret: REGISTRY_PASSWORD_ALIYUN
+
+  - name: harbor-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-tag:1.0
+    settings:
+      source: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.22.15-arm64
+      target: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.22-arm64
+      registry: registry.cn-qingdao.aliyuncs.com
+      registry_user:
+        from_secret: REGISTRY_USER_ALIYUN
+      registry_password:
+        from_secret: REGISTRY_PASSWORD_ALIYUN
+
+  - name: harbor-arch
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-manifest:1.0
+    settings:
+      platforms: linux/amd64,linux/arm64
+      template: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.22-ARCH
+      target: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.22
+      username:
+        from_secret: REGISTRY_USER_ALIYUN
+      password:
+        from_secret: REGISTRY_PASSWORD_ALIYUN
+
+  - name: ansible-docker-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    environment:
+      DOCKER_VERSION: 20.10.23
+      K8S_VERSION: v1.22.15
+      K8S_RELEASE: v1.22
+      K8S_ARCH: amd64
+    commands:
+      - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
+      - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
+      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
+      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
+      - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
+      - rm -rf .tmp/docker
+
+  - name: ansible-kubernetes-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    volumes:
+      - name: docker
+        path: /var/run/docker.sock
+    environment:
+      REGISTRY_REMOTE: registry.cn-qingdao.aliyuncs.com/wod
+      K8S_REPO: ansible-kubernetes
+      K8S_VERSION: v1.22.15
+      K8S_RELEASE: v1.22
+      K8S_ARCH: amd64
+    commands:
+      - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH
+      - cp install-offline.sh .tmp/$K8S_RELEASE/$K8S_ARCH/$K8S_REPO-$K8S_VERSION.sh
+      - docker pull $REGISTRY_REMOTE/$K8S_REPO:$K8S_VERSION-$K8S_ARCH
+      - docker save $REGISTRY_REMOTE/$K8S_REPO:$K8S_VERSION-$K8S_ARCH | gzip > .tmp/$K8S_RELEASE/$K8S_ARCH/$K8S_REPO-$K8S_VERSION-$K8S_ARCH.tgz
+
+  - name: ansible-kubernetes-images-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0
+    settings:
+      source: registry.cn-qingdao.aliyuncs.com/wod
+      yaml: linux/vars/1.22.yml
+      image: K8S_IMAGES
+      arch: amd64
+      group: k8s
+      release: .tmp/v1.22/amd64/ansible-kubernetes-images-v1.22.15-amd64.tgz
+
+  - name: ansible-docker-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    environment:
+      DOCKER_VERSION: 20.10.23
+      K8S_VERSION: v1.22.15
+      K8S_RELEASE: v1.22
+      K8S_ARCH: arm64
+    commands:
+      - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
+      - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
+      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
+      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
+      - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
+      - rm -rf .tmp/docker
+
+  - name: ansible-kubernetes-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    volumes:
+      - name: docker
+        path: /var/run/docker.sock
+    environment:
+      REGISTRY_REMOTE: registry.cn-qingdao.aliyuncs.com/wod
+      K8S_REPO: ansible-kubernetes
+      K8S_VERSION: v1.22.15
+      K8S_RELEASE: v1.22
+      K8S_ARCH: arm64
+    commands:
+      - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH
+      - cp install-offline.sh .tmp/$K8S_RELEASE/$K8S_ARCH/$K8S_REPO-$K8S_VERSION.sh
+      - docker pull $REGISTRY_REMOTE/$K8S_REPO:$K8S_VERSION-$K8S_ARCH
+      - docker save $REGISTRY_REMOTE/$K8S_REPO:$K8S_VERSION-$K8S_ARCH | gzip > .tmp/$K8S_RELEASE/$K8S_ARCH/$K8S_REPO-$K8S_VERSION-$K8S_ARCH.tgz
+
+  - name: ansible-kubernetes-images-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0
+    settings:
+      source: registry.cn-qingdao.aliyuncs.com/wod
+      yaml: linux/vars/1.22.yml
+      image: K8S_IMAGES
+      arch: arm64
+      group: k8s
+      release: .tmp/v1.22/arm64/ansible-kubernetes-images-v1.22.15-arm64.tgz
+
+  - name: minio
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-minio:1.0
+    environment:
+      S3_ACCESS_KEY: 
+        from_secret: ACCESS_KEY_MINIO
+      S3_SECRET_KEY: 
+        from_secret: SECRET_KEY_MINIO
+    commands:
+      - mc alias set cache --api=S3v4 https://cache.wodcloud.com $S3_ACCESS_KEY $S3_SECRET_KEY
+      - mc cp --recursive .tmp/v1.22 cache/kubernetes/k8s/ansible
+
+---
+kind: pipeline
+name: release-1.20
+
+trigger:
+  branch:
+    - release-1.20
+
+volumes:
+  - name: docker
+    host:
+      path: /var/run/docker.sock
+	  
+clone:
+  disable: true
+
+steps:
+  - name: s3-cache
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-s3-cache:1.0
+    settings:
+      restore: true
+      mount:
+        - ./.git
+      endpoint: https://cache.wodcloud.com
+      access_key:
+        from_secret: ACCESS_KEY_MINIO
+      secret_key:
+        from_secret: SECRET_KEY_MINIO
+
+  - name: fetch
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-git:1.0
+    settings:
+      proxy:
+        from_secret: SOCKS5_PROXY
+
+  - name: version
+    image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
+    environment:
+      K8S_VERSION: v1.20.15
+      K8S_RELEASE: v1.20
+    commands:
+      - 'sed -i --expression "s?K8S_VERSION:.*?K8S_VERSION: \"$K8S_VERSION\"?" linux/group_vars/all.yml'
+      - 'sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\${K8S_VERSION:-$K8S_VERSION}\"?" install-offline.sh'
+      - 'sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\${K8S_VERSION:-$K8S_VERSION}\"?" install.sh'
+
+  - name: curl
+    image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
+    environment:
+      CILIUM_VERSION: 1.11.13
+    commands:
+      - curl https://cache.wodcloud.com/kubernetes/k8s/charts/beagle-cilium-$CILIUM_VERSION.tgz > ./linux/roles/wod.cilium/files/beagle-cilium-$CILIUM_VERSION.tgz
+
+  - name: install-docker-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
+    environment:
+      DOCKER_VERSION: 20.10.23
+      ARCH: amd64
+    commands:
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/templates/install.sh
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
+
+  - name: install-registry-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/registry:v2.8.1-amd64
+    commands:
+      - cp /usr/local/bin/registry linux/roles/wod.registry/files/bin/registry-v2.8.1
+
+  - name: install-envoy-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:1.23.4-amd64
+    commands:
+      - cp /usr/local/bin/envoy linux/roles/wod.envoy/files/envoy-1.23.4
+
+  - name: docker-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    volumes:
+      - name: docker
+        path: /var/run/docker.sock
+    settings:
+      dockerfile: .beagle/dockerfile
+      base: registry.cn-qingdao.aliyuncs.com/wod/ansible:2-amd64
+      repo: wod/ansible-kubernetes
+      version: v1.20.15
+      channel: amd64
+      args: 'TARGETOS=linux,TARGETARCH=amd64'
+      registry: registry.cn-qingdao.aliyuncs.com
+      registry_user:
+        from_secret: REGISTRY_USER_ALIYUN
+      registry_password:
+        from_secret: REGISTRY_PASSWORD_ALIYUN
+
+  - name: install-docker-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
+    environment:
+      DOCKER_VERSION: 20.10.23
+      ARCH: arm64
+    commands:
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/templates/install.sh
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
+      - "sed -i -e 's/K8S_ARCH: amd64/K8S_ARCH: arm64/' linux/group_vars/all.yml"
+
+  - name: install-registry-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/registry:v2.8.1-arm64
+    commands:
+      - cp /usr/local/bin/registry linux/roles/wod.registry/files/bin/registry-v2.8.1
+
+  - name: install-envoy-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:1.23.4-arm64
+    commands:
+      - cp /usr/local/bin/envoy linux/roles/wod.envoy/files/envoy-1.23.4
+
+  - name: docker-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    volumes:
+      - name: docker
+        path: /var/run/docker.sock
+    settings:
+      dockerfile: .beagle/dockerfile
+      base: registry.cn-qingdao.aliyuncs.com/wod/ansible:2-arm64
+      repo: wod/ansible-kubernetes
+      version: v1.20.15
+      channel: arm64
+      args: 'TARGETOS=linux,TARGETARCH=arm64'
+      registry: registry.cn-qingdao.aliyuncs.com
+      registry_user:
+        from_secret: REGISTRY_USER_ALIYUN
+      registry_password:
+        from_secret: REGISTRY_PASSWORD_ALIYUN
+
+  - name: docker-arch
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-manifest:1.0
+    settings:
+      platforms: linux/amd64,linux/arm64
+      template: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.20.15-ARCH
+      target: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.20.15
+      username:
+        from_secret: REGISTRY_USER_ALIYUN
+      password:
+        from_secret: REGISTRY_PASSWORD_ALIYUN
+
+  - name: harbor-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-tag:1.0
+    settings:
+      source: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.20.15-amd64
+      target: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.20-amd64
+      registry: registry.cn-qingdao.aliyuncs.com
+      registry_user:
+        from_secret: REGISTRY_USER_ALIYUN
+      registry_password:
+        from_secret: REGISTRY_PASSWORD_ALIYUN
+
+  - name: harbor-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-tag:1.0
+    settings:
+      source: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.20.15-arm64
+      target: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.20-arm64
+      registry: registry.cn-qingdao.aliyuncs.com
+      registry_user:
+        from_secret: REGISTRY_USER_ALIYUN
+      registry_password:
+        from_secret: REGISTRY_PASSWORD_ALIYUN
+
+  - name: harbor-arch
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-manifest:1.0
+    settings:
+      platforms: linux/amd64,linux/arm64
+      template: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.20-ARCH
+      target: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.20
+      username:
+        from_secret: REGISTRY_USER_ALIYUN
+      password:
+        from_secret: REGISTRY_PASSWORD_ALIYUN
+
+  - name: ansible-docker-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    environment:
+      DOCKER_VERSION: 20.10.23
+      K8S_VERSION: v1.20.15
+      K8S_RELEASE: v1.20
+      K8S_ARCH: amd64
+    commands:
+      - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
+      - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
+      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
+      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
+      - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
+      - rm -rf .tmp/docker
+
+  - name: ansible-kubernetes-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    volumes:
+      - name: docker
+        path: /var/run/docker.sock
+    environment:
+      REGISTRY_REMOTE: registry.cn-qingdao.aliyuncs.com/wod
+      K8S_REPO: ansible-kubernetes
+      K8S_VERSION: v1.20.15
+      K8S_RELEASE: v1.20
+      K8S_ARCH: amd64
+    commands:
+      - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH
+      - cp install-offline.sh .tmp/$K8S_RELEASE/$K8S_ARCH/$K8S_REPO-$K8S_VERSION.sh
+      - docker pull $REGISTRY_REMOTE/$K8S_REPO:$K8S_VERSION-$K8S_ARCH
+      - docker save $REGISTRY_REMOTE/$K8S_REPO:$K8S_VERSION-$K8S_ARCH | gzip > .tmp/$K8S_RELEASE/$K8S_ARCH/$K8S_REPO-$K8S_VERSION-$K8S_ARCH.tgz
+
+  - name: ansible-kubernetes-images-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0
+    settings:
+      source: registry.cn-qingdao.aliyuncs.com/wod
+      yaml: linux/vars/1.20.yml
+      image: K8S_IMAGES
+      arch: amd64
+      group: k8s
+      release: .tmp/v1.20/amd64/ansible-kubernetes-images-v1.20.15-amd64.tgz
+
+  - name: ansible-docker-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    environment:
+      DOCKER_VERSION: 20.10.23
+      K8S_VERSION: v1.20.15
+      K8S_RELEASE: v1.20
+      K8S_ARCH: arm64
+    commands:
+      - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
+      - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
+      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
+      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
+      - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
+      - rm -rf .tmp/docker
+
+  - name: ansible-kubernetes-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    volumes:
+      - name: docker
+        path: /var/run/docker.sock
+    environment:
+      REGISTRY_REMOTE: registry.cn-qingdao.aliyuncs.com/wod
+      K8S_REPO: ansible-kubernetes
+      K8S_VERSION: v1.20.15
+      K8S_RELEASE: v1.20
+      K8S_ARCH: arm64
+    commands:
+      - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH
+      - cp install-offline.sh .tmp/$K8S_RELEASE/$K8S_ARCH/$K8S_REPO-$K8S_VERSION.sh
+      - docker pull $REGISTRY_REMOTE/$K8S_REPO:$K8S_VERSION-$K8S_ARCH
+      - docker save $REGISTRY_REMOTE/$K8S_REPO:$K8S_VERSION-$K8S_ARCH | gzip > .tmp/$K8S_RELEASE/$K8S_ARCH/$K8S_REPO-$K8S_VERSION-$K8S_ARCH.tgz
+
+  - name: ansible-kubernetes-images-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0
+    settings:
+      source: registry.cn-qingdao.aliyuncs.com/wod
+      yaml: linux/vars/1.20.yml
+      image: K8S_IMAGES
+      arch: arm64
+      group: k8s
+      release: .tmp/v1.20/arm64/ansible-kubernetes-images-v1.20.15-arm64.tgz
+
+  - name: minio
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-minio:1.0
+    environment:
+      S3_ACCESS_KEY: 
+        from_secret: ACCESS_KEY_MINIO
+      S3_SECRET_KEY: 
+        from_secret: SECRET_KEY_MINIO
+    commands:
+      - mc alias set cache --api=S3v4 https://cache.wodcloud.com $S3_ACCESS_KEY $S3_SECRET_KEY
+      - mc cp --recursive .tmp/v1.20 cache/kubernetes/k8s/ansible
+
+---
+kind: pipeline
+name: release-1.18
+
+trigger:
+  branch:
+    - release-1.18
+
+volumes:
+  - name: docker
+    host:
+      path: /var/run/docker.sock
+	  
+clone:
+  disable: true
+
+steps:
+  - name: s3-cache
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-s3-cache:1.0
+    settings:
+      restore: true
+      mount:
+        - ./.git
+      endpoint: https://cache.wodcloud.com
+      access_key:
+        from_secret: ACCESS_KEY_MINIO
+      secret_key:
+        from_secret: SECRET_KEY_MINIO
+
+  - name: fetch
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-git:1.0
+    settings:
+      proxy:
+        from_secret: SOCKS5_PROXY
+
+  - name: version
+    image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
+    environment:
+      K8S_VERSION: v1.18.20
+      K8S_RELEASE: v1.18
+    commands:
+      - 'sed -i --expression "s?K8S_VERSION:.*?K8S_VERSION: \"$K8S_VERSION\"?" linux/group_vars/all.yml'
+      - 'sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\${K8S_VERSION:-$K8S_VERSION}\"?" install-offline.sh'
+      - 'sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\${K8S_VERSION:-$K8S_VERSION}\"?" install.sh'
+
+  - name: curl
+    image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
+    environment:
+      CILIUM_VERSION: 1.11.13
+    commands:
+      - curl https://cache.wodcloud.com/kubernetes/k8s/charts/beagle-cilium-$CILIUM_VERSION.tgz > ./linux/roles/wod.cilium/files/beagle-cilium-$CILIUM_VERSION.tgz
+
+  - name: install-docker-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
+    environment:
+      DOCKER_VERSION: 20.10.23
+      ARCH: amd64
+    commands:
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/templates/install.sh
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
+
+  - name: install-registry-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/registry:v2.8.1-amd64
+    commands:
+      - cp /usr/local/bin/registry linux/roles/wod.registry/files/bin/registry-v2.8.1
+
+  - name: install-envoy-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:1.23.4-amd64
+    commands:
+      - cp /usr/local/bin/envoy linux/roles/wod.envoy/files/envoy-1.23.4
+
+  - name: docker-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    volumes:
+      - name: docker
+        path: /var/run/docker.sock
+    settings:
+      dockerfile: .beagle/dockerfile
+      base: registry.cn-qingdao.aliyuncs.com/wod/ansible:2-amd64
+      repo: wod/ansible-kubernetes
+      version: v1.18.20
+      channel: amd64
+      args: 'TARGETOS=linux,TARGETARCH=amd64'
+      registry: registry.cn-qingdao.aliyuncs.com
+      registry_user:
+        from_secret: REGISTRY_USER_ALIYUN
+      registry_password:
+        from_secret: REGISTRY_PASSWORD_ALIYUN
+
+  - name: install-docker-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
+    environment:
+      DOCKER_VERSION: 20.10.23
+      ARCH: arm64
+    commands:
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/templates/install.sh
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
+      - "sed -i -e 's/K8S_ARCH: amd64/K8S_ARCH: arm64/' linux/group_vars/all.yml"
+
+  - name: install-registry-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/registry:v2.8.1-arm64
+    commands:
+      - cp /usr/local/bin/registry linux/roles/wod.registry/files/bin/registry-v2.8.1
+
+  - name: install-envoy-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:1.23.4-arm64
+    commands:
+      - cp /usr/local/bin/envoy linux/roles/wod.envoy/files/envoy-1.23.4
+
+  - name: docker-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    volumes:
+      - name: docker
+        path: /var/run/docker.sock
+    settings:
+      dockerfile: .beagle/dockerfile
+      base: registry.cn-qingdao.aliyuncs.com/wod/ansible:2-arm64
+      repo: wod/ansible-kubernetes
+      version: v1.18.20
+      channel: arm64
+      args: 'TARGETOS=linux,TARGETARCH=arm64'
+      registry: registry.cn-qingdao.aliyuncs.com
+      registry_user:
+        from_secret: REGISTRY_USER_ALIYUN
+      registry_password:
+        from_secret: REGISTRY_PASSWORD_ALIYUN
+
+  - name: docker-arch
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-manifest:1.0
+    settings:
+      platforms: linux/amd64,linux/arm64
+      template: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.18.20-ARCH
+      target: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.18.20
+      username:
+        from_secret: REGISTRY_USER_ALIYUN
+      password:
+        from_secret: REGISTRY_PASSWORD_ALIYUN
+
+  - name: harbor-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-tag:1.0
+    settings:
+      source: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.18.20-amd64
+      target: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.18-amd64
+      registry: registry.cn-qingdao.aliyuncs.com
+      registry_user:
+        from_secret: REGISTRY_USER_ALIYUN
+      registry_password:
+        from_secret: REGISTRY_PASSWORD_ALIYUN
+
+  - name: harbor-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-tag:1.0
+    settings:
+      source: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.18.20-arm64
+      target: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.18-arm64
+      registry: registry.cn-qingdao.aliyuncs.com
+      registry_user:
+        from_secret: REGISTRY_USER_ALIYUN
+      registry_password:
+        from_secret: REGISTRY_PASSWORD_ALIYUN
+
+  - name: harbor-arch
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-manifest:1.0
+    settings:
+      platforms: linux/amd64,linux/arm64
+      template: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.18-ARCH
+      target: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.18
+      username:
+        from_secret: REGISTRY_USER_ALIYUN
+      password:
+        from_secret: REGISTRY_PASSWORD_ALIYUN
+
+  - name: ansible-docker-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    environment:
+      DOCKER_VERSION: 20.10.23
+      K8S_VERSION: v1.18.20
+      K8S_RELEASE: v1.18
+      K8S_ARCH: amd64
+    commands:
+      - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
+      - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
+      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
+      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
+      - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
+      - rm -rf .tmp/docker
+
+  - name: ansible-kubernetes-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    volumes:
+      - name: docker
+        path: /var/run/docker.sock
+    environment:
+      REGISTRY_REMOTE: registry.cn-qingdao.aliyuncs.com/wod
+      K8S_REPO: ansible-kubernetes
+      K8S_VERSION: v1.18.20
+      K8S_RELEASE: v1.18
+      K8S_ARCH: amd64
+    commands:
+      - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH
+      - cp install-offline.sh .tmp/$K8S_RELEASE/$K8S_ARCH/$K8S_REPO-$K8S_VERSION.sh
+      - docker pull $REGISTRY_REMOTE/$K8S_REPO:$K8S_VERSION-$K8S_ARCH
+      - docker save $REGISTRY_REMOTE/$K8S_REPO:$K8S_VERSION-$K8S_ARCH | gzip > .tmp/$K8S_RELEASE/$K8S_ARCH/$K8S_REPO-$K8S_VERSION-$K8S_ARCH.tgz
+
+  - name: ansible-kubernetes-images-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0
+    settings:
+      source: registry.cn-qingdao.aliyuncs.com/wod
+      yaml: linux/vars/1.18.yml
+      image: K8S_IMAGES
+      arch: amd64
+      group: k8s
+      release: .tmp/v1.18/amd64/ansible-kubernetes-images-v1.18.20-amd64.tgz
+
+  - name: ansible-docker-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    environment:
+      DOCKER_VERSION: 20.10.23
+      K8S_VERSION: v1.18.20
+      K8S_RELEASE: v1.18
+      K8S_ARCH: arm64
+    commands:
+      - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
+      - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
+      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
+      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
+      - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
+      - rm -rf .tmp/docker
+
+  - name: ansible-kubernetes-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    volumes:
+      - name: docker
+        path: /var/run/docker.sock
+    environment:
+      REGISTRY_REMOTE: registry.cn-qingdao.aliyuncs.com/wod
+      K8S_REPO: ansible-kubernetes
+      K8S_VERSION: v1.18.20
+      K8S_RELEASE: v1.18
+      K8S_ARCH: arm64
+    commands:
+      - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH
+      - cp install-offline.sh .tmp/$K8S_RELEASE/$K8S_ARCH/$K8S_REPO-$K8S_VERSION.sh
+      - docker pull $REGISTRY_REMOTE/$K8S_REPO:$K8S_VERSION-$K8S_ARCH
+      - docker save $REGISTRY_REMOTE/$K8S_REPO:$K8S_VERSION-$K8S_ARCH | gzip > .tmp/$K8S_RELEASE/$K8S_ARCH/$K8S_REPO-$K8S_VERSION-$K8S_ARCH.tgz
+
+  - name: ansible-kubernetes-images-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0
+    settings:
+      source: registry.cn-qingdao.aliyuncs.com/wod
+      yaml: linux/vars/1.18.yml
+      image: K8S_IMAGES
+      arch: arm64
+      group: k8s
+      release: .tmp/v1.18/arm64/ansible-kubernetes-images-v1.18.20-arm64.tgz
+
+  - name: minio
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-minio:1.0
+    environment:
+      S3_ACCESS_KEY: 
+        from_secret: ACCESS_KEY_MINIO
+      S3_SECRET_KEY: 
+        from_secret: SECRET_KEY_MINIO
+    commands:
+      - mc alias set cache --api=S3v4 https://cache.wodcloud.com $S3_ACCESS_KEY $S3_SECRET_KEY
+      - mc cp --recursive .tmp/v1.18 cache/kubernetes/k8s/ansible
+
 ---
 kind: secret
 name: SOCKS5_PROXY
