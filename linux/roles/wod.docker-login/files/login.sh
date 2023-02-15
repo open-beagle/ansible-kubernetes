@@ -21,6 +21,7 @@ if ! [ -e /root/.docker/config.json ] ; then
 	}
 }
 EOF
+  chmod 0600 /root/.docker/config.json
 fi
 
 RESTART_CONTAINERD=false
