@@ -14,6 +14,8 @@ curl https://cache.wodcloud.com/kubernetes/k8s/docker/$TARGETARCH/docker-$DOCKER
 curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/templates/install.sh
 curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
 
+sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/templates/install.sh
+
 rm -rf ./linux/roles/wod.registry/files/bin/registry-*
 REGISTRY_VERSION=v2.8.1
 docker run -it --rm \
