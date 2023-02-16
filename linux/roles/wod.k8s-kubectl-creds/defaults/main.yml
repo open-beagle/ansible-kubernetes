@@ -1,2 +1,0 @@
-K8S_MASTER_HOST: kubernetes.beagle.default
-K8S_MASTER_PORT: 6443
