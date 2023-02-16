@@ -25,10 +25,14 @@
     - role: wod.k8s-kubelet-docker
       when:
         - K8S_VERSION_NUM is version('1.24','<')
+    - role: wod.k8s-kubelet-images
+      when:
+        - K8S_VERSION_NUM is version('1.24','<')
     - role: wod.k8s-kubelet
       when:
         - K8S_VERSION_NUM is version('1.24','>=')
     - role: wod.k8s-kubectl
+    - role: wod.k8s-kubectl-creds
     - role: wod.k8s-label
 
 - hosts: node
@@ -39,6 +43,9 @@
     - role: wod.envoy
     - role: wod.docker-login
     - role: wod.k8s-kubelet-docker
+      when:
+        - K8S_VERSION_NUM is version('1.24','<')
+    - role: wod.k8s-kubelet-images-pause
       when:
         - K8S_VERSION_NUM is version('1.24','<')
     - role: wod.k8s-kubelet
