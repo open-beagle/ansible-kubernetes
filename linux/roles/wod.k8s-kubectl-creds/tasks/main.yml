@@ -7,7 +7,7 @@
   ignore_errors: True
 
 - name: kubectl create secret docker-registry
-  raw: /opt/bin/kubectl -n kube-system create secret docker-registry beagle-registry --docker-server=registry.beagle.default:6444 --docker-username=beagle --docker-password=beagle --docker-email=beagle@bd-apaas.com
+  raw: /opt/bin/kubectl -n kube-system create secret generic beagle-registry --from-file=.dockerconfigjson=/root/.docker/config.json --type=kubernetes.io/dockerconfigjson 
   when:
     - need_kubectl_creds is failed
 

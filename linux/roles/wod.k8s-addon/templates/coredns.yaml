@@ -98,6 +98,10 @@ spec:
     spec:
       priorityClassName: system-cluster-critical
       serviceAccountName: coredns
+{% if REGISTRY_LOCAL == 'registry.beagle.default:6444/k8s' %}
+      imagePullSecrets:
+        - name: beagle-registry
+{% endif %}
       tolerations:
         - key: "CriticalAddonsOnly"
           operator: "Exists"

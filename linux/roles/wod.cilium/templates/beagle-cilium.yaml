@@ -7,6 +7,11 @@ image:
   tag: "{{ K8S_IMAGES["CILIUM"]["VERSION"] }}{{ "-%s" | format(K8S_ARCH) | replace("-amd64", "") }}"
   pullPolicy: IfNotPresent
 
+{% if REGISTRY_LOCAL == 'registry.beagle.default:6444/k8s' %}
+imagePullSecrets:
+  - name: beagle-registry
+{% endif %}
+
 hubble:
   relay:
     enabled: true

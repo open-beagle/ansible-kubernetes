@@ -138,6 +138,10 @@ spec:
         k8s-app: kube-proxy
         app.bd-apaas.com/cluster-component: network
     spec:
+{% if REGISTRY_LOCAL == 'registry.beagle.default:6444/k8s' %}
+      imagePullSecrets:
+        - name: beagle-registry
+{% endif %}
       containers:
       - name: kube-proxy
         image: {{ REGISTRY_LOCAL }}/{{ K8S_IMAGES['KUBE-PROXY']['NAME'] }}:{{ K8S_IMAGES['KUBE-PROXY']['VERSION'] }}{{ "-%s" | format(K8S_ARCH) | replace("-amd64", "") }}
