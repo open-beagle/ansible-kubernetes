@@ -2,22 +2,22 @@
 K8S_IMAGES:
   KUBELET:
     NAME: kubelet
-    VERSION: 'v1.22.16-beagle'
+    VERSION: 'v1.22.17-beagle'
   KUBE-APISERVER:
     NAME: kube-apiserver
-    VERSION: 'v1.22.16-beagle'
+    VERSION: 'v1.22.17-beagle'
   KUBE-CONTROLLER-MANAGER:
     NAME: kube-controller-manager
-    VERSION: 'v1.22.16-beagle'
+    VERSION: 'v1.22.17-beagle'
   KUBE-SCHEDULER:
     NAME: kube-scheduler
-    VERSION: 'v1.22.16-beagle'
+    VERSION: 'v1.22.17-beagle'
   KUBE-PROXY:
     NAME: kube-proxy
-    VERSION: 'v1.22.16-beagle'
+    VERSION: 'v1.22.17-beagle'
   KUBECTL:
     NAME: kubectl
-    VERSION: 'v1.22.16-beagle'
+    VERSION: 'v1.22.17-beagle'
   PAUSE:
     NAME: pause
     VERSION: '3.7'

@@ -70,7 +70,7 @@ docker run \
 -w /etc/ansible/linux \
 registry.cn-qingdao.aliyuncs.com/wod/ansible:2 \
 ansible-playbook 1.install.yml \
---extra-vars "K8S_VERSION=v1.22.16" \
+--extra-vars "K8S_VERSION=v1.22.17" \
 --extra-vars "REGISTRY_LOCAL=registry.cn-qingdao.aliyuncs.com/wod"
 
 # 1.20
