@@ -40,6 +40,9 @@ if ! (grep -q $PAUSE_IMAGE /etc/containerd/config.toml) ; then
   sed -i -e 's/SystemdCgroup = false/SystemdCgroup = true/' /etc/containerd/config.toml
   RESTART_CONTAINERD=true
 fi
+if ! (grep -q "/etc/containerd/certs.d" /etc/containerd/config.toml) ; then 
+  sed -i -e 's/config_path = ""/config_path = "\/etc\/containerd\/certs.d"/' /etc/containerd/config.toml
+fi
 if [ "$RESTART_CONTAINERD" = true ] ; then 
   systemctl restart containerd
 fi
