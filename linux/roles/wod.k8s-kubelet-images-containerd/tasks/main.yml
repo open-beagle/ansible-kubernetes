@@ -1,0 +1,38 @@
+
+- name: mkdir -p /etc/kubernetes/ansible
+  raw: mkdir -p /etc/kubernetes/ansible
+
+- name: check need /etc/kubernetes/ansible/.ansible-kubelet-images-containerd
+  raw: stat /etc/kubernetes/ansible/.ansible-kubelet-images-containerd
+  register: need_kubelet_images
+  ignore_errors: True
+
+- name: nerdctl pull kube-apiserver
+  raw: /opt/bin/nerdctl -n k8s.io pull {{ REGISTRY_LOCAL }}/{{ K8S_IMAGES['KUBE-APISERVER']['NAME'] }}:{{ K8S_IMAGES['KUBE-APISERVER']['VERSION'] }}{{ "-%s" | format(K8S_ARCH) | replace("-amd64", "") }}
+  when:
+    - need_kubelet_images is failed
+
+- name: nerdctl pull kube-controller-manager
+  raw: /opt/bin/nerdctl -n k8s.io pull {{ REGISTRY_LOCAL }}/{{ K8S_IMAGES['KUBE-CONTROLLER-MANAGER']['NAME'] }}:{{ K8S_IMAGES['KUBE-CONTROLLER-MANAGER']['VERSION'] }}{{ "-%s" | format(K8S_ARCH) | replace("-amd64", "") }}
+  when:
+    - need_kubelet_images is failed
+
+- name: nerdctl pull kube-scheduler
+  raw: /opt/bin/nerdctl -n k8s.io pull {{ REGISTRY_LOCAL }}/{{ K8S_IMAGES['KUBE-SCHEDULER']['NAME'] }}:{{ K8S_IMAGES['KUBE-SCHEDULER']['VERSION'] }}{{ "-%s" | format(K8S_ARCH) | replace("-amd64", "") }}
+  when:
+    - need_kubelet_images is failed
+
+- name: nerdctl pull etcd
+  raw: /opt/bin/nerdctl -n k8s.io pull {{ REGISTRY_LOCAL }}/{{ K8S_IMAGES['ETCD']['NAME'] }}:{{ K8S_IMAGES['ETCD']['VERSION'] }}{{ "-%s" | format(K8S_ARCH) | replace("-amd64", "") }}
+  when:
+    - need_kubelet_images is failed
+
+- name: nerdctl pull pause
+  raw: /opt/bin/nerdctl -n k8s.io pull {{ REGISTRY_LOCAL }}/{{ K8S_IMAGES['PAUSE']['NAME'] }}:{{ K8S_IMAGES['PAUSE']['VERSION'] }}{{ '-%s' | format(K8S_ARCH) | replace('-amd64', '') }}
+  when:
+    - need_kubelet_images is failed
+
+- name: touch /etc/kubernetes/ansible/.ansible-kubelet-images-containerd
+  raw: touch /etc/kubernetes/ansible/.ansible-kubelet-images-containerd
+  when:
+    - need_kubelet_images is failed
