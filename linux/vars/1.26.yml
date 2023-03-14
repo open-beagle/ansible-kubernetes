@@ -2,22 +2,22 @@
 K8S_IMAGES:
   KUBELET:
     NAME: kubelet
-    VERSION: 'v1.26.1-beagle'
+    VERSION: 'v1.26.2-beagle'
   KUBE-APISERVER:
     NAME: kube-apiserver
-    VERSION: 'v1.26.1-beagle'
+    VERSION: 'v1.26.2-beagle'
   KUBE-CONTROLLER-MANAGER:
     NAME: kube-controller-manager
-    VERSION: 'v1.26.1-beagle'
+    VERSION: 'v1.26.2-beagle'
   KUBE-SCHEDULER:
     NAME: kube-scheduler
-    VERSION: 'v1.26.1-beagle'
+    VERSION: 'v1.26.2-beagle'
   KUBE-PROXY:
     NAME: kube-proxy
-    VERSION: 'v1.26.1-beagle'
+    VERSION: 'v1.26.2-beagle'
   KUBECTL:
     NAME: kubectl
-    VERSION: 'v1.26.1-beagle'
+    VERSION: 'v1.26.2-beagle'
   PAUSE:
     NAME: pause
     VERSION: '3.7'
@@ -26,13 +26,13 @@ K8S_IMAGES:
     VERSION: 'v1.2.0'
   ETCD:
     NAME: etcd
-    VERSION: 'v3.5.6'
+    VERSION: 'v3.5.7'
   ETCDCTL:
     NAME: etcdctl
-    VERSION: 'v3.5.6'
+    VERSION: 'v3.5.7'
   FLANNEL:
     NAME: flannel
-    VERSION: 'v0.20.2'
+    VERSION: 'v0.21.3'
   FLANNEL-CNI-PLUGIN:
     NAME: flannel-cni-plugin
     VERSION: 'v1.1.2'

@@ -7,7 +7,7 @@ HTTP_SERVER="${HTTP_SERVER:-https://cache.wodcloud.com/kubernetes}"
 # 平台架构
 TARGET_ARCH="${TARGET_ARCH:-amd64}"
 # K8S版本
-K8S_VERSION="${K8S_VERSION:-v1.26.1}"
+K8S_VERSION="${K8S_VERSION:-v1.26.2}"
 # K8S发布版本
 K8S_RELEASE="${K8S_VERSION%.*}"
 
@@ -24,8 +24,7 @@ elif [ "$LOCAL_ARCH" = "ppc64le" ]; then
   # TARGET_ARCH="ppc64le"
   TARGET_ARCH="unsupported"
 elif [ "$LOCAL_ARCH" = "mips64" ]; then
-  # TARGET_ARCH="mips64le"
-  TARGET_ARCH="unsupported"
+  TARGET_ARCH="mips64le"
 else
   echo "This system's architecture $(LOCAL_ARCH) isn't supported"
   TARGET_ARCH="unsupported"
