@@ -47,7 +47,7 @@ if ! (grep -q "/etc/containerd/certs.d" /etc/containerd/config.toml) ; then
 fi
 if ! (grep -q "root = \"$K8S_DATA_PATH/containerd\"" /etc/containerd/config.toml) ; then 
   RESTART_CONTAINERD=true
-  sed -i --expression "s?root =.*?root = \"$K8S_DATA_PATH/containerd\"?" /etc/containerd/config.toml
+  sed -i --expression "s?root = \"/var/lib/containerd\"?root = \"$K8S_DATA_PATH/containerd\"?" /etc/containerd/config.toml
 fi
 if [ "$RESTART_CONTAINERD" = true ] ; then 
   systemctl restart containerd
