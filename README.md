@@ -35,6 +35,20 @@ beagle-03 ansible_ssh_host=192.168.1.203 ansible_ssh_port=22 ansible_ssh_user=ro
 EOF
 ```
 
+## 准备 yaml 配置文件 [可选]
+
+请参考[all.yml](./linux/group_vars/all.yml)
+
+```bash
+mkdir -p /etc/kubernetes/ansible && \
+rm -rf /etc/kubernetes/ansible/beagle.yaml && \
+cat > /etc/kubernetes/ansible/beagle.yaml <<\EOF
+## REGISTRY_LOCAL , Docker镜像服务器
+## 安装过程种使用的容器镜像服务器
+# REGISTRY_LOCAL: 'registry.beagle.default:6444/k8s'
+EOF
+```
+
 ## 在线一键安装 kubernetes 集群
 
 ```bash

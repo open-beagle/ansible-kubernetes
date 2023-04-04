@@ -65,11 +65,21 @@ docker load -i /etc/kubernetes/ansible/ansible-kubernetes-$K8S_VERSION-$TARGET_A
 touch /etc/kubernetes/ansible/.ansible-kubernetes-$K8S_VERSION-$TARGET_ARCH
 fi
 
+if ! [ -e /etc/kubernetes/ansible/beagle.yaml ]; then
+  cat > /etc/kubernetes/ansible/beagle.yaml <<-EOF
+## REGISTRY_LOCAL , Docker镜像服务器
+## 安装过程种使用的容器镜像服务器
+# REGISTRY_LOCAL: 'registry.beagle.default:6444/k8s'
+EOF
+fi
+
 docker run \
 -t \
 --rm \
 -v /etc/kubernetes/ansible/hosts.ini:/etc/ansible/hosts \
+-v /etc/kubernetes/ansible/beagle.yaml:/etc/ansible/linux/beagle_vars/beagle.yaml \
 -v /etc/kubernetes/ansible/ansible-kubernetes-images-$K8S_VERSION-$TARGET_ARCH.tgz:/etc/ansible/linux/roles/wod.registry/files/images/ansible-kubernetes-images-$K8S_VERSION-$TARGET_ARCH.tgz \
 -w /etc/ansible/linux \
 registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:$K8S_VERSION-$TARGET_ARCH \
-ansible-playbook 1.install.yml
+ansible-playbook 1.install.yml \
+--extra-vars "@./beagle_vars/beagle.yaml"
