@@ -2,4 +2,5 @@
   script: login.sh
   environment:
     PAUSE_IMAGE: "{{ PAUSE_IMAGE }}"
+    K8S_DATA_PATH: "{{ K8S_DATA_PATH }}"
 

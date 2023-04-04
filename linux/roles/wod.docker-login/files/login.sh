@@ -4,6 +4,7 @@
 # REGISTRY_PASS=beagle
 
 PAUSE_IMAGE="${PAUSE_IMAGE:-registry.beagle.default:6444/k8s/pause:3.7}"
+K8S_DATA_PATH="${K8S_DATA_PATH:-/var/lib}"
 
 # docker , 信任自签名证书和默认登录
 mkdir -p /etc/docker/certs.d/registry.beagle.default:6444
@@ -46,6 +47,6 @@ fi
 if [ "$RESTART_CONTAINERD" = true ] ; then 
   systemctl restart containerd
 fi
-if ! (grep -q $K8S_DATA_PATH/containerd /etc/containerd/config.toml) ; then 
+if ! (grep -q "root = \"$K8S_DATA_PATH/containerd\"" /etc/containerd/config.toml) ; then 
   sed -i --expression "s?root =.*?root = \"$K8S_DATA_PATH/containerd\"?" /etc/containerd/config.toml
 fi
