@@ -3,12 +3,12 @@
 set -e
 
 mkdir -p /etc/kubernetes/downloads
-mkdir -p /etc/kubernetes/data/registry
+mkdir -p {{ K8S_DATA_PATH }}/registry
 mkdir -p /opt/bin
 
 if [ -e /tmp/registry/images ]; then
 for file in `find /tmp/registry/images -name "*.tgz"`; do  
-  tar xzvf $file -C /etc/kubernetes/data/registry
+  tar xzvf $file -C {{ K8S_DATA_PATH }}/registry
 done
 rm -rf /tmp/registry/images
 fi

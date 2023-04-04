@@ -1,1 +1,3 @@
 PAUSE_IMAGE: "{{ REGISTRY_LOCAL }}/{{ K8S_IMAGES['PAUSE']['NAME'] }}:{{ K8S_IMAGES['PAUSE']['VERSION'] }}{{ '-%s' | format(K8S_ARCH) | replace('-amd64', '') }}"
+
+K8S_DATA_PATH: "/var/lib"
