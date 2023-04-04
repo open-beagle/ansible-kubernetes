@@ -46,6 +46,9 @@ cat > /etc/kubernetes/ansible/beagle.yaml <<\EOF
 ## REGISTRY_LOCAL , Docker镜像服务器
 ## 安装过程种使用的容器镜像服务器
 # REGISTRY_LOCAL: 'registry.beagle.default:6444/k8s'
+
+## 容器存储路径
+# K8S_DATA_PATH: "/data/kubernetes"
 EOF
 ```
 
