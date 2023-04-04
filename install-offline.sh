@@ -7,7 +7,7 @@ HTTP_SERVER="${HTTP_SERVER:-https://cache.wodcloud.com/kubernetes}"
 # 平台架构
 TARGET_ARCH="${TARGET_ARCH:-amd64}"
 # K8S版本
-K8S_VERSION="${K8S_VERSION:-v1.26.2}"
+K8S_VERSION="${K8S_VERSION:-v1.26.3}"
 # K8S发布版本
 K8S_RELEASE="${K8S_VERSION%.*}"
 
