@@ -42,6 +42,7 @@ if ! (grep -q $PAUSE_IMAGE /etc/containerd/config.toml) ; then
   RESTART_CONTAINERD=true
 fi
 if ! (grep -q "/etc/containerd/certs.d" /etc/containerd/config.toml) ; then 
+  RESTART_CONTAINERD=true
   sed -i -e 's/config_path = ""/config_path = "\/etc\/containerd\/certs.d"/' /etc/containerd/config.toml
 fi
 if ! (grep -q "root = \"$K8S_DATA_PATH/containerd\"" /etc/containerd/config.toml) ; then 
