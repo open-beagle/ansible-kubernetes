@@ -2,7 +2,7 @@
   raw: mkdir -p /etc/kubernetes/services/k8s-registry
 
 - name: check need copy images
-  raw: stat /etc/kubernetes/data/registry/docker/registry/v2/repositories 
+  raw: stat {{ K8S_DATA_PATH }}/registry/docker/registry/v2/repositories
   register: need_copy_images
   ignore_errors: True
 

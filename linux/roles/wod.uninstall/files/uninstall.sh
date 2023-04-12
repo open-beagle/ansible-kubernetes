@@ -27,4 +27,4 @@ docker rm $(docker ps -a | awk '{print $1}') -f
 
 docker system prune -a -f
 
-rm -rf /etc/kubernetes /etc/cni/net.d /opt/cni/bin /opt/bin/helm /opt/bin/kubectl /opt/bin/kubelet /opt/bin/etcdctl
+rm -rf /etc/kubernetes /etc/cni/net.d /opt/cni/bin /opt/bin/helm /opt/bin/kubectl /opt/bin/kubelet /opt/bin/etcdctl /opt/bin/registry
