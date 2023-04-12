@@ -91,6 +91,14 @@ steps:
     commands:
       - cp /usr/local/bin/envoy linux/roles/wod.envoy/files/envoy-1.23.4
 
+  - name: group-vars-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
+    environment:
+      K8S_ARCH: amd64
+    commands:
+      - |
+        sed -i --expression "s?K8S_ARCH:.*?K8S_ARCH: $K8S_ARCH?" ./linux/group_vars/all.yml
+
   - name: docker-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     volumes:
@@ -120,8 +128,6 @@ steps:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
       - |
         sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/templates/install.sh
-      - |
-        sed -i --expression "s?K8S_ARCH:.*?K8S_ARCH: $K8S_ARCH?" ./linux/group_vars/all.yml
 
   - name: ansible-docker-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
@@ -150,9 +156,11 @@ steps:
 
   - name: group-vars-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
+    environment:
+      K8S_ARCH: arm64
     commands:
       - |
-        sed -i --expression "s?K8S_ARCH:.*?K8S_ARCH: mips64le?" linux/group_vars/all.yml
+        sed -i --expression "s?K8S_ARCH:.*?K8S_ARCH: $K8S_ARCH?" ./linux/group_vars/all.yml
 
   - name: docker-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
@@ -185,6 +193,8 @@ steps:
         sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/templates/install.sh
       - |
         sed -i --expression "s?K8S_ARCH:.*?K8S_ARCH: $K8S_ARCH?" ./linux/group_vars/all.yml
+      - |
+        sed -i --expression "s?K8S_NETWORK_PLUGIN:.*?K8S_NETWORK_PLUGIN: flannel?" linux/group_vars/all.yml
 
   - name: ansible-docker-mips64le
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
@@ -213,9 +223,11 @@ steps:
 
   - name: group-vars-mips64le
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
+    environment:
+      K8S_ARCH: mips64le
     commands:
       - |
-        sed -i --expression "s?K8S_ARCH:.*?K8S_ARCH: mips64le?" linux/group_vars/all.yml
+        sed -i --expression "s?K8S_ARCH:.*?K8S_ARCH: $K8S_ARCH?" ./linux/group_vars/all.yml
       - |
         sed -i --expression "s?K8S_NETWORK_PLUGIN:.*?K8S_NETWORK_PLUGIN: flannel?" linux/group_vars/all.yml
 
@@ -567,8 +579,6 @@ steps:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
       - |
         sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/templates/install.sh
-      - |
-        sed -i --expression "s?K8S_ARCH:.*?K8S_ARCH: $K8S_ARCH?" ./linux/group_vars/all.yml
 
   - name: ansible-docker-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
@@ -594,6 +604,14 @@ steps:
     image: registry.cn-qingdao.aliyuncs.com/wod/envoy:1.23.4-amd64
     commands:
       - cp /usr/local/bin/envoy linux/roles/wod.envoy/files/envoy-1.23.4
+
+  - name: group-vars-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
+    environment:
+      K8S_ARCH: amd64
+    commands:
+      - |
+        sed -i --expression "s?K8S_ARCH:.*?K8S_ARCH: $K8S_ARCH?" ./linux/group_vars/all.yml
 
   - name: docker-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
@@ -624,8 +642,6 @@ steps:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
       - |
         sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/templates/install.sh
-      - |
-        sed -i --expression "s?K8S_ARCH:.*?K8S_ARCH: $K8S_ARCH?" ./linux/group_vars/all.yml
 
   - name: ansible-docker-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
@@ -651,6 +667,14 @@ steps:
     image: registry.cn-qingdao.aliyuncs.com/wod/envoy:1.23.4-arm64
     commands:
       - cp /usr/local/bin/envoy linux/roles/wod.envoy/files/envoy-1.23.4
+
+  - name: group-vars-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
+    environment:
+      K8S_ARCH: arm64
+    commands:
+      - |
+        sed -i --expression "s?K8S_ARCH:.*?K8S_ARCH: $K8S_ARCH?" ./linux/group_vars/all.yml
 
   - name: docker-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
@@ -681,8 +705,6 @@ steps:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
       - |
         sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/templates/install.sh
-      - |
-        sed -i --expression "s?K8S_ARCH:.*?K8S_ARCH: $K8S_ARCH?" ./linux/group_vars/all.yml
 
   - name: ansible-docker-mips64le
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
@@ -711,9 +733,11 @@ steps:
 
   - name: group-vars-mips64le
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
+    environment:
+      K8S_ARCH: mips64le
     commands:
       - |
-        sed -i --expression "s?K8S_ARCH:.*?K8S_ARCH: mips64le?" linux/group_vars/all.yml
+        sed -i --expression "s?K8S_ARCH:.*?K8S_ARCH: $K8S_ARCH?" ./linux/group_vars/all.yml
       - |
         sed -i --expression "s?K8S_NETWORK_PLUGIN:.*?K8S_NETWORK_PLUGIN: flannel?" linux/group_vars/all.yml
 
@@ -948,8 +972,6 @@ steps:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
       - |
         sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/templates/install.sh
-      - |
-        sed -i --expression "s?K8S_ARCH:.*?K8S_ARCH: $K8S_ARCH?" ./linux/group_vars/all.yml
 
   - name: ansible-docker-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
@@ -975,6 +997,14 @@ steps:
     image: registry.cn-qingdao.aliyuncs.com/wod/envoy:1.23.4-amd64
     commands:
       - cp /usr/local/bin/envoy linux/roles/wod.envoy/files/envoy-1.23.4
+
+  - name: group-vars-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
+    environment:
+      K8S_ARCH: amd64
+    commands:
+      - |
+        sed -i --expression "s?K8S_ARCH:.*?K8S_ARCH: $K8S_ARCH?" ./linux/group_vars/all.yml
 
   - name: docker-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
@@ -1005,8 +1035,6 @@ steps:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
       - |
         sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/templates/install.sh
-      - |
-        sed -i --expression "s?K8S_ARCH:.*?K8S_ARCH: $K8S_ARCH?" ./linux/group_vars/all.yml
 
   - name: ansible-docker-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
@@ -1033,6 +1061,14 @@ steps:
     commands:
       - cp /usr/local/bin/envoy linux/roles/wod.envoy/files/envoy-1.23.4
 
+  - name: group-vars-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
+    environment:
+      K8S_ARCH: arm64
+    commands:
+      - |
+        sed -i --expression "s?K8S_ARCH:.*?K8S_ARCH: $K8S_ARCH?" ./linux/group_vars/all.yml
+        
   - name: docker-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     volumes:
@@ -1045,6 +1081,71 @@ steps:
       version: v1.22.17
       channel: arm64
       args: 'TARGETOS=linux,TARGETARCH=arm64'
+      registry: registry.cn-qingdao.aliyuncs.com
+      registry_user:
+        from_secret: REGISTRY_USER_ALIYUN
+      registry_password:
+        from_secret: REGISTRY_PASSWORD_ALIYUN
+
+  - name: install-docker-mips64le
+    image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
+    environment:
+      DOCKER_VERSION: 23.0.1
+      K8S_ARCH: mips64le
+    commands:
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/templates/install.sh
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
+      - |
+        sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/templates/install.sh
+
+  - name: ansible-docker-mips64le
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    environment:
+      DOCKER_VERSION: 23.0.1
+      K8S_VERSION: v1.22.17
+      K8S_RELEASE: v1.22
+      K8S_ARCH: mips64le
+    commands:
+      - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
+      - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
+      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
+      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
+      - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
+      - rm -rf .tmp/docker
+
+  - name: install-registry-mips64le
+    image: registry.cn-qingdao.aliyuncs.com/wod/registry:v2.8.1-mips64le
+    commands:
+      - cp /usr/local/bin/registry linux/roles/wod.registry/files/bin/registry-v2.8.1
+
+  - name: install-envoy-mips64le
+    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:1.23.4-mips64le
+    commands:
+      - cp /usr/local/bin/envoy linux/roles/wod.envoy/files/envoy-1.23.4
+
+  - name: group-vars-mips64le
+    image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
+    environment:
+      K8S_ARCH: mips64le
+    commands:
+      - |
+        sed -i --expression "s?K8S_ARCH:.*?K8S_ARCH: $K8S_ARCH?" ./linux/group_vars/all.yml
+      - |
+        sed -i --expression "s?K8S_NETWORK_PLUGIN:.*?K8S_NETWORK_PLUGIN: flannel?" linux/group_vars/all.yml
+
+  - name: docker-mips64le
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    volumes:
+      - name: docker
+        path: /var/run/docker.sock
+    settings:
+      dockerfile: .beagle/dockerfile
+      base: registry.cn-qingdao.aliyuncs.com/wod/ansible:2-mips64le
+      repo: wod/ansible-kubernetes
+      version: v1.22.17
+      channel: mips64le
+      args: 'TARGETOS=linux,TARGETARCH=mips64le'
       registry: registry.cn-qingdao.aliyuncs.com
       registry_user:
         from_secret: REGISTRY_USER_ALIYUN
@@ -1084,10 +1185,21 @@ steps:
       registry_password:
         from_secret: REGISTRY_PASSWORD_ALIYUN
 
+  - name: harbor-mips64le
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-tag:1.0
+    settings:
+      source: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.22.17-mips64le
+      target: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.22-mips64le
+      registry: registry.cn-qingdao.aliyuncs.com
+      registry_user:
+        from_secret: REGISTRY_USER_ALIYUN
+      registry_password:
+        from_secret: REGISTRY_PASSWORD_ALIYUN
+
   - name: harbor-arch
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-manifest:1.0
     settings:
-      platforms: linux/amd64,linux/arm64
+      platforms: linux/amd64,linux/arm64,linux/mips64le
       template: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.22-ARCH
       target: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.22
       username:
@@ -1148,6 +1260,33 @@ steps:
       arch: arm64
       group: k8s
       release: .tmp/v1.22/arm64/ansible-kubernetes-images-v1.22.17-arm64.tgz
+
+  - name: ansible-kubernetes-mips64le
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    volumes:
+      - name: docker
+        path: /var/run/docker.sock
+    environment:
+      REGISTRY_REMOTE: registry.cn-qingdao.aliyuncs.com/wod
+      K8S_REPO: ansible-kubernetes
+      K8S_VERSION: v1.22.17
+      K8S_RELEASE: v1.22
+      K8S_ARCH: mips64le
+    commands:
+      - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH
+      - cp install-offline.sh .tmp/$K8S_RELEASE/$K8S_ARCH/$K8S_REPO-$K8S_VERSION.sh
+      - docker pull $REGISTRY_REMOTE/$K8S_REPO:$K8S_VERSION-$K8S_ARCH
+      - docker save $REGISTRY_REMOTE/$K8S_REPO:$K8S_VERSION-$K8S_ARCH | gzip > .tmp/$K8S_RELEASE/$K8S_ARCH/$K8S_REPO-$K8S_VERSION-$K8S_ARCH.tgz
+
+  - name: ansible-kubernetes-images-mips64le
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0
+    settings:
+      source: registry.cn-qingdao.aliyuncs.com/wod
+      yaml: linux/vars/1.22-mips64le.yml
+      image: K8S_IMAGES
+      arch: mips64le
+      group: k8s
+      release: .tmp/v1.22/mips64le/ansible-kubernetes-images-v1.22.17-mips64le.tgz
 
   - name: minio
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-minio:1.0
@@ -1226,8 +1365,6 @@ steps:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
       - |
         sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/templates/install.sh
-      - |
-        sed -i --expression "s?K8S_ARCH:.*?K8S_ARCH: $K8S_ARCH?" ./linux/group_vars/all.yml
 
   - name: ansible-docker-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
@@ -1253,6 +1390,14 @@ steps:
     image: registry.cn-qingdao.aliyuncs.com/wod/envoy:1.23.4-amd64
     commands:
       - cp /usr/local/bin/envoy linux/roles/wod.envoy/files/envoy-1.23.4
+
+  - name: group-vars-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
+    environment:
+      K8S_ARCH: amd64
+    commands:
+      - |
+        sed -i --expression "s?K8S_ARCH:.*?K8S_ARCH: $K8S_ARCH?" ./linux/group_vars/all.yml
 
   - name: docker-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
@@ -1283,8 +1428,6 @@ steps:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
       - |
         sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/templates/install.sh
-      - |
-        sed -i --expression "s?K8S_ARCH:.*?K8S_ARCH: $K8S_ARCH?" ./linux/group_vars/all.yml
 
   - name: ansible-docker-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
@@ -1311,6 +1454,14 @@ steps:
     commands:
       - cp /usr/local/bin/envoy linux/roles/wod.envoy/files/envoy-1.23.4
 
+  - name: group-vars-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
+    environment:
+      K8S_ARCH: arm64
+    commands:
+      - |
+        sed -i --expression "s?K8S_ARCH:.*?K8S_ARCH: $K8S_ARCH?" ./linux/group_vars/all.yml
+        
   - name: docker-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     volumes:
@@ -1323,6 +1474,71 @@ steps:
       version: v1.20.15
       channel: arm64
       args: 'TARGETOS=linux,TARGETARCH=arm64'
+      registry: registry.cn-qingdao.aliyuncs.com
+      registry_user:
+        from_secret: REGISTRY_USER_ALIYUN
+      registry_password:
+        from_secret: REGISTRY_PASSWORD_ALIYUN
+
+  - name: install-docker-mips64le
+    image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
+    environment:
+      DOCKER_VERSION: 23.0.1
+      K8S_ARCH: mips64le
+    commands:
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/templates/install.sh
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
+      - |
+        sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/templates/install.sh
+
+  - name: ansible-docker-mips64le
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    environment:
+      DOCKER_VERSION: 23.0.1
+      K8S_VERSION: v1.20.15
+      K8S_RELEASE: v1.20
+      K8S_ARCH: mips64le
+    commands:
+      - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
+      - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
+      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
+      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
+      - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
+      - rm -rf .tmp/docker
+
+  - name: install-registry-mips64le
+    image: registry.cn-qingdao.aliyuncs.com/wod/registry:v2.8.1-mips64le
+    commands:
+      - cp /usr/local/bin/registry linux/roles/wod.registry/files/bin/registry-v2.8.1
+
+  - name: install-envoy-mips64le
+    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:1.23.4-mips64le
+    commands:
+      - cp /usr/local/bin/envoy linux/roles/wod.envoy/files/envoy-1.23.4
+
+  - name: group-vars-mips64le
+    image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
+    environment:
+      K8S_ARCH: mips64le
+    commands:
+      - |
+        sed -i --expression "s?K8S_ARCH:.*?K8S_ARCH: $K8S_ARCH?" ./linux/group_vars/all.yml
+      - |
+        sed -i --expression "s?K8S_NETWORK_PLUGIN:.*?K8S_NETWORK_PLUGIN: flannel?" linux/group_vars/all.yml
+
+  - name: docker-mips64le
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    volumes:
+      - name: docker
+        path: /var/run/docker.sock
+    settings:
+      dockerfile: .beagle/dockerfile
+      base: registry.cn-qingdao.aliyuncs.com/wod/ansible:2-mips64le
+      repo: wod/ansible-kubernetes
+      version: v1.20.15
+      channel: mips64le
+      args: 'TARGETOS=linux,TARGETARCH=mips64le'
       registry: registry.cn-qingdao.aliyuncs.com
       registry_user:
         from_secret: REGISTRY_USER_ALIYUN
@@ -1362,10 +1578,21 @@ steps:
       registry_password:
         from_secret: REGISTRY_PASSWORD_ALIYUN
 
+  - name: harbor-mips64le
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-tag:1.0
+    settings:
+      source: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.20.15-mips64le
+      target: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.20-mips64le
+      registry: registry.cn-qingdao.aliyuncs.com
+      registry_user:
+        from_secret: REGISTRY_USER_ALIYUN
+      registry_password:
+        from_secret: REGISTRY_PASSWORD_ALIYUN
+
   - name: harbor-arch
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-manifest:1.0
     settings:
-      platforms: linux/amd64,linux/arm64
+      platforms: linux/amd64,linux/arm64,linux/mips64le
       template: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.20-ARCH
       target: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.20
       username:
@@ -1426,6 +1653,33 @@ steps:
       arch: arm64
       group: k8s
       release: .tmp/v1.20/arm64/ansible-kubernetes-images-v1.20.15-arm64.tgz
+
+  - name: ansible-kubernetes-mips64le
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    volumes:
+      - name: docker
+        path: /var/run/docker.sock
+    environment:
+      REGISTRY_REMOTE: registry.cn-qingdao.aliyuncs.com/wod
+      K8S_REPO: ansible-kubernetes
+      K8S_VERSION: v1.20.15
+      K8S_RELEASE: v1.20
+      K8S_ARCH: mips64le
+    commands:
+      - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH
+      - cp install-offline.sh .tmp/$K8S_RELEASE/$K8S_ARCH/$K8S_REPO-$K8S_VERSION.sh
+      - docker pull $REGISTRY_REMOTE/$K8S_REPO:$K8S_VERSION-$K8S_ARCH
+      - docker save $REGISTRY_REMOTE/$K8S_REPO:$K8S_VERSION-$K8S_ARCH | gzip > .tmp/$K8S_RELEASE/$K8S_ARCH/$K8S_REPO-$K8S_VERSION-$K8S_ARCH.tgz
+
+  - name: ansible-kubernetes-images-mips64le
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0
+    settings:
+      source: registry.cn-qingdao.aliyuncs.com/wod
+      yaml: linux/vars/1.20-mips64le.yml
+      image: K8S_IMAGES
+      arch: mips64le
+      group: k8s
+      release: .tmp/v1.20/mips64le/ansible-kubernetes-images-v1.20.15-mips64le.tgz
 
   - name: minio
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-minio:1.0
@@ -1504,8 +1758,6 @@ steps:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
       - |
         sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/templates/install.sh
-      - |
-        sed -i --expression "s?K8S_ARCH:.*?K8S_ARCH: $K8S_ARCH?" ./linux/group_vars/all.yml
 
   - name: ansible-docker-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
@@ -1531,6 +1783,14 @@ steps:
     image: registry.cn-qingdao.aliyuncs.com/wod/envoy:1.23.4-amd64
     commands:
       - cp /usr/local/bin/envoy linux/roles/wod.envoy/files/envoy-1.23.4
+
+  - name: group-vars-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
+    environment:
+      K8S_ARCH: amd64
+    commands:
+      - |
+        sed -i --expression "s?K8S_ARCH:.*?K8S_ARCH: $K8S_ARCH?" ./linux/group_vars/all.yml
 
   - name: docker-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
@@ -1561,8 +1821,6 @@ steps:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
       - |
         sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/templates/install.sh
-      - |
-        sed -i --expression "s?K8S_ARCH:.*?K8S_ARCH: $K8S_ARCH?" ./linux/group_vars/all.yml
 
   - name: ansible-docker-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
@@ -1578,7 +1836,7 @@ steps:
       - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
       - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
       - rm -rf .tmp/docker
-      
+
   - name: install-registry-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/registry:v2.8.1-arm64
     commands:
@@ -1589,6 +1847,14 @@ steps:
     commands:
       - cp /usr/local/bin/envoy linux/roles/wod.envoy/files/envoy-1.23.4
 
+  - name: group-vars-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
+    environment:
+      K8S_ARCH: arm64
+    commands:
+      - |
+        sed -i --expression "s?K8S_ARCH:.*?K8S_ARCH: $K8S_ARCH?" ./linux/group_vars/all.yml
+        
   - name: docker-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     volumes:
@@ -1601,6 +1867,71 @@ steps:
       version: v1.18.20
       channel: arm64
       args: 'TARGETOS=linux,TARGETARCH=arm64'
+      registry: registry.cn-qingdao.aliyuncs.com
+      registry_user:
+        from_secret: REGISTRY_USER_ALIYUN
+      registry_password:
+        from_secret: REGISTRY_PASSWORD_ALIYUN
+
+  - name: install-docker-mips64le
+    image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
+    environment:
+      DOCKER_VERSION: 23.0.1
+      K8S_ARCH: mips64le
+    commands:
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/templates/install.sh
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
+      - |
+        sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/templates/install.sh
+
+  - name: ansible-docker-mips64le
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    environment:
+      DOCKER_VERSION: 23.0.1
+      K8S_VERSION: v1.18.20
+      K8S_RELEASE: v1.18
+      K8S_ARCH: mips64le
+    commands:
+      - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
+      - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
+      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
+      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
+      - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
+      - rm -rf .tmp/docker
+
+  - name: install-registry-mips64le
+    image: registry.cn-qingdao.aliyuncs.com/wod/registry:v2.8.1-mips64le
+    commands:
+      - cp /usr/local/bin/registry linux/roles/wod.registry/files/bin/registry-v2.8.1
+
+  - name: install-envoy-mips64le
+    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:1.23.4-mips64le
+    commands:
+      - cp /usr/local/bin/envoy linux/roles/wod.envoy/files/envoy-1.23.4
+
+  - name: group-vars-mips64le
+    image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
+    environment:
+      K8S_ARCH: mips64le
+    commands:
+      - |
+        sed -i --expression "s?K8S_ARCH:.*?K8S_ARCH: $K8S_ARCH?" ./linux/group_vars/all.yml
+      - |
+        sed -i --expression "s?K8S_NETWORK_PLUGIN:.*?K8S_NETWORK_PLUGIN: flannel?" linux/group_vars/all.yml
+
+  - name: docker-mips64le
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    volumes:
+      - name: docker
+        path: /var/run/docker.sock
+    settings:
+      dockerfile: .beagle/dockerfile
+      base: registry.cn-qingdao.aliyuncs.com/wod/ansible:2-mips64le
+      repo: wod/ansible-kubernetes
+      version: v1.18.20
+      channel: mips64le
+      args: 'TARGETOS=linux,TARGETARCH=mips64le'
       registry: registry.cn-qingdao.aliyuncs.com
       registry_user:
         from_secret: REGISTRY_USER_ALIYUN
@@ -1640,10 +1971,21 @@ steps:
       registry_password:
         from_secret: REGISTRY_PASSWORD_ALIYUN
 
+  - name: harbor-mips64le
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-tag:1.0
+    settings:
+      source: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.18.20-mips64le
+      target: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.18-mips64le
+      registry: registry.cn-qingdao.aliyuncs.com
+      registry_user:
+        from_secret: REGISTRY_USER_ALIYUN
+      registry_password:
+        from_secret: REGISTRY_PASSWORD_ALIYUN
+
   - name: harbor-arch
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-manifest:1.0
     settings:
-      platforms: linux/amd64,linux/arm64
+      platforms: linux/amd64,linux/arm64,linux/mips64le
       template: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.18-ARCH
       target: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.18
       username:
@@ -1704,6 +2046,33 @@ steps:
       arch: arm64
       group: k8s
       release: .tmp/v1.18/arm64/ansible-kubernetes-images-v1.18.20-arm64.tgz
+
+  - name: ansible-kubernetes-mips64le
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    volumes:
+      - name: docker
+        path: /var/run/docker.sock
+    environment:
+      REGISTRY_REMOTE: registry.cn-qingdao.aliyuncs.com/wod
+      K8S_REPO: ansible-kubernetes
+      K8S_VERSION: v1.18.20
+      K8S_RELEASE: v1.18
+      K8S_ARCH: mips64le
+    commands:
+      - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH
+      - cp install-offline.sh .tmp/$K8S_RELEASE/$K8S_ARCH/$K8S_REPO-$K8S_VERSION.sh
+      - docker pull $REGISTRY_REMOTE/$K8S_REPO:$K8S_VERSION-$K8S_ARCH
+      - docker save $REGISTRY_REMOTE/$K8S_REPO:$K8S_VERSION-$K8S_ARCH | gzip > .tmp/$K8S_RELEASE/$K8S_ARCH/$K8S_REPO-$K8S_VERSION-$K8S_ARCH.tgz
+
+  - name: ansible-kubernetes-images-mips64le
+    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0
+    settings:
+      source: registry.cn-qingdao.aliyuncs.com/wod
+      yaml: linux/vars/1.18-mips64le.yml
+      image: K8S_IMAGES
+      arch: mips64le
+      group: k8s
+      release: .tmp/v1.18/mips64le/ansible-kubernetes-images-v1.18.20-mips64le.tgz
 
   - name: minio
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-minio:1.0
