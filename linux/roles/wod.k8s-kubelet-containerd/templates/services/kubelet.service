@@ -9,6 +9,7 @@ Environment=PATH=/bin:/opt/bin:/usr/bin:/usr/sbin:/sbin:$PATH
 ExecStartPre=/usr/bin/mkdir -p /etc/kubernetes/data
 ExecStartPre=/usr/bin/mkdir -p /etc/kubernetes/manifests
 ExecStartPre=/usr/bin/mkdir -p /var/log/containers
+ExecStartPre=/usr/bin/swapoff -a
 
 ExecStart=/opt/bin/kubelet \
   --config=/etc/kubernetes/config/kubelet.yaml \

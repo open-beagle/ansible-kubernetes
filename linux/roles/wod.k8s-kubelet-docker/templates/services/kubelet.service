@@ -11,6 +11,7 @@ ExecStartPre=/usr/bin/mkdir -p /etc/kubernetes/manifests
 ExecStartPre=/usr/bin/mkdir -p /var/log/containers
 ExecStartPre=/usr/bin/mkdir -p /var/lib/cni
 ExecStartPre=/usr/bin/mkdir -p /etc/cni/net.d
+ExecStartPre=/usr/bin/swapoff -a
 
 ExecStart=/opt/bin/kubelet \
   --config=/etc/kubernetes/config/kubelet.yaml \

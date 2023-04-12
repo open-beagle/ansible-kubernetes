@@ -40,8 +40,17 @@ if ! [ -e /usr/bin/mkdir ] ; then
 fi
 
 # 关闭swap分区
+if ! [ -e /usr/bin/swapoff ] ; then 
+  if [ -e /sbin/swapoff ] ; then 
+    ln -s /sbin/swapoff /usr/bin/swapoff
+  fi
+  if [ -e /usr/sbin/swapoff ] ; then 
+    ln -s /usr/sbin/swapoff /usr/bin/swapoff
+  fi
+fi
 if ! [ -e /etc/kubernetes/scripts/swap.sh ] ; then 
-  swapoff -a && sysctl -w vm.swappiness=0
+  swapoff -a 
+  sysctl -w vm.swappiness=0
   sed -ri '/^[^#]*swap/s@^@#@' /etc/fstab
   touch /etc/kubernetes/scripts/swap.sh
 fi
