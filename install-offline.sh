@@ -59,7 +59,7 @@ mkdir -p /etc/kubernetes/ansible
 curl $HTTP_SERVER/k8s/ansible/$K8S_RELEASE/$TARGET_ARCH/ansible-kubernetes-$K8S_VERSION-$TARGET_ARCH.tgz > /etc/kubernetes/ansible/ansible-kubernetes-$K8S_VERSION-$TARGET_ARCH.tgz
 fi
 
-if ! [ docker images | grep "registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:$K8S_VERSION-$TARGET_ARCH" ]; then
+if ! (docker images | grep "$K8S_VERSION-$TARGET_ARCH"); then
 # 加载镜像
 docker load -i /etc/kubernetes/ansible/ansible-kubernetes-$K8S_VERSION-$TARGET_ARCH.tgz
 fi
