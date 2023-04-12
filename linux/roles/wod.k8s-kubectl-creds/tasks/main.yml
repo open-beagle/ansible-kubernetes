@@ -1,17 +1,12 @@
 - name: mkdir -p /etc/kubernetes/ansible
   raw: mkdir -p /etc/kubernetes/ansible
 
-- name: check need /etc/kubernetes/ansible/.ansible-kubectl-creds
-  raw: stat /etc/kubernetes/ansible/.ansible-kubectl-creds
+- name: check need beagle-registry
+  raw: /opt/bin/kubectl -n kube-system get secrets | grep beagle-registry
   register: need_kubectl_creds
   ignore_errors: True
 
 - name: kubectl create secret docker-registry
   raw: /opt/bin/kubectl -n kube-system create secret generic beagle-registry --from-file=.dockerconfigjson=/root/.docker/config.json --type=kubernetes.io/dockerconfigjson 
-  when:
-    - need_kubectl_creds is failed
-
-- name: touch /etc/kubernetes/ansible/.ansible-kubectl-creds
-  raw: touch /etc/kubernetes/ansible/.ansible-kubectl-creds
   when:
     - need_kubectl_creds is failed

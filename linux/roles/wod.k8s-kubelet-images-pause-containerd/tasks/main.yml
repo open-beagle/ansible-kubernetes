@@ -2,17 +2,5 @@
 - name: mkdir -p /etc/kubernetes/ansible
   raw: mkdir -p /etc/kubernetes/ansible
 
-- name: check need /etc/kubernetes/ansible/.ansible-kubelet-images-pause-containerd
-  raw: stat /etc/kubernetes/ansible/.ansible-kubelet-images-pause-containerd
-  register: need_kubelet_images
-  ignore_errors: True
-
 - name: nerdctl pull pause
   raw: /opt/bin/nerdctl -n k8s.io pull {{ REGISTRY_LOCAL }}/{{ K8S_IMAGES['PAUSE']['NAME'] }}:{{ K8S_IMAGES['PAUSE']['VERSION'] }}{{ '-%s' | format(K8S_ARCH) | replace('-amd64', '') }}
-  when:
-    - need_kubelet_images is failed
-
-- name: touch /etc/kubernetes/ansible/.ansible-kubelet-images-pause-containerd
-  raw: touch /etc/kubernetes/ansible/.ansible-kubelet-images-pause-containerd
-  when:
-    - need_kubelet_images is failed
