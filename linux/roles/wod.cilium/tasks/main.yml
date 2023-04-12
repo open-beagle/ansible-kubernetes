@@ -21,7 +21,7 @@
   raw: mkdir -p /etc/kubernetes/charts
 
 - name: check need cilium
-  raw: stat /etc/kubernetes/charts/beagle-cilium.md
+  raw: stat /etc/kubernetes/charts/beagle-cilium-{{ BEAGLE_CILIUM_VERSION }}.md
   register: need_addons_cilium
   ignore_errors: True
 

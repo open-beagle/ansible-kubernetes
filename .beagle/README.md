@@ -14,16 +14,20 @@ docker run \
 -it --rm \
 -v $PWD/:/etc/ansible \
 -v $PWD/.vscode/hosts.ini:/etc/ansible/hosts \
--w /etc/ansible/linux \
+-w /etc/ansible \
 --entrypoint=bash \
 registry.cn-qingdao.aliyuncs.com/wod/ansible:2
 
+# 使用自定义配置安装集群
+ap linux/1.install.yml \
+--extra-vars "@./.vscode/beagle.yaml"
+
 # 离线安装kubernetes集群
-ap 1.install.yml \
+ap linux/1.install.yml \
 --extra-vars "K8S_ADMIN_TOKEN=pleasechangeit"
 
 # 在线安装kubernetes集群
-ap 1.install.yml \
+ap linux/1.install.yml \
 --extra-vars "K8S_ADMIN_TOKEN=pleasechangeit" \
 --extra-vars "REGISTRY_LOCAL=registry.cn-qingdao.aliyuncs.com/wod"
 
