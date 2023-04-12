@@ -96,7 +96,7 @@ K8S_IMAGES:
 
 #### k8s 可选设置 ####
 # K8S_ADMIN_TOKEN , 设置集群的管理员静态Token
-K8S_ADMIN_TOKEN: pleasechangeit
+# K8S_ADMIN_TOKEN: pleasechangeit
 
 # K8S_NETWORK_PLUGIN , 网络插件cilium, flannel
 K8S_NETWORK_PLUGIN: cilium
