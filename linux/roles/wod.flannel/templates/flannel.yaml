@@ -99,6 +99,10 @@ spec:
         app: flannel
         app.bd-apaas.com/cluster-component: network
     spec:
+{% if REGISTRY_LOCAL == 'registry.beagle.default:6444/k8s' %}
+      imagePullSecrets:
+        - name: beagle-registry
+{% endif %}
       hostNetwork: true
       priorityClassName: system-node-critical
       tolerations:
