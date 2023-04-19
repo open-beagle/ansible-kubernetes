@@ -43,8 +43,7 @@ fi
 if ! [ -e /usr/bin/swapoff ] ; then 
   if [ -e /sbin/swapoff ] ; then 
     ln -s /sbin/swapoff /usr/bin/swapoff
-  fi
-  if [ -e /usr/sbin/swapoff ] ; then 
+  elif [ -e /usr/sbin/swapoff ] ; then 
     ln -s /usr/sbin/swapoff /usr/bin/swapoff
   fi
 fi
