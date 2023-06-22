@@ -1,0 +1,6 @@
+[Unit]
+Description=Drop Caches
+
+[Service]
+Type=oneshot
+ExecStart=/etc/kubernetes/scripts/k8s-dropcaches.sh

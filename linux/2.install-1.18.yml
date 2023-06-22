@@ -9,6 +9,7 @@
     - wod.k8s-ssl
     - wod.bpf-mount
     - wod.docker
+    - wod.k8s-dropcaches
 
 - hosts: master
   roles:

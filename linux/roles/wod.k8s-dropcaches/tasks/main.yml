@@ -1,0 +1,24 @@
+- name: check need files
+  raw: stat /etc/systemd/system/k8s-dropcaches.service
+  register: check_need_files
+  ignore_errors: True
+
+- name: mkdir -p /etc/kubernetes/scripts
+  raw: mkdir -p /etc/kubernetes/scripts
+
+- name: template k8s-dropcaches.sh
+  template: src=scripts/k8s-dropcaches.sh dest=/etc/kubernetes/scripts/k8s-dropcaches.sh mode=0755
+
+- name: template services/k8s-dropcaches.service
+  template: src=services/k8s-dropcaches.service dest=/etc/systemd/system/k8s-dropcaches.service
+
+- name: template services/k8s-dropcaches.timer
+  template: src=services/k8s-dropcaches.timer dest=/etc/systemd/system/k8s-dropcaches.timer
+  when: check_need_files is failed
+
+- name: systemctl start k8s-dropcaches.service
+  raw: systemctl daemon-reload && systemctl start k8s-dropcaches.service
+
+- name: systemctl start k8s-dropcaches.timer
+  raw: systemctl enable k8s-dropcaches.timer && systemctl start k8s-dropcaches.timer
+  when: check_need_files is failed

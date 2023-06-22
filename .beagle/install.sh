@@ -9,7 +9,7 @@ CILIUM_VERSION=1.11.13
 curl https://cache.wodcloud.com/kubernetes/k8s/charts/beagle-cilium-$CILIUM_VERSION.tgz > ./linux/roles/wod.cilium/files/beagle-cilium-$CILIUM_VERSION.tgz
 
 rm -rf ./linux/roles/wod.docker/files/*.tgz
-DOCKER_VERSION=23.0.1
+DOCKER_VERSION=24.0.2
 curl https://cache.wodcloud.com/kubernetes/k8s/docker/$TARGETARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
 curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/templates/install.sh
 curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh

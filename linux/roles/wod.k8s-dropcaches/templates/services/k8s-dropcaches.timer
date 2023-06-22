@@ -1,0 +1,10 @@
+[Unit]
+Description=Run Drop Caches Service
+
+[Timer]
+OnCalendar=*-*-* 04:10:00
+Unit=k8s-dropcaches.service
+Persistent=true     
+ 
+[Install]
+WantedBy=timers.target

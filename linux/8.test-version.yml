@@ -1,7 +1,0 @@
-- hosts: all
-  vars:
-    my_version: "{{ 'v1.2.3' | replace('v', '') }}"
-  tasks:
-    - debug:
-        msg: 'my_version is higher than 1.0.0'
-      when: my_version is version('1.0.0', '>=')

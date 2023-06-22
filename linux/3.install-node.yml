@@ -5,17 +5,29 @@
 
 - hosts: all
   roles:
-    - wod.docker
-    - wod.docker-conf
-    - wod.timezone
     - wod.sys
     - wod.k8s-ssl
-    - wod.k8s-cni
     - wod.bpf-mount
+    - wod.docker
+    - wod.k8s-dropcaches
 
 - hosts: node
+  vars:
+    K8S_VERSION_NUM: "{{ K8S_VERSION | replace('v', '') }}"
   roles:
     - role: wod.k8s-ssl-kubelet
-    - role: wod.gateway
-    - role: wod.k8s-kubelet
+    - role: wod.envoy
+    - role: wod.docker-login
+    - role: wod.k8s-kubelet-docker
+      when:
+        - K8S_VERSION_NUM is version('1.24','<')
+    - role: wod.k8s-kubelet-containerd
+      when:
+        - K8S_VERSION_NUM is version('1.24','>=')
+    - role: wod.k8s-kubelet-images-pause-docker
+      when:
+        - K8S_VERSION_NUM is version('1.24','<')
+    - role: wod.k8s-kubelet-images-pause-containerd
+      when:
+        - K8S_VERSION_NUM is version('1.24','>=')
     - role: wod.k8s-cni
