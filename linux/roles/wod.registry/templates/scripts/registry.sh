@@ -6,6 +6,10 @@ mkdir -p /etc/kubernetes/downloads
 mkdir -p {{ K8S_DATA_PATH }}/registry
 mkdir -p /opt/bin
 
+if ! [ -e /etc/kubernetes/services/k8s-registry/.beagle_registry_version_{{ BEAGLE_REGISTRY_VERSION }} ]; then
+  touch /etc/kubernetes/services/k8s-registry/.beagle_registry_version_{{ BEAGLE_REGISTRY_VERSION }}
+fi
+
 if [ -e /tmp/registry/images ]; then
 for file in `find /tmp/registry/images -name "*.tgz"`; do  
   tar xzvf $file -C {{ K8S_DATA_PATH }}/registry

@@ -1,6 +1,11 @@
 - name: mkdir -p /etc/kubernetes/services/k8s-registry
   raw: mkdir -p /etc/kubernetes/services/k8s-registry
 
+- name: check regsitry version
+  raw: stat /etc/kubernetes/services/k8s-registry/.beagle_registry_version_{{ BEAGLE_REGISTRY_VERSION }}
+  register: need_change_version
+  ignore_errors: True
+
 - name: check need copy images
   raw: stat {{ K8S_DATA_PATH }}/registry/docker/registry/v2/repositories
   register: need_copy_images
@@ -8,13 +13,17 @@
 
 - name: mkdir -p /tmp/registry/images
   raw: mkdir -p /tmp/registry/images
-  when: need_copy_images is failed and REGISTRY_LOCAL == "registry.beagle.default:6444/k8s" 
+  when: 
+    - REGISTRY_LOCAL == "registry.beagle.default:6444/k8s" 
+    - need_copy_images is failed or need_change_version is failed
 
 - name: copy files to /tmp/registry/images
   copy:
     src: ./images
     dest: /tmp/registry
-  when: need_copy_images is failed and REGISTRY_LOCAL == "registry.beagle.default:6444/k8s" 
+  when: 
+    - REGISTRY_LOCAL == "registry.beagle.default:6444/k8s" 
+    - need_copy_images is failed or need_change_version is failed
 
 - name: check need copy bin
   raw: stat /opt/bin/registry
@@ -29,7 +38,8 @@
   copy:
     src: ./bin
     dest: /tmp/registry
-  when: need_copy_bin is failed
+  when: 
+    - need_copy_bin is failed or need_change_version is failed
 
 - name: template registry.beagle.default.cnf
   template: src=config/registry.beagle.default.cnf dest=/etc/kubernetes/services/k8s-registry/registry.beagle.default.cnf

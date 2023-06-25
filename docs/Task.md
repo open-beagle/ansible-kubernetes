@@ -144,3 +144,16 @@ static_resources:
                       address: 192.168.1.201
                       port_value: 6444
 ```
+
+## 集群升级
+
+### 更新镜像包
+
+```bash
+# 删除缓存的镜像包tgz
+rm -rf /etc/kubernetes/ansible/ansible-kubernetes-v1.24.12-amd64.tgz \
+/etc/kubernetes/ansible/ansible-kubernetes-v1.24.12.sh \
+/etc/kubernetes/ansible/ansible-kubernetes-images-v1.24.12-amd64.tgz
+
+# 重新跑离线安装脚本即可
+```
