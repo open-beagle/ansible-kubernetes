@@ -4,7 +4,7 @@ metadata:
   name: etcd
   namespace: kube-system
   annotations:
-    kubeadm.kubernetes.io/etcd.advertise-client-urls: https://{{ HOST_IP }}:2379
+    kubeadm.kubernetes.io/etcd.advertise-client-urls: https://{{ inventory_hostname }}:2379
   labels:
     k8s-app: etcd
     app.bd-apaas.com/cluster-component: core
@@ -68,12 +68,12 @@ spec:
     - --peer-cert-file=/etc/kubernetes/ssl/etcd/peer.crt
     - --peer-trusted-ca-file=/etc/kubernetes/ssl/etcd/ca.crt
     - --name={{ inventory_hostname }}
-    - --initial-advertise-peer-urls=https://{{ HOST_IP }}:2380
-    - --listen-peer-urls=https://{{ HOST_IP }}:2380
-    - --advertise-client-urls=https://{{ HOST_IP }}:2379
-    - --listen-client-urls=https://127.0.0.1:2379,https://{{ HOST_IP }}:2379
+    - --initial-advertise-peer-urls=https://{{ inventory_hostname }}:2380
+    - --listen-peer-urls=https://0.0.0.0:2380
+    - --advertise-client-urls=https://{{ inventory_hostname }}:2379
+    - --listen-client-urls=https://0.0.0.0:2379
 {% if groups['master'] | length > 1 %}
     - --initial-cluster-state=new
     - --initial-cluster-token=beagle
-    - --initial-cluster={% for host in groups['master'] %}{{ host }}=https://{{ hostvars[host]['ansible_facts'][IFACE]['ipv4']['address'] }}:2380{% if loop.last %}{% else %},{% endif %}{% endfor %}
+    - --initial-cluster={% for host in groups['master'] %}{{ host }}=https://{{ host }}:2380{% if loop.last %}{% else %},{% endif %}{% endfor %}
 {% endif %}

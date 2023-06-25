@@ -26,10 +26,10 @@ K8S_IMAGES:
     VERSION: 'v1.2.0'
   ETCD:
     NAME: etcd
-    VERSION: 'v3.5.7'
+    VERSION: 'v3.5.9'
   ETCDCTL:
     NAME: etcdctl
-    VERSION: 'v3.5.7'
+    VERSION: 'v3.5.9'
   FLANNEL:
     NAME: flannel
     VERSION: 'v0.21.3'

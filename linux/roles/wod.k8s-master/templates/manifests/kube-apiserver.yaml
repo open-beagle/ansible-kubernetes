@@ -45,7 +45,7 @@ spec:
     - --etcd-cafile=/etc/kubernetes/ssl/etcd/ca.crt
     - --etcd-certfile=/etc/kubernetes/ssl/etcd/apiserver-etcd-client.crt
     - --etcd-keyfile=/etc/kubernetes/ssl/etcd/apiserver-etcd-client.key
-    - --etcd-servers=https://{{ HOST_IP }}:2379
+    - --etcd-servers=https://{{ inventory_hostname }}:2379
     ports:
     - containerPort: {{ K8S_MASTER_PORT }}
       name: https

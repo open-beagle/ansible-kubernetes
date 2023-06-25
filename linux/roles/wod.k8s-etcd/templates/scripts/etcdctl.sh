@@ -4,9 +4,6 @@ set -e
 
 REGISTRY_LOCAL="{{ REGISTRY_LOCAL }}"
 
-REGISTRY_REPO_ETCD="{{ K8S_IMAGES['ETCD']['NAME'] }}"
-REGISTRY_VERSION_ETCD="{{ K8S_IMAGES['ETCD']['VERSION'] }}{{ "-%s" | format(K8S_ARCH) | replace("-amd64", "") }}"
-
 REGISTRY_REPO_ETCDCTL="{{ K8S_IMAGES['ETCDCTL']['NAME'] }}"
 REGISTRY_VERSION_ETCDCTL="{{ K8S_IMAGES['ETCDCTL']['VERSION'] }}{{ "-%s" | format(K8S_ARCH) | replace("-amd64", "") }}"
 
@@ -34,6 +31,12 @@ else
   TARGET_ARCH="unsupported"
 fi
 
+{% for host in groups['master'] %}
+if ! (grep -q "{{ host }}" /etc/hosts) ; then
+  echo "{{ hostvars[host]['ansible_facts'][IFACE]['ipv4']['address'] }} {{ host }}" >> /etc/hosts
+fi
+{% endfor %}
+
 if ! [ -e /etc/kubernetes/downloads/etcdctl-linux-$REGISTRY_VERSION_ETCDCTL ]; then
 
   docker run -v /etc/kubernetes/downloads:/data/output \
@@ -46,5 +49,20 @@ if ! [ -e /etc/kubernetes/downloads/etcdctl-linux-$REGISTRY_VERSION_ETCDCTL ]; t
   rm -rf /opt/bin/etcdctl /usr/local/bin/etcdctl
   ln -s /etc/kubernetes/downloads/etcdctl-linux-$REGISTRY_VERSION_ETCDCTL /opt/bin/etcdctl
   ln -s /etc/kubernetes/downloads/etcdctl-linux-$REGISTRY_VERSION_ETCDCTL /usr/local/bin/etcdctl
-  
+
+fi
+
+if ! [ -e /etc/kubernetes/downloads/etcdutl-linux-$REGISTRY_VERSION_ETCDCTL ]; then
+
+  docker run -v /etc/kubernetes/downloads:/data/output \
+    --rm --entrypoint=sh \
+    $REGISTRY_LOCAL/$REGISTRY_REPO_ETCDCTL:$REGISTRY_VERSION_ETCDCTL \
+    -c 'cp /usr/local/bin/etcdutl /data/output/etcdutl'
+  mv /etc/kubernetes/downloads/etcdutl /etc/kubernetes/downloads/etcdutl-linux-$REGISTRY_VERSION_ETCDCTL
+
+  chmod +x /etc/kubernetes/downloads/etcdutl-linux-$REGISTRY_VERSION_ETCDCTL
+  rm -rf /opt/bin/etcdutl /usr/local/bin/etcdutl
+  ln -s /etc/kubernetes/downloads/etcdutl-linux-$REGISTRY_VERSION_ETCDCTL /opt/bin/etcdutl
+  ln -s /etc/kubernetes/downloads/etcdutl-linux-$REGISTRY_VERSION_ETCDCTL /usr/local/bin/etcdutl
+
 fi
