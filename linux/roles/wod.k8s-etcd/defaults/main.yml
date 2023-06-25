@@ -1,3 +1,5 @@
+BEAGLE_ETCD_VERSION: 20230625
+
 # etcd options
 ## 老系统升级时请注意ETCD存储数据的位置
 ETCD_DATA_PATH: /etc/kubernetes/data/etcd

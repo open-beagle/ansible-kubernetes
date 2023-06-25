@@ -5,6 +5,7 @@ metadata:
   namespace: kube-system
   annotations:
     kubeadm.kubernetes.io/etcd.advertise-client-urls: https://{{ inventory_hostname }}:2379
+    k8s.beagle.io/etcd.version: "{{ BEAGLE_ETCD_VERSION }}"
   labels:
     k8s-app: etcd
     app.bd-apaas.com/cluster-component: core

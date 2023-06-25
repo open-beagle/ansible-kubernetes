@@ -3,6 +3,12 @@
 set -e  
 
 mkdir -p /etc/kubernetes/ssl/etcd
+
+if ! [ -e /etc/kubernetes/ssl/etcd/.beagle_etcd_version_{{ BEAGLE_ETCD_VERSION }} ]; then
+  touch /etc/kubernetes/ssl/etcd/.beagle_etcd_version_{{ BEAGLE_ETCD_VERSION }}
+  rm -rf /etc/kubernetes/ssl/etcd/server.crt /etc/kubernetes/ssl/etcd/server.csr
+  rm -rf /etc/kubernetes/ssl/etcd/peer.crt /etc/kubernetes/ssl/etcd/server.csr
+fi
  
 if ! [ -e /etc/kubernetes/ssl/etcd/server.key ]; then
   openssl genrsa -out /etc/kubernetes/ssl/etcd/server.key 2048
