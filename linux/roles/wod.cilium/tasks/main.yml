@@ -51,3 +51,8 @@
   raw: /opt/bin/helm install cilium /etc/kubernetes/charts/beagle-cilium-{{ BEAGLE_CILIUM_VERSION }}.tgz --namespace kube-system -f /etc/kubernetes/charts/beagle-cilium-{{ BEAGLE_CILIUM_VERSION }}.yaml
   when:
     - need_addons_cilium_install is failed
+
+- name: helm upgrade cilium
+  raw: /opt/bin/helm upgrade cilium /etc/kubernetes/charts/beagle-cilium-{{ BEAGLE_CILIUM_VERSION }}.tgz --namespace kube-system -f /etc/kubernetes/charts/beagle-cilium-{{ BEAGLE_CILIUM_VERSION }}.yaml
+  when:
+    - need_addons_cilium_install

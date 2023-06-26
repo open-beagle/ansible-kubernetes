@@ -2,7 +2,7 @@
 
 set -e  
 
-HTTP_SERVER="${HTTP_SERVER:-https://cache.wodcloud.com/kubernetes}" 
+HTTP_SERVER="${HTTP_SERVER:-https://cache.wodcloud.com}" 
 KERNEL_VERSION="${KERNEL_VERSION:-5.4.219-0504219}"
 KERNEL_RELEASE="${KERNEL_RELEASE:-202210171633}"
 
@@ -33,16 +33,16 @@ LINUX_MODULES="linux-modules-${KERNEL_VERSION}-generic_${KERNEL_VERSION}.${KERNE
 if [ "$TARGET_ARCH" = "amd64" ]; then
   if ! [ "$LOCAL_KERNEL" = "5.4" ]; then
     if ! [ -e /etc/kubernetes/ansible/$LINUX_HEADERS_ALL.deb ]; then
-      curl $HTTP_SERVER/kernel/deb/v5.4/$TARGET_ARCH/$LINUX_HEADERS_ALL.deb > /etc/kubernetes/ansible/$LINUX_HEADERS_ALL.deb
+      curl $HTTP_SERVER/kubernetes/kernel/deb/v5.4/$TARGET_ARCH/$LINUX_HEADERS_ALL.deb > /etc/kubernetes/ansible/$LINUX_HEADERS_ALL.deb
     fi
     if ! [ -e /etc/kubernetes/ansible/$LINUX_HEADERS.deb ]; then
-      curl $HTTP_SERVER/kernel/deb/v5.4/$TARGET_ARCH/$LINUX_HEADERS.deb > /etc/kubernetes/ansible/$LINUX_HEADERS.deb
+      curl $HTTP_SERVER/kubernetes/kernel/deb/v5.4/$TARGET_ARCH/$LINUX_HEADERS.deb > /etc/kubernetes/ansible/$LINUX_HEADERS.deb
     fi
     if ! [ -e /etc/kubernetes/ansible/$LINUX_IMAGE.deb ]; then
-      curl $HTTP_SERVER/kernel/deb/v5.4/$TARGET_ARCH/$LINUX_IMAGE.deb > /etc/kubernetes/ansible/$LINUX_IMAGE.deb
+      curl $HTTP_SERVER/kubernetes/kernel/deb/v5.4/$TARGET_ARCH/$LINUX_IMAGE.deb > /etc/kubernetes/ansible/$LINUX_IMAGE.deb
     fi
     if ! [ -e /etc/kubernetes/ansible/$LINUX_MODULES.deb ]; then
-      curl $HTTP_SERVER/kernel/deb/v5.4/$TARGET_ARCH/$LINUX_MODULES.deb > /etc/kubernetes/ansible/$LINUX_MODULES.deb
+      curl $HTTP_SERVER/kubernetes/kernel/deb/v5.4/$TARGET_ARCH/$LINUX_MODULES.deb > /etc/kubernetes/ansible/$LINUX_MODULES.deb
     fi
 
     dpkg -i /etc/kubernetes/ansible/$LINUX_MODULES.deb
@@ -56,13 +56,13 @@ fi
 if [ "$TARGET_ARCH" = "arm64" ]; then
   if ! [ "$LOCAL_KERNEL" = "5.4" ]; then
     if ! [ -e /etc/kubernetes/ansible/$LINUX_HEADERS.deb ]; then
-      curl $HTTP_SERVER/kernel/deb/v5.4/$TARGET_ARCH/$LINUX_HEADERS.deb > /etc/kubernetes/ansible/$LINUX_HEADERS.deb
+      curl $HTTP_SERVER/kubernetes/kernel/deb/v5.4/$TARGET_ARCH/$LINUX_HEADERS.deb > /etc/kubernetes/ansible/$LINUX_HEADERS.deb
     fi
     if ! [ -e /etc/kubernetes/ansible/$LINUX_IMAGE.deb ]; then
-      curl $HTTP_SERVER/kernel/deb/v5.4/$TARGET_ARCH/$LINUX_IMAGE.deb > /etc/kubernetes/ansible/$LINUX_IMAGE.deb
+      curl $HTTP_SERVER/kubernetes/kernel/deb/v5.4/$TARGET_ARCH/$LINUX_IMAGE.deb > /etc/kubernetes/ansible/$LINUX_IMAGE.deb
     fi
     if ! [ -e /etc/kubernetes/ansible/$LINUX_MODULES.deb ]; then
-      curl $HTTP_SERVER/kernel/deb/v5.4/$TARGET_ARCH/$LINUX_MODULES.deb > /etc/kubernetes/ansible/$LINUX_MODULES.deb
+      curl $HTTP_SERVER/kubernetes/kernel/deb/v5.4/$TARGET_ARCH/$LINUX_MODULES.deb > /etc/kubernetes/ansible/$LINUX_MODULES.deb
     fi
 
     dpkg -i /etc/kubernetes/ansible/$LINUX_MODULES.deb

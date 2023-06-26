@@ -149,11 +149,16 @@ static_resources:
 
 ### 更新镜像包
 
+某个特定的版本如v1.24.12，镜像包升级了，或者安装结构发生了调整，则使用以下命令进行升级。
+
 ```bash
 # 删除缓存的镜像包tgz
-rm -rf /etc/kubernetes/ansible/ansible-kubernetes-v1.24.12-amd64.tgz \
-/etc/kubernetes/ansible/ansible-kubernetes-v1.24.12.sh \
-/etc/kubernetes/ansible/ansible-kubernetes-images-v1.24.12-amd64.tgz
+rm -rf \
+/etc/kubernetes/ansible/ansible-docker-v1.24.12-amd64.tgz \
+/etc/kubernetes/ansible/ansible-kubernetes-images-v1.24.12-amd64.tgz \
+/etc/kubernetes/ansible/ansible-kubernetes-images-v1.24.12-amd64.tgz \
+/etc/kubernetes/ansible/ansible-kubernetes-v1.24.12.sh
 
 # 重新跑离线安装脚本即可
+sudo curl -sfL https://cache.wodcloud.com/kubernetes/k8s/ansible/v1.24/amd64/ansible-kubernetes-v1.24.12.sh | sh -
 ```

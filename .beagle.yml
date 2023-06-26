@@ -48,7 +48,7 @@ steps:
   - name: curl
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      CILIUM_VERSION: 1.11.13
+      CILIUM_VERSION: 1.11.18
     commands:
       - curl https://cache.wodcloud.com/kubernetes/k8s/charts/beagle-cilium-$CILIUM_VERSION.tgz > ./linux/roles/wod.cilium/files/beagle-cilium-$CILIUM_VERSION.tgz
 
@@ -562,7 +562,7 @@ steps:
   - name: curl
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      CILIUM_VERSION: 1.11.13
+      CILIUM_VERSION: 1.11.18
     commands:
       - curl https://cache.wodcloud.com/kubernetes/k8s/charts/beagle-cilium-$CILIUM_VERSION.tgz > ./linux/roles/wod.cilium/files/beagle-cilium-$CILIUM_VERSION.tgz
 
@@ -955,7 +955,7 @@ steps:
   - name: curl
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      CILIUM_VERSION: 1.11.13
+      CILIUM_VERSION: 1.11.18
     commands:
       - curl https://cache.wodcloud.com/kubernetes/k8s/charts/beagle-cilium-$CILIUM_VERSION.tgz > ./linux/roles/wod.cilium/files/beagle-cilium-$CILIUM_VERSION.tgz
 
@@ -1348,7 +1348,7 @@ steps:
   - name: curl
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      CILIUM_VERSION: 1.11.13
+      CILIUM_VERSION: 1.11.18
     commands:
       - curl https://cache.wodcloud.com/kubernetes/k8s/charts/beagle-cilium-$CILIUM_VERSION.tgz > ./linux/roles/wod.cilium/files/beagle-cilium-$CILIUM_VERSION.tgz
 
@@ -1741,7 +1741,7 @@ steps:
   - name: curl
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      CILIUM_VERSION: 1.11.13
+      CILIUM_VERSION: 1.11.18
     commands:
       - curl https://cache.wodcloud.com/kubernetes/k8s/charts/beagle-cilium-$CILIUM_VERSION.tgz > ./linux/roles/wod.cilium/files/beagle-cilium-$CILIUM_VERSION.tgz
 

@@ -3,7 +3,7 @@
 set -ex
 
 # HTTPS服务器
-HTTP_SERVER="${HTTP_SERVER:-https://cache.wodcloud.com/kubernetes}"
+HTTP_SERVER="${HTTP_SERVER:-https://cache.wodcloud.com}"
 # 平台架构
 TARGET_ARCH="${TARGET_ARCH:-amd64}"
 # K8S版本
@@ -34,7 +34,7 @@ if ! [ -e /etc/kubernetes/ansible/ansible-docker-$K8S_VERSION-$TARGET_ARCH.tgz ]
 mkdir -p /etc/kubernetes/ansible
 # 下载文件
 # ansible-docker-$K8S_VERSION-amd64.tgz 68MB
-curl $HTTP_SERVER/k8s/ansible/$K8S_RELEASE/$TARGET_ARCH/ansible-docker-$K8S_VERSION-$TARGET_ARCH.tgz > /etc/kubernetes/ansible/ansible-docker-$K8S_VERSION-$TARGET_ARCH.tgz
+curl $HTTP_SERVER/kubernetes/k8s/ansible/$K8S_RELEASE/$TARGET_ARCH/ansible-docker-$K8S_VERSION-$TARGET_ARCH.tgz > /etc/kubernetes/ansible/ansible-docker-$K8S_VERSION-$TARGET_ARCH.tgz
 fi
 
 if ! [ -e /opt/bin/docker ]; then

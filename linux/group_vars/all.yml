@@ -7,7 +7,7 @@ HOST_IP: "{{ ansible_facts[IFACE]['ipv4']['address'] }}"
 
 ## HTTP_SERVER , HTTP服务器
 ## 调试安装过程种使用的文件下载服务器，二进制安装包存储在这里
-HTTP_SERVER: 'https://cache.wodcloud.com/kubernetes'
+HTTP_SERVER: 'https://cache.wodcloud.com'
 
 ## REGISTRY_LOCAL , Docker镜像服务器
 ## 安装过程种使用的容器镜像服务器
@@ -68,19 +68,19 @@ K8S_IMAGES:
     VERSION: 'v1.1.2'
   CILIUM:
     NAME: cilium
-    VERSION: '1.11.13'
+    VERSION: '1.11.18'
   CILIUM-OPERATOR:
     NAME: cilium-operator-generic
-    VERSION: '1.11.13'
+    VERSION: '1.11.18'
   CILIUM-HUBBLE-RELAY:
     NAME: cilium-hubble-relay
-    VERSION: '1.11.13'
+    VERSION: '1.11.18'
   CILIUM-HUBBLE-UI:
     NAME: cilium-hubble-ui
-    VERSION: '0.9.2'
+    VERSION: '0.11.0'
   CILIUM-HUBBLE-UI-BACKEND:
     NAME: cilium-hubble-ui-backend
-    VERSION: '0.9.2'
+    VERSION: '0.11.0'
   COREDNS:
     NAME: coredns
     VERSION: 'v1.10.1'
@@ -122,3 +122,11 @@ K8S_NODE_PODCIDRMASK: 24
 # K8S_NODE_MAXPODS，节点设置，最大运行Pods数量限制，默认值110，
 # 不能超过K8S_NODE_PODCIDRMASK子网掩码计算的最大Pod数量
 K8S_NODE_MAXPODS: 110
+
+# BEAGLE_REGISTRY_VERSION , 镜像包版本号
+# 用于K8S版本号，不变时，内部镜像需要调整，则由研发升级此版本
+BEAGLE_REGISTRY_VERSION: 20230626
+
+# BEAGLE_ETCD_VERSION , ETCD部署版本号
+# 用于K8S版本号，不变时，内部ETCD部署架构需要调整，则由研发升级此版本
+BEAGLE_ETCD_VERSION: 20230625

@@ -2,7 +2,7 @@
 
 set -e 
   
-HTTP_SERVER="${HTTP_SERVER:-https://cache.wodcloud.com/kubernetes}" 
+HTTP_SERVER="${HTTP_SERVER:-https://cache.wodcloud.com}" 
 PYPY_VERSION=5.1.0
 ActivePython="ActivePython-2.7.14.2717-linux-x86_64-glibc-2.12-404899"
 ENV_OPT="$PATH:/opt/bin"
@@ -33,10 +33,10 @@ fi
 # if [ -e /opt/$ActivePython.tar.gz ]; then
 #   echo '$ActivePython.tar.gz exist!'
 # else
-#   curl $HTTP_SERVER/$ActivePython.tar.gz > /opt/$ActivePython.tar.gz
+#   curl $HTTP_SERVER/kubernetes/$ActivePython.tar.gz > /opt/$ActivePython.tar.gz
 # fi
 
-curl $HTTP_SERVER/$ActivePython.tar.gz > /opt/$ActivePython.tar.gz
+curl $HTTP_SERVER/kubernetes/$ActivePython.tar.gz > /opt/$ActivePython.tar.gz
 
 cd /opt
 tar -xzvf $ActivePython.tar.gz

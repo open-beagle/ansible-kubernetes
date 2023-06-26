@@ -38,19 +38,19 @@ K8S_IMAGES:
     VERSION: 'v1.1.2'
   CILIUM:
     NAME: cilium
-    VERSION: '1.11.13'
+    VERSION: '1.11.18'
   CILIUM-OPERATOR:
     NAME: cilium-operator-generic
-    VERSION: '1.11.13'
+    VERSION: '1.11.18'
   CILIUM-HUBBLE-RELAY:
     NAME: cilium-hubble-relay
-    VERSION: '1.11.13'
+    VERSION: '1.11.18'
   CILIUM-HUBBLE-UI:
     NAME: cilium-hubble-ui
-    VERSION: '0.9.2'
+    VERSION: '0.11.0'
   CILIUM-HUBBLE-UI-BACKEND:
     NAME: cilium-hubble-ui-backend
-    VERSION: '0.9.2'
+    VERSION: '0.11.0'
   COREDNS:
     NAME: coredns
     VERSION: 'v1.10.1'

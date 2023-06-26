@@ -5,7 +5,7 @@ set -ex
 TARGETARCH=amd64
 
 rm -rf ./linux/roles/wod.cilium/files/*.tgz
-CILIUM_VERSION=1.11.13
+CILIUM_VERSION=1.11.18
 curl https://cache.wodcloud.com/kubernetes/k8s/charts/beagle-cilium-$CILIUM_VERSION.tgz > ./linux/roles/wod.cilium/files/beagle-cilium-$CILIUM_VERSION.tgz
 
 rm -rf ./linux/roles/wod.docker/files/*.tgz
