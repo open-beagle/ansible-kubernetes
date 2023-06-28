@@ -3,8 +3,6 @@
 set -e  
 
 HTTP_SERVER="${HTTP_SERVER:-https://cache.wodcloud.com}" 
-KERNEL_VERSION="${KERNEL_VERSION:-5.4.219-0504219}"
-KERNEL_RELEASE="${KERNEL_RELEASE:-202210171633}"
 
 LOCAL_KERNEL=$(uname -r | head -c 3)
 LOCAL_ARCH=$(uname -m)
@@ -26,48 +24,36 @@ fi
 
 mkdir -p /etc/kubernetes/ansible
 
-LINUX_HEADERS_ALL="linux-headers-${KERNEL_VERSION}_${KERNEL_VERSION}.${KERNEL_RELEASE}_all"
-LINUX_HEADERS="linux-headers-${KERNEL_VERSION}-generic_${KERNEL_VERSION}.${KERNEL_RELEASE}_${TARGET_ARCH}"
-LINUX_IMAGE="linux-image-unsigned-${KERNEL_VERSION}-generic_${KERNEL_VERSION}.${KERNEL_RELEASE}_${TARGET_ARCH}"
-LINUX_MODULES="linux-modules-${KERNEL_VERSION}-generic_${KERNEL_VERSION}.${KERNEL_RELEASE}_${TARGET_ARCH}"
+KERNEL_VERSION="5.4.246-0504246-generic_5.4.246-0504246.202306090538"
 if [ "$TARGET_ARCH" = "amd64" ]; then
-  if ! [ "$LOCAL_KERNEL" = "5.4" ]; then
-    if ! [ -e /etc/kubernetes/ansible/$LINUX_HEADERS_ALL.deb ]; then
-      curl $HTTP_SERVER/kubernetes/kernel/deb/v5.4/$TARGET_ARCH/$LINUX_HEADERS_ALL.deb > /etc/kubernetes/ansible/$LINUX_HEADERS_ALL.deb
-    fi
-    if ! [ -e /etc/kubernetes/ansible/$LINUX_HEADERS.deb ]; then
-      curl $HTTP_SERVER/kubernetes/kernel/deb/v5.4/$TARGET_ARCH/$LINUX_HEADERS.deb > /etc/kubernetes/ansible/$LINUX_HEADERS.deb
-    fi
-    if ! [ -e /etc/kubernetes/ansible/$LINUX_IMAGE.deb ]; then
-      curl $HTTP_SERVER/kubernetes/kernel/deb/v5.4/$TARGET_ARCH/$LINUX_IMAGE.deb > /etc/kubernetes/ansible/$LINUX_IMAGE.deb
-    fi
-    if ! [ -e /etc/kubernetes/ansible/$LINUX_MODULES.deb ]; then
-      curl $HTTP_SERVER/kubernetes/kernel/deb/v5.4/$TARGET_ARCH/$LINUX_MODULES.deb > /etc/kubernetes/ansible/$LINUX_MODULES.deb
-    fi
-
-    dpkg -i /etc/kubernetes/ansible/$LINUX_MODULES.deb
-    dpkg -i /etc/kubernetes/ansible/$LINUX_HEADERS_ALL.deb
-    dpkg -i /etc/kubernetes/ansible/$LINUX_HEADERS.deb
-    dpkg -i /etc/kubernetes/ansible/$LINUX_IMAGE.deb
-
+  if ! [ -e /etc/kubernetes/ansible/linux-headers-${KERNEL_VERSION}_amd64.deb ]; then
+    curl $HTTP_SERVER/kubernetes/kernel/deb/linux-headers-${KERNEL_VERSION}_amd64.deb > /etc/kubernetes/ansible/linux-headers-${KERNEL_VERSION}_amd64.deb
   fi
+  if ! [ -e /etc/kubernetes/ansible/linux-modules-${KERNEL_VERSION}_amd64.deb ]; then
+    curl $HTTP_SERVER/kubernetes/kernel/deb/linux-modules-${KERNEL_VERSION}_amd64.deb > /etc/kubernetes/linux-modules-${KERNEL_VERSION}_amd64.deb
+  fi
+  if ! [ -e /etc/kubernetes/ansible/linux-image-unsigned-${KERNEL_VERSION}_amd64.deb ]; then
+    curl $HTTP_SERVER/kubernetes/kernel/deb/linux-image-unsigned-${KERNEL_VERSION}_amd64.deb > /etc/kubernetes/ansible/linux-image-unsigned-${KERNEL_VERSION}_amd64.deb
+  fi
+
+  dpkg -i /etc/kubernetes/ansible/linux-modules-${KERNEL_VERSION}_amd64.deb
+  dpkg -i /etc/kubernetes/ansible/linux-headers-${KERNEL_VERSION}_amd64.deb
+  dpkg -i /etc/kubernetes/ansible/linux-image-unsigned-${KERNEL_VERSION}_amd64.deb
 fi
 
+KERNEL_VERSION="5.4.246-0504246-generic_5.4.246-0504246.202306090538"
 if [ "$TARGET_ARCH" = "arm64" ]; then
-  if ! [ "$LOCAL_KERNEL" = "5.4" ]; then
-    if ! [ -e /etc/kubernetes/ansible/$LINUX_HEADERS.deb ]; then
-      curl $HTTP_SERVER/kubernetes/kernel/deb/v5.4/$TARGET_ARCH/$LINUX_HEADERS.deb > /etc/kubernetes/ansible/$LINUX_HEADERS.deb
-    fi
-    if ! [ -e /etc/kubernetes/ansible/$LINUX_IMAGE.deb ]; then
-      curl $HTTP_SERVER/kubernetes/kernel/deb/v5.4/$TARGET_ARCH/$LINUX_IMAGE.deb > /etc/kubernetes/ansible/$LINUX_IMAGE.deb
-    fi
-    if ! [ -e /etc/kubernetes/ansible/$LINUX_MODULES.deb ]; then
-      curl $HTTP_SERVER/kubernetes/kernel/deb/v5.4/$TARGET_ARCH/$LINUX_MODULES.deb > /etc/kubernetes/ansible/$LINUX_MODULES.deb
-    fi
-
-    dpkg -i /etc/kubernetes/ansible/$LINUX_MODULES.deb
-    dpkg -i /etc/kubernetes/ansible/$LINUX_HEADERS.deb
-    dpkg -i /etc/kubernetes/ansible/$LINUX_IMAGE.deb
-
+  if ! [ -e /etc/kubernetes/ansible/linux-headers-${KERNEL_VERSION}_arm64.deb ]; then
+    curl $HTTP_SERVER/kubernetes/kernel/deb/linux-headers-${KERNEL_VERSION}_arm64.deb > /etc/kubernetes/ansible/linux-headers-${KERNEL_VERSION}_arm64.deb
   fi
+  if ! [ -e /etc/kubernetes/ansible/linux-modules-${KERNEL_VERSION}_arm64.deb ]; then
+    curl $HTTP_SERVER/kubernetes/kernel/deb/linux-modules-${KERNEL_VERSION}_arm64.deb > /etc/kubernetes/linux-modules-${KERNEL_VERSION}_arm64.deb
+  fi
+  if ! [ -e /etc/kubernetes/ansible/linux-image-unsigned-${KERNEL_VERSION}_arm64.deb ]; then
+    curl $HTTP_SERVER/kubernetes/kernel/deb/linux-image-unsigned-${KERNEL_VERSION}_arm64.deb > /etc/kubernetes/ansible/linux-image-unsigned-${KERNEL_VERSION}_arm64.deb
+  fi
+
+  dpkg -i /etc/kubernetes/ansible/linux-modules-${KERNEL_VERSION}_arm64.deb
+  dpkg -i /etc/kubernetes/ansible/linux-headers-${KERNEL_VERSION}_arm64.deb
+  dpkg -i /etc/kubernetes/ansible/linux-image-unsigned-${KERNEL_VERSION}_arm64.deb
 fi

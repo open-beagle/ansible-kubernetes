@@ -2,7 +2,7 @@
 
 set -e  
 
-HTTP_SERVER="${HTTP_SERVER:-https://cache.wodcloud.com/kubernetes}" 
+HTTP_SERVER="${HTTP_SERVER:-https://cache.wodcloud.com}" 
 
 LOCAL_KERNEL=$(uname -r | head -c 3)
 LOCAL_ARCH=$(uname -m)
@@ -24,13 +24,26 @@ fi
 
 mkdir -p /etc/kubernetes/ansible
 
-LINUX_KERNEL="kernel-lt-5.4.219-1.el7.elrepo.x86_64"
+KERNEL_VERSION="5.4.248-1"
 if [ "$TARGET_ARCH" = "amd64" ]; then
-  if ! [ "$LOCAL_KERNEL" = "5.4" ]; then
-    if ! [ -e /etc/kubernetes/ansible/$LINUX_KERNEL.rpm ]; then
-      curl $HTTP_SERVER/kernel/rpm/v5.4/$TARGET_ARCH/$LINUX_KERNEL.rpm > /etc/kubernetes/downloads/$LINUX_KERNEL.rpm
-    fi
-    rpm -Uvh /etc/kubernetes/ansible/$LINUX_KERNEL.rpm
-    grub2-set-default 0
+  if ! [ -e /etc/kubernetes/ansible/kernel-lt-$KERNEL_VERSION.el7.elrepo.x86_64.rpm ]; then
+    curl $HTTP_SERVER/kubernetes/kernel/rpm/kernel-lt-$KERNEL_VERSION.el7.elrepo.x86_64.rpm > /etc/kubernetes/ansible/kernel-lt-$KERNEL_VERSION.el7.elrepo.x86_64.rpm
+    curl $HTTP_SERVER/kubernetes/kernel/rpm/kernel-lt-headers-$KERNEL_VERSION.el7.elrepo.x86_64.rpm > /etc/kubernetes/ansible/kernel-lt-headers-$KERNEL_VERSION.el7.elrepo.x86_64.rpm
   fi
+  rpm -Uvh /etc/kubernetes/ansible/kernel-lt-$KERNEL_VERSION.el7.elrepo.x86_64.rpm
+  rpm -Uvh /etc/kubernetes/ansible/kernel-lt-headers-$KERNEL_VERSION.el7.elrepo.x86_64.rpm
+  grub2-set-default 0
+fi
+
+KERNEL_VERSION="6.1.35-1"
+if [ "$TARGET_ARCH" = "arm64" ]; then
+  if ! [ -e /etc/kubernetes/ansible/kernel-lt-$KERNEL_VERSION.el9.elrepo.aarch64.rpm ]; then
+    curl $HTTP_SERVER/kubernetes/kernel/rpm/kernel-lt-$KERNEL_VERSION.el9.elrepo.aarch64.rpm > /etc/kubernetes/ansible/kernel-lt-$KERNEL_VERSION.el9.elrepo.aarch64.rpm
+    curl $HTTP_SERVER/kubernetes/kernel/rpm/kernel-lt-core-$KERNEL_VERSION.el9.elrepo.aarch64.rpm > /etc/kubernetes/ansible/kernel-lt-core-$KERNEL_VERSION.el9.elrepo.aarch64.rpm
+    curl $HTTP_SERVER/kubernetes/kernel/rpm/kernel-lt-headers-$KERNEL_VERSION.el9.elrepo.aarch64.rpm > /etc/kubernetes/ansible/kernel-lt-headers-$KERNEL_VERSION.el9.elrepo.aarch64.rpm
+  fi
+  rpm -Uvh /etc/kubernetes/ansible/kernel-lt-$KERNEL_VERSION.el9.elrepo.aarch64.rpm
+  rpm -Uvh /etc/kubernetes/ansible/kernel-lt-core-$KERNEL_VERSION.el9.elrepo.aarch64.rpm
+  rpm -Uvh /etc/kubernetes/ansible/kernel-lt-headers-$KERNEL_VERSION.el9.elrepo.aarch64.rpm
+  grub2-set-default 0
 fi
