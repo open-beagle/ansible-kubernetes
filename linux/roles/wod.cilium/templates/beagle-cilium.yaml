@@ -6,6 +6,7 @@ image:
   repository: "{{ REGISTRY_LOCAL }}/{{ K8S_IMAGES["CILIUM"]["NAME"] }}"
   tag: "{{ K8S_IMAGES["CILIUM"]["VERSION"] }}{{ "-%s" | format(K8S_ARCH) | replace("-amd64", "") }}"
   pullPolicy: IfNotPresent
+  useDigest: false
 
 {% if REGISTRY_LOCAL == 'registry.beagle.default:6444/k8s' %}
 imagePullSecrets:
@@ -19,26 +20,17 @@ hubble:
       repository: "{{ REGISTRY_LOCAL }}/{{ K8S_IMAGES["CILIUM-HUBBLE-RELAY"]["NAME"] }}"
       tag: "{{ K8S_IMAGES["CILIUM-HUBBLE-RELAY"]["VERSION"] }}{{ "-%s" | format(K8S_ARCH) | replace("-amd64", "") }}"
       pullPolicy: IfNotPresent
+      useDigest: false
   ui:
-    enabled: true
-    securityContext:
-      enabled: false
-    backend:
-      image:
-        repository: "{{ REGISTRY_LOCAL }}/{{ K8S_IMAGES["CILIUM-HUBBLE-UI-BACKEND"]["NAME"] }}"
-        tag: "{{ K8S_IMAGES["CILIUM-HUBBLE-UI-BACKEND"]["VERSION"] }}{{ "-%s" | format(K8S_ARCH) | replace("-amd64", "") }}"
-        pullPolicy: IfNotPresent
-    frontend:
-      image:
-        repository: "{{ REGISTRY_LOCAL }}/{{ K8S_IMAGES["CILIUM-HUBBLE-UI"]["NAME"] }}"
-        tag: "{{ K8S_IMAGES["CILIUM-HUBBLE-UI"]["VERSION"] }}{{ "-%s" | format(K8S_ARCH) | replace("-amd64", "") }}"
-        pullPolicy: IfNotPresent
+    enabled: false
 
 operator:
+  replicas: 1
   image:
     repository: "{{ REGISTRY_LOCAL }}/{{ "%s" | format(K8S_IMAGES["CILIUM-OPERATOR"]["NAME"]) | replace("-generic", "") }}"
     tag: "{{ K8S_IMAGES["CILIUM-OPERATOR"]["VERSION"] }}{{ "-%s" | format(K8S_ARCH) | replace("-amd64", "") }}"
     pullPolicy: IfNotPresent
+    useDigest: false
 
 ipam:
   mode: "cluster-pool"
@@ -51,10 +43,6 @@ kubeProxyReplacement: "partial"
 nodePort:
   enabled: true
   range: "20,65000"
-
-hostServices:
-  enabled: true
-  protocols: tcp,udp
 
 externalIPs:
   enabled: true

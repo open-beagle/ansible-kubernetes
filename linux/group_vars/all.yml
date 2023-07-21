@@ -75,12 +75,6 @@ K8S_IMAGES:
   CILIUM-HUBBLE-RELAY:
     NAME: cilium-hubble-relay
     VERSION: '1.11.18'
-  CILIUM-HUBBLE-UI:
-    NAME: cilium-hubble-ui
-    VERSION: '0.11.0'
-  CILIUM-HUBBLE-UI-BACKEND:
-    NAME: cilium-hubble-ui-backend
-    VERSION: '0.11.0'
   COREDNS:
     NAME: coredns
     VERSION: 'v1.10.1'
