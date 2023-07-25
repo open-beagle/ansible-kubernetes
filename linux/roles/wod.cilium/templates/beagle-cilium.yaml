@@ -44,6 +44,9 @@ nodePort:
   enabled: true
   range: "20,65000"
 
+hostServices:
+  enabled: true
+
 externalIPs:
   enabled: true
 

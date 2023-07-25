@@ -23,12 +23,10 @@ ap linux/1.install.yml \
 --extra-vars "@./.vscode/beagle.yaml"
 
 # 离线安装kubernetes集群
-ap linux/1.install.yml \
---extra-vars "K8S_ADMIN_TOKEN=pleasechangeit"
+ap linux/1.install.yml 
 
 # 在线安装kubernetes集群
 ap linux/1.install.yml \
---extra-vars "K8S_ADMIN_TOKEN=pleasechangeit" \
 --extra-vars "REGISTRY_LOCAL=registry.cn-qingdao.aliyuncs.com/wod"
 
 # 检查内核
@@ -52,7 +50,7 @@ docker run \
 -w /etc/ansible/linux \
 registry.cn-qingdao.aliyuncs.com/wod/ansible:2 \
 ansible-playbook 1.install.yml \
---extra-vars "K8S_VERSION=v1.26.5" \
+--extra-vars "@./vars/1.26.yml" \
 --extra-vars "REGISTRY_LOCAL=registry.cn-qingdao.aliyuncs.com/wod"
 
 # 1.24
@@ -63,7 +61,7 @@ docker run \
 -w /etc/ansible/linux \
 registry.cn-qingdao.aliyuncs.com/wod/ansible:2 \
 ansible-playbook 1.install.yml \
---extra-vars "K8S_VERSION=v1.24.12" \
+--extra-vars "@./vars/1.24.yml" \
 --extra-vars "REGISTRY_LOCAL=registry.cn-qingdao.aliyuncs.com/wod"
 
 # 1.22
@@ -74,7 +72,7 @@ docker run \
 -w /etc/ansible/linux \
 registry.cn-qingdao.aliyuncs.com/wod/ansible:2 \
 ansible-playbook 1.install.yml \
---extra-vars "K8S_VERSION=v1.22.17" \
+--extra-vars "@./vars/1.22.yml" \
 --extra-vars "REGISTRY_LOCAL=registry.cn-qingdao.aliyuncs.com/wod"
 
 # 1.20
@@ -85,7 +83,7 @@ docker run \
 -w /etc/ansible/linux \
 registry.cn-qingdao.aliyuncs.com/wod/ansible:2 \
 ansible-playbook 1.install.yml \
---extra-vars "K8S_VERSION=v1.20.15" \
+--extra-vars "@./vars/1.20.yml" \
 --extra-vars "REGISTRY_LOCAL=registry.cn-qingdao.aliyuncs.com/wod"
 
 # 1.18
@@ -97,7 +95,7 @@ docker run \
 -w /etc/ansible/linux \
 registry.cn-qingdao.aliyuncs.com/wod/ansible:2 \
 ansible-playbook 1.install.yml \
---extra-vars "K8S_VERSION=v1.18.20" \
+--extra-vars "@./vars/1.18.yml" \
 --extra-vars "REGISTRY_LOCAL=registry.cn-qingdao.aliyuncs.com/wod"
 ```
 
