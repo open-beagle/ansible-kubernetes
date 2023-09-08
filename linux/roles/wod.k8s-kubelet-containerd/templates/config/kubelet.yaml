@@ -12,13 +12,21 @@ authorization:
   mode: Webhook
 cgroupDriver: systemd
 clusterDNS:
-  - {{ K8S_DNS_SERVICE_IP }}
-maxPods: {{ K8S_NODE_MAXPODS }}
-containerLogMaxSize: {{ LOG_MAX_SIZE }}
-containerLogMaxFiles: {{ LOG_MAX_FILES }}
+  - "{{ K8S_DNS_SERVICE_IP }}"
+maxPods: "{{ K8S_NODE_MAXPODS }}"
+containerLogMaxSize: "{{ LOG_MAX_SIZE }}"
+containerLogMaxFiles: "{{ LOG_MAX_FILES }}"
 allowedUnsafeSysctls:
-  - 'net.*'
+  - "net.*"
 clusterDomain: cluster.local
+evictionHard:
+  memory.available: "500Mi"
+  nodefs.available: "1Gi"
+  imagefs.available: "1Gi"
+evictionMinimumReclaim:
+  memory.available: "500Mi"
+  nodefs.available: "1Gi"
+  imagefs.available: "1Gi"
 cpuManagerReconcilePeriod: 0s
 evictionPressureTransitionPeriod: 0s
 fileCheckFrequency: 0s
