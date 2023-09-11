@@ -39,7 +39,7 @@ spec:
   priorityClassName: system-cluster-critical
   containers:
   - name: kube-apiserver
-    image: registry.cn-qingdao.aliyuncs.com/wod/kube-apiserver:v1.26.5-beagle
+    image: registry.cn-qingdao.aliyuncs.com/wod/kube-apiserver:v1.26.8-beagle
     imagePullPolicy: IfNotPresent
     command:
     - kube-apiserver
