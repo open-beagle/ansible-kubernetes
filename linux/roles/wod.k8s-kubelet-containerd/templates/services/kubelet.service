@@ -15,7 +15,6 @@ ExecStart=/opt/bin/kubelet \
   --config=/etc/kubernetes/config/kubelet.yaml \
   --kubeconfig=/etc/kubernetes/config/kubelet.conf \
   --hostname-override={{ inventory_hostname }} \
-  --node-ip={{ HOST_IP }} \
   --container-runtime-endpoint=unix:///run/containerd/containerd.sock
 
 Restart=always

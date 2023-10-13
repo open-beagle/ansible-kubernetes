@@ -13,9 +13,9 @@ authorization:
 cgroupDriver: systemd
 clusterDNS:
   - "{{ K8S_DNS_SERVICE_IP }}"
-maxPods: "{{ K8S_NODE_MAXPODS }}"
-containerLogMaxSize: "{{ LOG_MAX_SIZE }}"
-containerLogMaxFiles: "{{ LOG_MAX_FILES }}"
+maxPods: {{ K8S_NODE_MAXPODS }}
+containerLogMaxSize: {{ LOG_MAX_SIZE }}
+containerLogMaxFiles: {{ LOG_MAX_FILES }}
 allowedUnsafeSysctls:
   - "net.*"
 clusterDomain: cluster.local

@@ -9,5 +9,4 @@ subjectAltName = @alt_names
 [alt_names]
 DNS.1 = localhost
 DNS.2 = {{ inventory_hostname }}
-IP.1 = {{ HOST_IP }}
 IP.2 = 127.0.0.1

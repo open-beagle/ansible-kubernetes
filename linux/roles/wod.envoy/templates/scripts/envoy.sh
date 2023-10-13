@@ -14,11 +14,13 @@ for file in `find /tmp/envoy -name "envoy-*"`; do
 done
 
 if ! (grep -q "kubernetes.beagle.default" /etc/hosts) ; then
-  echo "{{ HOST_IP }} kubernetes.beagle.default" >> /etc/hosts
+  echo "127.0.0.1 kubernetes.beagle.default" >> /etc/hosts
 fi
+sed -i --expression "s?.*kubernetes.beagle.default?127.0.0.1 kubernetes.beagle.default?" /etc/hosts
 
 if ! (grep -q "registry.beagle.default" /etc/hosts) ; then
-  echo "{{ HOST_IP }} registry.beagle.default" >> /etc/hosts
+  echo "127.0.0.1 registry.beagle.default" >> /etc/hosts
 fi
+sed -i --expression "s?.*registry.beagle.default?127.0.0.1 registry.beagle.default?" /etc/hosts
 
 systemctl daemon-reload && systemctl enable k8s-envoy.service && systemctl restart k8s-envoy.service

@@ -16,7 +16,6 @@ spec:
     command:
     - kube-apiserver
     - --allow-privileged=true
-    - --advertise-address={{ HOST_IP }}
     - --authorization-mode=Node,RBAC
     - --bind-address=0.0.0.0
     - --enable-admission-plugins=PersistentVolumeClaimResize,NamespaceLifecycle,LimitRanger,ServiceAccount,DefaultStorageClass,ResourceQuota,MutatingAdmissionWebhook,ValidatingAdmissionWebhook
@@ -45,14 +44,14 @@ spec:
     - --etcd-cafile=/etc/kubernetes/ssl/etcd/ca.crt
     - --etcd-certfile=/etc/kubernetes/ssl/etcd/apiserver-etcd-client.crt
     - --etcd-keyfile=/etc/kubernetes/ssl/etcd/apiserver-etcd-client.key
-    - --etcd-servers=https://{{ inventory_hostname }}:2379
+    - --etcd-servers=https://127.0.0.1:2379
     ports:
     - containerPort: {{ K8S_MASTER_PORT }}
       name: https
     livenessProbe:
       failureThreshold: 8
       httpGet:
-        host: {{ HOST_IP }}
+        host: 127.0.0.1
         path: /livez
         port: {{ K8S_MASTER_PORT }}
         scheme: HTTPS
@@ -63,7 +62,7 @@ spec:
     readinessProbe:
       failureThreshold: 3
       httpGet:
-        host: {{ HOST_IP }}
+        host: 127.0.0.1
         path: /readyz
         port: {{ K8S_MASTER_PORT }}
         scheme: HTTPS
@@ -75,7 +74,7 @@ spec:
     startupProbe:
       failureThreshold: 24
       httpGet:
-        host: {{ HOST_IP }}
+        host: 127.0.0.1
         path: /livez
         port: {{ K8S_MASTER_PORT }}
         scheme: HTTPS

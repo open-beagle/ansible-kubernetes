@@ -28,12 +28,14 @@ done
 fi
 
 if ! (grep -q "kubernetes.beagle.default" /etc/hosts) ; then
-  echo "{{ HOST_IP }} kubernetes.beagle.default" >> /etc/hosts
+  echo "127.0.0.1 kubernetes.beagle.default" >> /etc/hosts
 fi
+sed -i --expression "s?.*kubernetes.beagle.default?127.0.0.1 kubernetes.beagle.default?" /etc/hosts
 
 if ! (grep -q "registry.beagle.default" /etc/hosts) ; then
-  echo "{{ HOST_IP }} registry.beagle.default" >> /etc/hosts
+  echo "127.0.0.1 registry.beagle.default" >> /etc/hosts
 fi
+sed -i --expression "s?.*registry.beagle.default?127.0.0.1 registry.beagle.default?" /etc/hosts
 
 if ! [ -e /etc/kubernetes/services/k8s-registry/registry.beagle.default.key ]; then
   /usr/bin/openssl genrsa \
