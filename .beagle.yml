@@ -85,7 +85,7 @@ steps:
       - cp /usr/local/bin/registry linux/roles/wod.registry/files/bin/registry-v2.8.1
 
   - name: install-envoy-amd64
-    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:1.23.12-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:v1.23.12-amd64
     commands:
       - cp /usr/local/bin/envoy linux/roles/wod.envoy/files/envoy-1.23.12
 
@@ -149,7 +149,7 @@ steps:
       - cp /usr/local/bin/registry ./linux/roles/wod.registry/files/bin/registry-v2.8.1
 
   - name: install-envoy-arm64
-    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:1.23.12-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:v1.23.12-arm64
     commands:
       - rm -rf ./linux/roles/wod.envoy/files/envoy-*
       - cp /usr/local/bin/envoy linux/roles/wod.envoy/files/envoy-1.23.12
@@ -218,7 +218,7 @@ steps:
       - cp /usr/local/bin/registry linux/roles/wod.registry/files/bin/registry-v2.8.1
 
   - name: install-envoy-mips64le
-    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:1.23.12-mips64le
+    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:v1.23.12-mips64le
     commands:
       - rm -rf ./linux/roles/wod.envoy/files/envoy-*
       - cp /usr/local/bin/envoy linux/roles/wod.envoy/files/envoy-1.23.12
@@ -470,7 +470,7 @@ steps:
       - cp /usr/local/bin/registry linux/roles/wod.registry/files/bin/registry-v2.8.1
 
   - name: install-envoy-amd64
-    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:1.23.12-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:v1.23.12-amd64
     commands:
       - cp /usr/local/bin/envoy linux/roles/wod.envoy/files/envoy-1.23.12
 
@@ -533,7 +533,7 @@ steps:
       - cp /usr/local/bin/registry linux/roles/wod.registry/files/bin/registry-v2.8.1
 
   - name: install-envoy-arm64
-    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:1.23.12-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:v1.23.12-arm64
     commands:
       - cp /usr/local/bin/envoy linux/roles/wod.envoy/files/envoy-1.23.12
 
@@ -596,7 +596,7 @@ steps:
       - cp /usr/local/bin/registry linux/roles/wod.registry/files/bin/registry-v2.8.1
 
   - name: install-envoy-mips64le
-    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:1.23.12-mips64le
+    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:v1.23.12-mips64le
     commands:
       - cp /usr/local/bin/envoy linux/roles/wod.envoy/files/envoy-1.23.12
 
@@ -863,7 +863,7 @@ steps:
       - cp /usr/local/bin/registry linux/roles/wod.registry/files/bin/registry-v2.8.1
 
   - name: install-envoy-amd64
-    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:1.23.12-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:v1.23.12-amd64
     commands:
       - cp /usr/local/bin/envoy linux/roles/wod.envoy/files/envoy-1.23.12
 
@@ -926,7 +926,7 @@ steps:
       - cp /usr/local/bin/registry linux/roles/wod.registry/files/bin/registry-v2.8.1
 
   - name: install-envoy-arm64
-    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:1.23.12-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:v1.23.12-arm64
     commands:
       - cp /usr/local/bin/envoy linux/roles/wod.envoy/files/envoy-1.23.12
 
@@ -989,7 +989,7 @@ steps:
       - cp /usr/local/bin/registry linux/roles/wod.registry/files/bin/registry-v2.8.1
 
   - name: install-envoy-mips64le
-    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:1.23.12-mips64le
+    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:v1.23.12-mips64le
     commands:
       - cp /usr/local/bin/envoy linux/roles/wod.envoy/files/envoy-1.23.12
 
@@ -1256,7 +1256,7 @@ steps:
       - cp /usr/local/bin/registry linux/roles/wod.registry/files/bin/registry-v2.8.1
 
   - name: install-envoy-amd64
-    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:1.23.12-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:v1.23.12-amd64
     commands:
       - cp /usr/local/bin/envoy linux/roles/wod.envoy/files/envoy-1.23.12
 
@@ -1319,7 +1319,7 @@ steps:
       - cp /usr/local/bin/registry linux/roles/wod.registry/files/bin/registry-v2.8.1
 
   - name: install-envoy-arm64
-    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:1.23.12-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:v1.23.12-arm64
     commands:
       - cp /usr/local/bin/envoy linux/roles/wod.envoy/files/envoy-1.23.12
 
@@ -1382,7 +1382,7 @@ steps:
       - cp /usr/local/bin/registry linux/roles/wod.registry/files/bin/registry-v2.8.1
 
   - name: install-envoy-mips64le
-    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:1.23.12-mips64le
+    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:v1.23.12-mips64le
     commands:
       - cp /usr/local/bin/envoy linux/roles/wod.envoy/files/envoy-1.23.12
 
@@ -1649,7 +1649,7 @@ steps:
       - cp /usr/local/bin/registry linux/roles/wod.registry/files/bin/registry-v2.8.1
 
   - name: install-envoy-amd64
-    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:1.23.12-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:v1.23.12-amd64
     commands:
       - cp /usr/local/bin/envoy linux/roles/wod.envoy/files/envoy-1.23.12
 
@@ -1712,7 +1712,7 @@ steps:
       - cp /usr/local/bin/registry linux/roles/wod.registry/files/bin/registry-v2.8.1
 
   - name: install-envoy-arm64
-    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:1.23.12-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:v1.23.12-arm64
     commands:
       - cp /usr/local/bin/envoy linux/roles/wod.envoy/files/envoy-1.23.12
 
@@ -1775,7 +1775,7 @@ steps:
       - cp /usr/local/bin/registry linux/roles/wod.registry/files/bin/registry-v2.8.1
 
   - name: install-envoy-mips64le
-    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:1.23.12-mips64le
+    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:v1.23.12-mips64le
     commands:
       - cp /usr/local/bin/envoy linux/roles/wod.envoy/files/envoy-1.23.12
 
@@ -2042,7 +2042,7 @@ steps:
       - cp /usr/local/bin/registry linux/roles/wod.registry/files/bin/registry-v2.8.1
 
   - name: install-envoy-amd64
-    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:1.23.12-amd64
+    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:v1.23.12-amd64
     commands:
       - cp /usr/local/bin/envoy linux/roles/wod.envoy/files/envoy-1.23.12
 
@@ -2105,7 +2105,7 @@ steps:
       - cp /usr/local/bin/registry linux/roles/wod.registry/files/bin/registry-v2.8.1
 
   - name: install-envoy-arm64
-    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:1.23.12-arm64
+    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:v1.23.12-arm64
     commands:
       - cp /usr/local/bin/envoy linux/roles/wod.envoy/files/envoy-1.23.12
 
@@ -2168,7 +2168,7 @@ steps:
       - cp /usr/local/bin/registry linux/roles/wod.registry/files/bin/registry-v2.8.1
 
   - name: install-envoy-mips64le
-    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:1.23.12-mips64le
+    image: registry.cn-qingdao.aliyuncs.com/wod/envoy:v1.23.12-mips64le
     commands:
       - cp /usr/local/bin/envoy linux/roles/wod.envoy/files/envoy-1.23.12
 

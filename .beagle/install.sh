@@ -31,5 +31,5 @@ docker run -it --rm \
   --entrypoint=sh \
   -e ENVOY_VERSION=$ENVOY_VERSION \
   -v $PWD/linux/roles/wod.envoy/files:/data/output \
-  registry.cn-qingdao.aliyuncs.com/wod/envoy:$ENVOY_VERSION \
+  registry.cn-qingdao.aliyuncs.com/wod/envoy:v$ENVOY_VERSION \
   -c "cp /usr/local/bin/envoy /data/output/envoy-$ENVOY_VERSION"
