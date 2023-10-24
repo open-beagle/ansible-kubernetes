@@ -63,6 +63,8 @@ data:
         ready
         kubernetes cluster.local {{ K8S_SERVICE_IP_RANGE }} {
           fallthrough in-addr.arpa ip6.arpa
+          pods insecure
+          endpoint_pod_names
         }
         # forward . UPSTREAMNAMESERVER {
         #   max_concurrent 1000
