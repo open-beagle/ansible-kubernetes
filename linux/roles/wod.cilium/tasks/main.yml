@@ -15,7 +15,7 @@
       when:
         - need_addons_proxy is failed
   when:
-    - ansible_kernel is version('5.4','<')
+    - ansible_kernel is version('4.19.57','<')
 
 - name: mkdir -p /etc/kubernetes/charts
   raw: mkdir -p /etc/kubernetes/charts
@@ -36,6 +36,13 @@
   template: src=beagle-cilium.yaml dest=/etc/kubernetes/charts/beagle-cilium-{{ BEAGLE_CILIUM_VERSION }}.yaml
   when:
     - need_addons_cilium_files is failed
+    - ansible_kernel is version('4.19.57','>=')
+
+- name: template beagle-cilium.yaml
+  template: src=beagle-cilium-proxy.yaml dest=/etc/kubernetes/charts/beagle-cilium-{{ BEAGLE_CILIUM_VERSION }}.yaml
+  when:
+    - need_addons_cilium_files is failed
+    - ansible_kernel is version('4.19.57','<')
 
 - name: template beagle-cilium.md
   template: src=beagle-cilium.md dest=/etc/kubernetes/charts/beagle-cilium-{{ BEAGLE_CILIUM_VERSION }}.md

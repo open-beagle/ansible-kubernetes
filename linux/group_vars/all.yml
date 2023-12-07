@@ -7,11 +7,11 @@ HOST_IP: "{{ ansible_facts[IFACE]['ipv4']['address'] }}"
 
 ## HTTP_SERVER , HTTP服务器
 ## 调试安装过程种使用的文件下载服务器，二进制安装包存储在这里
-HTTP_SERVER: 'https://cache.wodcloud.com'
+HTTP_SERVER: "https://cache.wodcloud.com"
 
 ## REGISTRY_LOCAL , Docker镜像服务器
 ## 安装过程种使用的容器镜像服务器
-REGISTRY_LOCAL: 'registry.beagle.default:6444/k8s'
+REGISTRY_LOCAL: "registry.beagle.default:6444/k8s"
 
 ## 容器存储路径
 K8S_DATA_PATH: "/var/lib"
@@ -19,7 +19,7 @@ K8S_DATA_PATH: "/var/lib"
 ## DOCKER_DATA_PATH ， docker将数据存储至此目录，转移后docker将数据存储至额外的硬盘，避免系统盘被占满
 # DOCKER_DATA_PATH: "/data/kubernetes"
 ## DOCKER_VERSION , docker的安装版本
-DOCKER_VERSION: '24.0.5'
+DOCKER_VERSION: "24.0.5"
 
 ## K8S_ARCH, 服务器的CPU架构
 ## 可选值：amd64，arm64，ppc64le，mips64le
@@ -32,61 +32,64 @@ K8S_VERSION: "v1.24.17"
 K8S_IMAGES:
   KUBELET:
     NAME: kubelet
-    VERSION: '{{ K8S_VERSION }}-beagle'
+    VERSION: "{{ K8S_VERSION }}-beagle"
   KUBE-APISERVER:
     NAME: kube-apiserver
-    VERSION: '{{ K8S_VERSION }}-beagle'
+    VERSION: "{{ K8S_VERSION }}-beagle"
   KUBE-CONTROLLER-MANAGER:
     NAME: kube-controller-manager
-    VERSION: '{{ K8S_VERSION }}-beagle'
+    VERSION: "{{ K8S_VERSION }}-beagle"
   KUBE-SCHEDULER:
     NAME: kube-scheduler
-    VERSION: '{{ K8S_VERSION }}-beagle'
+    VERSION: "{{ K8S_VERSION }}-beagle"
   KUBE-PROXY:
     NAME: kube-proxy
-    VERSION: '{{ K8S_VERSION }}-beagle'
+    VERSION: "{{ K8S_VERSION }}-beagle"
   KUBECTL:
     NAME: kubectl
-    VERSION: '{{ K8S_VERSION }}-beagle'
+    VERSION: "{{ K8S_VERSION }}-beagle"
   PAUSE:
     NAME: pause
-    VERSION: '3.7'
+    VERSION: "3.7"
   KUBE-CNI-PLUGINS:
     NAME: kube-cni-plugins
-    VERSION: 'v1.2.0'
+    VERSION: "v1.2.0"
   ETCD:
     NAME: etcd
-    VERSION: 'v3.5.9'
+    VERSION: "v3.5.9"
   ETCDCTL:
     NAME: etcdctl
-    VERSION: 'v3.5.9'
+    VERSION: "v3.5.9"
   FLANNEL:
     NAME: flannel
-    VERSION: 'v0.21.3'
+    VERSION: "v0.21.3"
   FLANNEL-CNI-PLUGIN:
     NAME: flannel-cni-plugin
-    VERSION: 'v1.1.2'
+    VERSION: "v1.1.2"
   CILIUM:
     NAME: cilium
-    VERSION: '1.11.18'
+    VERSION: "1.14.4"
   CILIUM-OPERATOR:
     NAME: cilium-operator-generic
-    VERSION: '1.11.18'
+    VERSION: "1.14.4"
   CILIUM-HUBBLE-RELAY:
     NAME: cilium-hubble-relay
-    VERSION: '1.11.18'
+    VERSION: "1.14.4"
+  CILIUM-ENVOY:
+    NAME: cilium-envoy
+    VERSION: "1.26.6"
   COREDNS:
     NAME: coredns
-    VERSION: 'v1.10.1'
+    VERSION: "v1.10.1"
   HELM:
     NAME: helm
-    VERSION: 'v3.11.1'
+    VERSION: "v3.11.1"
   BUSYBOX:
     NAME: busybox
-    VERSION: '1.34'
+    VERSION: "1.34"
   DEVOPS_DOCKER_IMAGES:
     NAME: devops-docker-images
-    VERSION: '1.0'
+    VERSION: "1.0"
 
 #### k8s 可选设置 ####
 # K8S_ADMIN_TOKEN , 设置集群的管理员静态Token

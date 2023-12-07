@@ -76,10 +76,12 @@ if ! [ -e /etc/modules-load.d/k8s.conf ] ; then
   cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
 overlay
 br_netfilter
+xt_bpf
 EOF
 
   modprobe overlay
   modprobe br_netfilter
+  modprobe xt_bpf
 
 fi
 
@@ -92,6 +94,7 @@ net.ipv4.ip_forward                 = 1
 net.ipv4.ip_unprivileged_port_start = 0
 net.ipv4.ip_local_port_range        = 1 65535
 net.ipv6.conf.all.forwarding        = 1
+net.core.bpf_jit_limit              = 264241152
 EOF
 
   # Apply sysctl params without reboot

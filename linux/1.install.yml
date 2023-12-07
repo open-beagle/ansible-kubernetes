@@ -75,12 +75,7 @@
       when:
         - "inventory_hostname == groups['master'][0]"
         - "K8S_NETWORK_PLUGIN == 'cilium'"
-        - ansible_kernel is version('4.19','>=')
-    - role: wod.flannel
-      when:
-        - "inventory_hostname == groups['master'][0]"
-        - "K8S_NETWORK_PLUGIN == 'cilium'"
-        - ansible_kernel is version('4.19','<')
+        - ansible_kernel is version('4.9.17','>=')
     - role: wod.k8s-addon
       when:
         - "inventory_hostname == groups['master'][0]"

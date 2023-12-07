@@ -1,8 +1,8 @@
 [Unit]
 Description=kubelet
 Documentation=https://kubernetes.io
-Requires=docker.service
-After=docker.service
+Requires=containerd.service
+After=containerd.service
 [Service]
 Environment=PATH=/bin:/opt/bin:/usr/bin:/usr/sbin:/sbin:$PATH
 

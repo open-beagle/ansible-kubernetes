@@ -30,19 +30,12 @@ operator:
     tag: "{{ K8S_IMAGES["CILIUM-OPERATOR"]["VERSION"] }}{{ "-%s" | format(K8S_ARCH) | replace("-amd64", "") }}"
     useDigest: false
 
-envoy:
-  enabled: true
-  image:
-    repository: "{{ REGISTRY_LOCAL }}/{{ K8S_IMAGES["CILIUM-ENVOY"]["NAME"] }}"
-    tag: "{{ K8S_IMAGES["CILIUM-ENVOY"]["VERSION"] }}{{ "-%s" | format(K8S_ARCH) | replace("-amd64", "") }}"
-    useDigest: false
-
 ipam:
   operator:
     clusterPoolIPv4PodCIDRList: ["{{ K8S_POD_NETWORK }}"]
     clusterPoolIPv4MaskSize: {{ K8S_NODE_PODCIDRMASK }}
 
-kubeProxyReplacement: "true"
+kubeProxyReplacement: "false"
 
 nodePort:
   enabled: true

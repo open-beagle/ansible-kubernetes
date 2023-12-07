@@ -23,7 +23,7 @@ ap linux/1.install.yml \
 --extra-vars "@./.vscode/beagle.yaml"
 
 # 离线安装kubernetes集群
-ap linux/1.install.yml 
+ap linux/1.install.yml
 
 # 在线安装kubernetes集群
 ap linux/1.install.yml \

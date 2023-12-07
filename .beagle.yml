@@ -48,7 +48,7 @@ steps:
   - name: curl
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      CILIUM_VERSION: 1.11.18
+      CILIUM_VERSION: 1.14.4
     commands:
       - curl https://cache.wodcloud.com/kubernetes/k8s/charts/beagle-cilium-$CILIUM_VERSION.tgz > ./linux/roles/wod.cilium/files/beagle-cilium-$CILIUM_VERSION.tgz
 
@@ -108,7 +108,7 @@ steps:
       repo: wod/ansible-kubernetes
       version: v1.24.17
       channel: amd64
-      args: 'TARGETOS=linux,TARGETARCH=amd64'
+      args: "TARGETOS=linux,TARGETARCH=amd64"
       registry: registry.cn-qingdao.aliyuncs.com
       registry_user:
         from_secret: REGISTRY_USER_ALIYUN
@@ -173,7 +173,7 @@ steps:
       repo: wod/ansible-kubernetes
       version: v1.24.17
       channel: arm64
-      args: 'TARGETOS=linux,TARGETARCH=arm64'
+      args: "TARGETOS=linux,TARGETARCH=arm64"
       registry: registry.cn-qingdao.aliyuncs.com
       registry_user:
         from_secret: REGISTRY_USER_ALIYUN
@@ -244,7 +244,7 @@ steps:
       repo: wod/ansible-kubernetes
       version: v1.24.17
       channel: mips64le
-      args: 'TARGETOS=linux,TARGETARCH=mips64le'
+      args: "TARGETOS=linux,TARGETARCH=mips64le"
       registry: registry.cn-qingdao.aliyuncs.com
       registry_user:
         from_secret: REGISTRY_USER_ALIYUN
@@ -312,13 +312,13 @@ steps:
       - cp install-offline.sh .tmp/$K8S_RELEASE/$K8S_ARCH/$K8S_REPO-$K8S_VERSION.sh
       - docker pull $REGISTRY_REMOTE/$K8S_REPO:$K8S_VERSION-$K8S_ARCH
       - docker save $REGISTRY_REMOTE/$K8S_REPO:$K8S_VERSION-$K8S_ARCH | gzip > .tmp/$K8S_RELEASE/$K8S_ARCH/$K8S_REPO-$K8S_VERSION-$K8S_ARCH.tgz
-      
+
   - name: minio
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-minio:1.0
     environment:
-      S3_ACCESS_KEY: 
+      S3_ACCESS_KEY:
         from_secret: ACCESS_KEY_MINIO
-      S3_SECRET_KEY: 
+      S3_SECRET_KEY:
         from_secret: SECRET_KEY_MINIO
     commands:
       - mc alias set cache --api=S3v4 https://cache.wodcloud.com $S3_ACCESS_KEY $S3_SECRET_KEY
@@ -433,7 +433,7 @@ steps:
   - name: curl
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      CILIUM_VERSION: 1.11.18
+      CILIUM_VERSION: 1.14.4
     commands:
       - curl https://cache.wodcloud.com/kubernetes/k8s/charts/beagle-cilium-$CILIUM_VERSION.tgz > ./linux/roles/wod.cilium/files/beagle-cilium-$CILIUM_VERSION.tgz
 
@@ -493,7 +493,7 @@ steps:
       repo: wod/ansible-kubernetes
       version: v1.26.8
       channel: amd64
-      args: 'TARGETOS=linux,TARGETARCH=amd64'
+      args: "TARGETOS=linux,TARGETARCH=amd64"
       registry: registry.cn-qingdao.aliyuncs.com
       registry_user:
         from_secret: REGISTRY_USER_ALIYUN
@@ -556,7 +556,7 @@ steps:
       repo: wod/ansible-kubernetes
       version: v1.26.8
       channel: arm64
-      args: 'TARGETOS=linux,TARGETARCH=arm64'
+      args: "TARGETOS=linux,TARGETARCH=arm64"
       registry: registry.cn-qingdao.aliyuncs.com
       registry_user:
         from_secret: REGISTRY_USER_ALIYUN
@@ -621,7 +621,7 @@ steps:
       repo: wod/ansible-kubernetes
       version: v1.26.8
       channel: mips64le
-      args: 'TARGETOS=linux,TARGETARCH=mips64le'
+      args: "TARGETOS=linux,TARGETARCH=mips64le"
       registry: registry.cn-qingdao.aliyuncs.com
       registry_user:
         from_secret: REGISTRY_USER_ALIYUN
@@ -767,9 +767,9 @@ steps:
   - name: minio
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-minio:1.0
     environment:
-      S3_ACCESS_KEY: 
+      S3_ACCESS_KEY:
         from_secret: ACCESS_KEY_MINIO
-      S3_SECRET_KEY: 
+      S3_SECRET_KEY:
         from_secret: SECRET_KEY_MINIO
     commands:
       - mc alias set cache --api=S3v4 https://cache.wodcloud.com $S3_ACCESS_KEY $S3_SECRET_KEY
@@ -826,7 +826,7 @@ steps:
   - name: curl
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      CILIUM_VERSION: 1.11.18
+      CILIUM_VERSION: 1.14.4
     commands:
       - curl https://cache.wodcloud.com/kubernetes/k8s/charts/beagle-cilium-$CILIUM_VERSION.tgz > ./linux/roles/wod.cilium/files/beagle-cilium-$CILIUM_VERSION.tgz
 
@@ -886,7 +886,7 @@ steps:
       repo: wod/ansible-kubernetes
       version: v1.24.17
       channel: amd64
-      args: 'TARGETOS=linux,TARGETARCH=amd64'
+      args: "TARGETOS=linux,TARGETARCH=amd64"
       registry: registry.cn-qingdao.aliyuncs.com
       registry_user:
         from_secret: REGISTRY_USER_ALIYUN
@@ -949,7 +949,7 @@ steps:
       repo: wod/ansible-kubernetes
       version: v1.24.17
       channel: arm64
-      args: 'TARGETOS=linux,TARGETARCH=arm64'
+      args: "TARGETOS=linux,TARGETARCH=arm64"
       registry: registry.cn-qingdao.aliyuncs.com
       registry_user:
         from_secret: REGISTRY_USER_ALIYUN
@@ -1014,7 +1014,7 @@ steps:
       repo: wod/ansible-kubernetes
       version: v1.24.17
       channel: mips64le
-      args: 'TARGETOS=linux,TARGETARCH=mips64le'
+      args: "TARGETOS=linux,TARGETARCH=mips64le"
       registry: registry.cn-qingdao.aliyuncs.com
       registry_user:
         from_secret: REGISTRY_USER_ALIYUN
@@ -1160,9 +1160,9 @@ steps:
   - name: minio
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-minio:1.0
     environment:
-      S3_ACCESS_KEY: 
+      S3_ACCESS_KEY:
         from_secret: ACCESS_KEY_MINIO
-      S3_SECRET_KEY: 
+      S3_SECRET_KEY:
         from_secret: SECRET_KEY_MINIO
     commands:
       - mc alias set cache --api=S3v4 https://cache.wodcloud.com $S3_ACCESS_KEY $S3_SECRET_KEY
@@ -1219,7 +1219,7 @@ steps:
   - name: curl
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      CILIUM_VERSION: 1.11.18
+      CILIUM_VERSION: 1.14.4
     commands:
       - curl https://cache.wodcloud.com/kubernetes/k8s/charts/beagle-cilium-$CILIUM_VERSION.tgz > ./linux/roles/wod.cilium/files/beagle-cilium-$CILIUM_VERSION.tgz
 
@@ -1279,7 +1279,7 @@ steps:
       repo: wod/ansible-kubernetes
       version: v1.22.17
       channel: amd64
-      args: 'TARGETOS=linux,TARGETARCH=amd64'
+      args: "TARGETOS=linux,TARGETARCH=amd64"
       registry: registry.cn-qingdao.aliyuncs.com
       registry_user:
         from_secret: REGISTRY_USER_ALIYUN
@@ -1330,7 +1330,7 @@ steps:
     commands:
       - |
         sed -i --expression "s?K8S_ARCH:.*?K8S_ARCH: $K8S_ARCH?" ./linux/group_vars/all.yml
-        
+
   - name: docker-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     volumes:
@@ -1342,7 +1342,7 @@ steps:
       repo: wod/ansible-kubernetes
       version: v1.22.17
       channel: arm64
-      args: 'TARGETOS=linux,TARGETARCH=arm64'
+      args: "TARGETOS=linux,TARGETARCH=arm64"
       registry: registry.cn-qingdao.aliyuncs.com
       registry_user:
         from_secret: REGISTRY_USER_ALIYUN
@@ -1407,7 +1407,7 @@ steps:
       repo: wod/ansible-kubernetes
       version: v1.22.17
       channel: mips64le
-      args: 'TARGETOS=linux,TARGETARCH=mips64le'
+      args: "TARGETOS=linux,TARGETARCH=mips64le"
       registry: registry.cn-qingdao.aliyuncs.com
       registry_user:
         from_secret: REGISTRY_USER_ALIYUN
@@ -1553,9 +1553,9 @@ steps:
   - name: minio
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-minio:1.0
     environment:
-      S3_ACCESS_KEY: 
+      S3_ACCESS_KEY:
         from_secret: ACCESS_KEY_MINIO
-      S3_SECRET_KEY: 
+      S3_SECRET_KEY:
         from_secret: SECRET_KEY_MINIO
     commands:
       - mc alias set cache --api=S3v4 https://cache.wodcloud.com $S3_ACCESS_KEY $S3_SECRET_KEY
@@ -1612,7 +1612,7 @@ steps:
   - name: curl
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      CILIUM_VERSION: 1.11.18
+      CILIUM_VERSION: 1.14.4
     commands:
       - curl https://cache.wodcloud.com/kubernetes/k8s/charts/beagle-cilium-$CILIUM_VERSION.tgz > ./linux/roles/wod.cilium/files/beagle-cilium-$CILIUM_VERSION.tgz
 
@@ -1672,7 +1672,7 @@ steps:
       repo: wod/ansible-kubernetes
       version: v1.20.15
       channel: amd64
-      args: 'TARGETOS=linux,TARGETARCH=amd64'
+      args: "TARGETOS=linux,TARGETARCH=amd64"
       registry: registry.cn-qingdao.aliyuncs.com
       registry_user:
         from_secret: REGISTRY_USER_ALIYUN
@@ -1723,7 +1723,7 @@ steps:
     commands:
       - |
         sed -i --expression "s?K8S_ARCH:.*?K8S_ARCH: $K8S_ARCH?" ./linux/group_vars/all.yml
-        
+
   - name: docker-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     volumes:
@@ -1735,7 +1735,7 @@ steps:
       repo: wod/ansible-kubernetes
       version: v1.20.15
       channel: arm64
-      args: 'TARGETOS=linux,TARGETARCH=arm64'
+      args: "TARGETOS=linux,TARGETARCH=arm64"
       registry: registry.cn-qingdao.aliyuncs.com
       registry_user:
         from_secret: REGISTRY_USER_ALIYUN
@@ -1800,7 +1800,7 @@ steps:
       repo: wod/ansible-kubernetes
       version: v1.20.15
       channel: mips64le
-      args: 'TARGETOS=linux,TARGETARCH=mips64le'
+      args: "TARGETOS=linux,TARGETARCH=mips64le"
       registry: registry.cn-qingdao.aliyuncs.com
       registry_user:
         from_secret: REGISTRY_USER_ALIYUN
@@ -1946,9 +1946,9 @@ steps:
   - name: minio
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-minio:1.0
     environment:
-      S3_ACCESS_KEY: 
+      S3_ACCESS_KEY:
         from_secret: ACCESS_KEY_MINIO
-      S3_SECRET_KEY: 
+      S3_SECRET_KEY:
         from_secret: SECRET_KEY_MINIO
     commands:
       - mc alias set cache --api=S3v4 https://cache.wodcloud.com $S3_ACCESS_KEY $S3_SECRET_KEY
@@ -2005,7 +2005,7 @@ steps:
   - name: curl
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      CILIUM_VERSION: 1.11.18
+      CILIUM_VERSION: 1.14.4
     commands:
       - curl https://cache.wodcloud.com/kubernetes/k8s/charts/beagle-cilium-$CILIUM_VERSION.tgz > ./linux/roles/wod.cilium/files/beagle-cilium-$CILIUM_VERSION.tgz
 
@@ -2065,7 +2065,7 @@ steps:
       repo: wod/ansible-kubernetes
       version: v1.18.20
       channel: amd64
-      args: 'TARGETOS=linux,TARGETARCH=amd64'
+      args: "TARGETOS=linux,TARGETARCH=amd64"
       registry: registry.cn-qingdao.aliyuncs.com
       registry_user:
         from_secret: REGISTRY_USER_ALIYUN
@@ -2116,7 +2116,7 @@ steps:
     commands:
       - |
         sed -i --expression "s?K8S_ARCH:.*?K8S_ARCH: $K8S_ARCH?" ./linux/group_vars/all.yml
-        
+
   - name: docker-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     volumes:
@@ -2128,7 +2128,7 @@ steps:
       repo: wod/ansible-kubernetes
       version: v1.18.20
       channel: arm64
-      args: 'TARGETOS=linux,TARGETARCH=arm64'
+      args: "TARGETOS=linux,TARGETARCH=arm64"
       registry: registry.cn-qingdao.aliyuncs.com
       registry_user:
         from_secret: REGISTRY_USER_ALIYUN
@@ -2193,7 +2193,7 @@ steps:
       repo: wod/ansible-kubernetes
       version: v1.18.20
       channel: mips64le
-      args: 'TARGETOS=linux,TARGETARCH=mips64le'
+      args: "TARGETOS=linux,TARGETARCH=mips64le"
       registry: registry.cn-qingdao.aliyuncs.com
       registry_user:
         from_secret: REGISTRY_USER_ALIYUN
@@ -2339,9 +2339,9 @@ steps:
   - name: minio
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-minio:1.0
     environment:
-      S3_ACCESS_KEY: 
+      S3_ACCESS_KEY:
         from_secret: ACCESS_KEY_MINIO
-      S3_SECRET_KEY: 
+      S3_SECRET_KEY:
         from_secret: SECRET_KEY_MINIO
     commands:
       - mc alias set cache --api=S3v4 https://cache.wodcloud.com $S3_ACCESS_KEY $S3_SECRET_KEY

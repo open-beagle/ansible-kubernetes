@@ -1,32 +1,22 @@
 # Setup
 
 ```bash
-# 1. Package
-helm package .
-
-# 2. Install
+# 1. Install
 helm install \
 cilium \
-/etc/kubernetes/charts/beagle-cilium-1.11.18.tgz \
+/etc/kubernetes/charts/beagle-cilium-1.14.4.tgz \
 --namespace kube-system \
--f /etc/kubernetes/charts/beagle-cilium-1.11.18.yaml
+-f /etc/kubernetes/charts/beagle-cilium-1.14.4.yaml
 
-# 3. Upgrade
+# 2. Upgrade
 helm upgrade \
 cilium \
-/etc/kubernetes/charts/beagle-cilium-1.11.18.tgz \
+/etc/kubernetes/charts/beagle-cilium-1.14.4.tgz \
 --namespace kube-system \
--f /etc/kubernetes/charts/beagle-cilium-1.11.18.yaml
+-f /etc/kubernetes/charts/beagle-cilium-1.14.4.yaml
 
-# 4. Uninstall
+# 3. Uninstall
 helm uninstall \
 cilium \
 --namespace kube-system
-
-# 5. Template
-helm template \
-cilium \
-/etc/kubernetes/charts/beagle-cilium-1.11.18.tgz \
---namespace kube-system \
--f /etc/kubernetes/charts/beagle-cilium-1.11.18.yaml >  /etc/kubernetes/charts/beagle-cilium-dist.yaml
 ```

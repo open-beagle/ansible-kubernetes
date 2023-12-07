@@ -3,20 +3,20 @@
 ## 简介
 
 - 快速搭建一个 Kubernetes 集群
-- 搭建过程离线，无需访问外部的服务器
+- 搭建过程离线，无需访问互联网
 - 一行命令，使用 ansible，全程自动化
 
 ### 限制条件
 
-- Linux Kernel >= 5.4 , 推荐 Ubuntu 22.04
+- Linux Kernel >= 4.9.17 , 推荐 Ubuntu 22.04
 
 ### 核心组件
 
 - 容器引擎: containerd 1.7
 - 容器平台: kubernetes v1.24
 - 数据库: etcd v3.5
-- 网络组件: cilium v1.11
-- 扩展组件: coredns 1.9
+- 网络组件: cilium v1.14
+- 扩展组件: coredns 1.10
 
 ## 准备 hosts 文件
 
@@ -150,9 +150,9 @@ ERRO[0095] error waiting for container: unexpected EOF
 - 如果安装服务器同时在本机上安装 K8S 节点则会导致中断。
 - 忽略此错误，继续运行脚本 ansible-playbook 1.install.yml 可以解决问题。
 
-### Ubuntu 18.04如何安装
+### Ubuntu 18.04 如何安装
 
-尽量升级内核至5.4以上。请参考[Ubuntu-18.04.md](./docs/Ubuntu-18.04.md)
+尽量升级内核至 5.4 以上。请参考[Ubuntu-18.04.md](./docs/Ubuntu-18.04.md)
 
-- Linux Kernel 4.10.x 时，将会默认安装Flannel网络插件
-- 升级Linux Kernel 5.4.x 时，将会默认安装Cilium网络插件
+- Linux Kernel 3.10 时，将会默认安装 Flannel 网络插件
+- 升级 Linux Kernel 至大于等于 4.9.17 时，将会安装 Cilium 网络插件
