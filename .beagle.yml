@@ -420,7 +420,7 @@ steps:
   - name: version
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      K8S_VERSION: v1.26.8
+      K8S_VERSION: v1.26.11
       K8S_RELEASE: v1.26
     commands:
       - |
@@ -453,7 +453,7 @@ steps:
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     environment:
       DOCKER_VERSION: 24.0.5
-      K8S_VERSION: v1.26.8
+      K8S_VERSION: v1.26.11
       K8S_RELEASE: v1.26
       K8S_ARCH: amd64
     commands:
@@ -491,7 +491,7 @@ steps:
       dockerfile: .beagle/dockerfile
       base: registry.cn-qingdao.aliyuncs.com/wod/ansible:2-amd64
       repo: wod/ansible-kubernetes
-      version: v1.26.8
+      version: v1.26.11
       channel: amd64
       args: "TARGETOS=linux,TARGETARCH=amd64"
       registry: registry.cn-qingdao.aliyuncs.com
@@ -516,7 +516,7 @@ steps:
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     environment:
       DOCKER_VERSION: 24.0.5
-      K8S_VERSION: v1.26.8
+      K8S_VERSION: v1.26.11
       K8S_RELEASE: v1.26
       K8S_ARCH: arm64
     commands:
@@ -554,7 +554,7 @@ steps:
       dockerfile: .beagle/dockerfile
       base: registry.cn-qingdao.aliyuncs.com/wod/ansible:2-arm64
       repo: wod/ansible-kubernetes
-      version: v1.26.8
+      version: v1.26.11
       channel: arm64
       args: "TARGETOS=linux,TARGETARCH=arm64"
       registry: registry.cn-qingdao.aliyuncs.com
@@ -579,7 +579,7 @@ steps:
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     environment:
       DOCKER_VERSION: 24.0.5
-      K8S_VERSION: v1.26.8
+      K8S_VERSION: v1.26.11
       K8S_RELEASE: v1.26
       K8S_ARCH: mips64le
     commands:
@@ -619,7 +619,7 @@ steps:
       dockerfile: .beagle/dockerfile
       base: registry.cn-qingdao.aliyuncs.com/wod/ansible:2-mips64le
       repo: wod/ansible-kubernetes
-      version: v1.26.8
+      version: v1.26.11
       channel: mips64le
       args: "TARGETOS=linux,TARGETARCH=mips64le"
       registry: registry.cn-qingdao.aliyuncs.com
@@ -632,8 +632,8 @@ steps:
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-manifest:1.0
     settings:
       platforms: linux/amd64,linux/arm64
-      template: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.26.8-ARCH
-      target: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.26.8
+      template: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.26.11-ARCH
+      target: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.26.11
       username:
         from_secret: REGISTRY_USER_ALIYUN
       password:
@@ -642,7 +642,7 @@ steps:
   - name: harbor-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-tag:1.0
     settings:
-      source: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.26.8-amd64
+      source: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.26.11-amd64
       target: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.26-amd64
       registry: registry.cn-qingdao.aliyuncs.com
       registry_user:
@@ -653,7 +653,7 @@ steps:
   - name: harbor-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-tag:1.0
     settings:
-      source: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.26.8-arm64
+      source: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.26.11-arm64
       target: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.26-arm64
       registry: registry.cn-qingdao.aliyuncs.com
       registry_user:
@@ -664,7 +664,7 @@ steps:
   - name: harbor-mips64le
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-tag:1.0
     settings:
-      source: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.26.8-mips64le
+      source: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.26.11-mips64le
       target: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.26-mips64le
       registry: registry.cn-qingdao.aliyuncs.com
       registry_user:
@@ -691,7 +691,7 @@ steps:
     environment:
       REGISTRY_REMOTE: registry.cn-qingdao.aliyuncs.com/wod
       K8S_REPO: ansible-kubernetes
-      K8S_VERSION: v1.26.8
+      K8S_VERSION: v1.26.11
       K8S_RELEASE: v1.26
       K8S_ARCH: amd64
     commands:
@@ -708,7 +708,7 @@ steps:
       image: K8S_IMAGES
       arch: amd64
       group: k8s
-      release: .tmp/v1.26/amd64/ansible-kubernetes-images-v1.26.8-amd64.tgz
+      release: .tmp/v1.26/amd64/ansible-kubernetes-images-v1.26.11-amd64.tgz
 
   - name: ansible-kubernetes-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
@@ -718,7 +718,7 @@ steps:
     environment:
       REGISTRY_REMOTE: registry.cn-qingdao.aliyuncs.com/wod
       K8S_REPO: ansible-kubernetes
-      K8S_VERSION: v1.26.8
+      K8S_VERSION: v1.26.11
       K8S_RELEASE: v1.26
       K8S_ARCH: arm64
     commands:
@@ -735,7 +735,7 @@ steps:
       image: K8S_IMAGES
       arch: arm64
       group: k8s
-      release: .tmp/v1.26/arm64/ansible-kubernetes-images-v1.26.8-arm64.tgz
+      release: .tmp/v1.26/arm64/ansible-kubernetes-images-v1.26.11-arm64.tgz
 
   - name: ansible-kubernetes-mips64le
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
@@ -745,7 +745,7 @@ steps:
     environment:
       REGISTRY_REMOTE: registry.cn-qingdao.aliyuncs.com/wod
       K8S_REPO: ansible-kubernetes
-      K8S_VERSION: v1.26.8
+      K8S_VERSION: v1.26.11
       K8S_RELEASE: v1.26
       K8S_ARCH: mips64le
     commands:
@@ -762,7 +762,7 @@ steps:
       image: K8S_IMAGES
       arch: mips64le
       group: k8s
-      release: .tmp/v1.26/mips64le/ansible-kubernetes-images-v1.26.8-mips64le.tgz
+      release: .tmp/v1.26/mips64le/ansible-kubernetes-images-v1.26.11-mips64le.tgz
 
   - name: minio
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-minio:1.0
