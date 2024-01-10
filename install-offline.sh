@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/bin/bash
 
 set -ex
 
@@ -31,39 +31,39 @@ else
 fi
 
 if ! [ -e /etc/kubernetes/ansible/ansible-docker-$K8S_VERSION-$TARGET_ARCH.tgz ]; then
-mkdir -p /etc/kubernetes/ansible
-# 下载文件
-# ansible-docker-$K8S_VERSION-amd64.tgz 68MB
-curl $HTTP_SERVER/kubernetes/k8s/ansible/$K8S_RELEASE/$TARGET_ARCH/ansible-docker-$K8S_VERSION-$TARGET_ARCH.tgz > /etc/kubernetes/ansible/ansible-docker-$K8S_VERSION-$TARGET_ARCH.tgz
+  mkdir -p /etc/kubernetes/ansible
+  # 下载文件
+  # ansible-docker-$K8S_VERSION-amd64.tgz 68MB
+  curl $HTTP_SERVER/kubernetes/k8s/ansible/$K8S_RELEASE/$TARGET_ARCH/ansible-docker-$K8S_VERSION-$TARGET_ARCH.tgz >/etc/kubernetes/ansible/ansible-docker-$K8S_VERSION-$TARGET_ARCH.tgz
 fi
 
 if ! [ -e /opt/bin/docker ]; then
-mkdir -p /opt/docker
-# 解压文件
-tar xzvf /etc/kubernetes/ansible/ansible-docker-$K8S_VERSION-$TARGET_ARCH.tgz -C /opt/docker
-# 安装Docker
-bash /opt/docker/install.sh
+  mkdir -p /opt/docker
+  # 解压文件
+  tar xzvf /etc/kubernetes/ansible/ansible-docker-$K8S_VERSION-$TARGET_ARCH.tgz -C /opt/docker
+  # 安装Docker
+  bash /opt/docker/install.sh
 fi
 
 if ! [ -e /etc/kubernetes/ansible/ansible-kubernetes-images-$K8S_VERSION-$TARGET_ARCH.tgz ]; then
-mkdir -p /etc/kubernetes/ansible
-# 下载文件
-# 依赖镜像 ansible-kubernetes-images-$K8S_VERSION-amd64.tgz 1526MB
-curl $HTTP_SERVER/kubernetes/k8s/ansible/$K8S_RELEASE/$TARGET_ARCH/ansible-kubernetes-images-$K8S_VERSION-$TARGET_ARCH.tgz > /etc/kubernetes/ansible/ansible-kubernetes-images-$K8S_VERSION-$TARGET_ARCH.tgz
+  mkdir -p /etc/kubernetes/ansible
+  # 下载文件
+  # 依赖镜像 ansible-kubernetes-images-$K8S_VERSION-amd64.tgz 1526MB
+  curl $HTTP_SERVER/kubernetes/k8s/ansible/$K8S_RELEASE/$TARGET_ARCH/ansible-kubernetes-images-$K8S_VERSION-$TARGET_ARCH.tgz >/etc/kubernetes/ansible/ansible-kubernetes-images-$K8S_VERSION-$TARGET_ARCH.tgz
 fi
 
 if ! [ -e /etc/kubernetes/ansible/ansible-kubernetes-$K8S_VERSION-$TARGET_ARCH.tgz ]; then
-mkdir -p /etc/kubernetes/ansible
-# 下载文件
-# 安装脚本 ansible-kubernetes-$K8S_VERSION-amd64.tgz 276MB
-curl $HTTP_SERVER/kubernetes/k8s/ansible/$K8S_RELEASE/$TARGET_ARCH/ansible-kubernetes-$K8S_VERSION-$TARGET_ARCH.tgz > /etc/kubernetes/ansible/ansible-kubernetes-$K8S_VERSION-$TARGET_ARCH.tgz
+  mkdir -p /etc/kubernetes/ansible
+  # 下载文件
+  # 安装脚本 ansible-kubernetes-$K8S_VERSION-amd64.tgz 276MB
+  curl $HTTP_SERVER/kubernetes/k8s/ansible/$K8S_RELEASE/$TARGET_ARCH/ansible-kubernetes-$K8S_VERSION-$TARGET_ARCH.tgz >/etc/kubernetes/ansible/ansible-kubernetes-$K8S_VERSION-$TARGET_ARCH.tgz
 fi
 
 # 加载镜像
 docker load -i /etc/kubernetes/ansible/ansible-kubernetes-$K8S_VERSION-$TARGET_ARCH.tgz
 
 if ! [ -e /etc/kubernetes/ansible/beagle.yaml ]; then
-  cat > /etc/kubernetes/ansible/beagle.yaml <<-EOF
+  cat >/etc/kubernetes/ansible/beagle.yaml <<-EOF
 ## REGISTRY_LOCAL , Docker镜像服务器
 ## 安装过程种使用的容器镜像服务器
 REGISTRY_LOCAL: 'registry.beagle.default:6444/k8s'
@@ -71,12 +71,12 @@ EOF
 fi
 
 docker run \
--t \
---rm \
--v /etc/kubernetes/ansible/hosts.ini:/etc/ansible/hosts \
--v /etc/kubernetes/ansible/beagle.yaml:/etc/ansible/linux/beagle_vars/beagle.yaml \
--v /etc/kubernetes/ansible/ansible-kubernetes-images-$K8S_VERSION-$TARGET_ARCH.tgz:/etc/ansible/linux/roles/wod.registry/files/images/ansible-kubernetes-images-$K8S_VERSION-$TARGET_ARCH.tgz \
--w /etc/ansible/linux \
-registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:$K8S_VERSION-$TARGET_ARCH \
-ansible-playbook 1.install.yml \
---extra-vars "@./beagle_vars/beagle.yaml"
+  -t \
+  --rm \
+  -v /etc/kubernetes/ansible/hosts.ini:/etc/ansible/hosts \
+  -v /etc/kubernetes/ansible/beagle.yaml:/etc/ansible/linux/beagle_vars/beagle.yaml \
+  -v /etc/kubernetes/ansible/ansible-kubernetes-images-$K8S_VERSION-$TARGET_ARCH.tgz:/etc/ansible/linux/roles/wod.registry/files/images/ansible-kubernetes-images-$K8S_VERSION-$TARGET_ARCH.tgz \
+  -w /etc/ansible/linux \
+  registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:$K8S_VERSION-$TARGET_ARCH \
+  ansible-playbook 1.install.yml \
+  --extra-vars "@./beagle_vars/beagle.yaml"

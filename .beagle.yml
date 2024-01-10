@@ -55,7 +55,7 @@ steps:
   - name: install-docker-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      DOCKER_VERSION: 24.0.5
+      DOCKER_VERSION: 24.0.7
       K8S_ARCH: amd64
     commands:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
@@ -67,7 +67,7 @@ steps:
   - name: ansible-docker-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     environment:
-      DOCKER_VERSION: 24.0.5
+      DOCKER_VERSION: 24.0.7
       K8S_VERSION: v1.24.17
       K8S_RELEASE: v1.24
       K8S_ARCH: amd64
@@ -118,7 +118,7 @@ steps:
   - name: install-docker-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      DOCKER_VERSION: 24.0.5
+      DOCKER_VERSION: 24.0.7
       K8S_ARCH: arm64
     commands:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
@@ -130,7 +130,7 @@ steps:
   - name: ansible-docker-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     environment:
-      DOCKER_VERSION: 24.0.5
+      DOCKER_VERSION: 24.0.7
       K8S_VERSION: v1.24.17
       K8S_RELEASE: v1.24
       K8S_ARCH: arm64
@@ -183,7 +183,7 @@ steps:
   - name: install-docker-mips64le
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      DOCKER_VERSION: 24.0.5
+      DOCKER_VERSION: 24.0.7
       K8S_ARCH: mips64le
     commands:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
@@ -199,7 +199,7 @@ steps:
   - name: ansible-docker-mips64le
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     environment:
-      DOCKER_VERSION: 24.0.5
+      DOCKER_VERSION: 24.0.7
       K8S_VERSION: v1.24.17
       K8S_RELEASE: v1.24
       K8S_ARCH: mips64le
@@ -440,7 +440,7 @@ steps:
   - name: install-docker-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      DOCKER_VERSION: 24.0.5
+      DOCKER_VERSION: 24.0.7
       K8S_ARCH: amd64
     commands:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
@@ -452,7 +452,7 @@ steps:
   - name: ansible-docker-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     environment:
-      DOCKER_VERSION: 24.0.5
+      DOCKER_VERSION: 24.0.7
       K8S_VERSION: v1.26.11
       K8S_RELEASE: v1.26
       K8S_ARCH: amd64
@@ -503,7 +503,7 @@ steps:
   - name: install-docker-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      DOCKER_VERSION: 24.0.5
+      DOCKER_VERSION: 24.0.7
       K8S_ARCH: arm64
     commands:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
@@ -515,7 +515,7 @@ steps:
   - name: ansible-docker-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     environment:
-      DOCKER_VERSION: 24.0.5
+      DOCKER_VERSION: 24.0.7
       K8S_VERSION: v1.26.11
       K8S_RELEASE: v1.26
       K8S_ARCH: arm64
@@ -566,7 +566,7 @@ steps:
   - name: install-docker-mips64le
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      DOCKER_VERSION: 24.0.5
+      DOCKER_VERSION: 24.0.7
       K8S_ARCH: mips64le
     commands:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
@@ -578,7 +578,7 @@ steps:
   - name: ansible-docker-mips64le
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     environment:
-      DOCKER_VERSION: 24.0.5
+      DOCKER_VERSION: 24.0.7
       K8S_VERSION: v1.26.11
       K8S_RELEASE: v1.26
       K8S_ARCH: mips64le
@@ -833,7 +833,7 @@ steps:
   - name: install-docker-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      DOCKER_VERSION: 24.0.5
+      DOCKER_VERSION: 24.0.7
       K8S_ARCH: amd64
     commands:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
@@ -845,7 +845,7 @@ steps:
   - name: ansible-docker-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     environment:
-      DOCKER_VERSION: 24.0.5
+      DOCKER_VERSION: 24.0.7
       K8S_VERSION: v1.24.17
       K8S_RELEASE: v1.24
       K8S_ARCH: amd64
@@ -896,7 +896,7 @@ steps:
   - name: install-docker-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      DOCKER_VERSION: 24.0.5
+      DOCKER_VERSION: 24.0.7
       K8S_ARCH: arm64
     commands:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
@@ -908,7 +908,7 @@ steps:
   - name: ansible-docker-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     environment:
-      DOCKER_VERSION: 24.0.5
+      DOCKER_VERSION: 24.0.7
       K8S_VERSION: v1.24.17
       K8S_RELEASE: v1.24
       K8S_ARCH: arm64
@@ -959,7 +959,7 @@ steps:
   - name: install-docker-mips64le
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      DOCKER_VERSION: 24.0.5
+      DOCKER_VERSION: 24.0.7
       K8S_ARCH: mips64le
     commands:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
@@ -971,7 +971,7 @@ steps:
   - name: ansible-docker-mips64le
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     environment:
-      DOCKER_VERSION: 24.0.5
+      DOCKER_VERSION: 24.0.7
       K8S_VERSION: v1.24.17
       K8S_RELEASE: v1.24
       K8S_ARCH: mips64le
@@ -1226,7 +1226,7 @@ steps:
   - name: install-docker-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      DOCKER_VERSION: 24.0.5
+      DOCKER_VERSION: 24.0.7
       K8S_ARCH: amd64
     commands:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
@@ -1238,7 +1238,7 @@ steps:
   - name: ansible-docker-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     environment:
-      DOCKER_VERSION: 24.0.5
+      DOCKER_VERSION: 24.0.7
       K8S_VERSION: v1.22.17
       K8S_RELEASE: v1.22
       K8S_ARCH: amd64
@@ -1289,7 +1289,7 @@ steps:
   - name: install-docker-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      DOCKER_VERSION: 24.0.5
+      DOCKER_VERSION: 24.0.7
       K8S_ARCH: arm64
     commands:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
@@ -1301,7 +1301,7 @@ steps:
   - name: ansible-docker-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     environment:
-      DOCKER_VERSION: 24.0.5
+      DOCKER_VERSION: 24.0.7
       K8S_VERSION: v1.22.17
       K8S_RELEASE: v1.22
       K8S_ARCH: arm64
@@ -1352,7 +1352,7 @@ steps:
   - name: install-docker-mips64le
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      DOCKER_VERSION: 24.0.5
+      DOCKER_VERSION: 24.0.7
       K8S_ARCH: mips64le
     commands:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
@@ -1364,7 +1364,7 @@ steps:
   - name: ansible-docker-mips64le
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     environment:
-      DOCKER_VERSION: 24.0.5
+      DOCKER_VERSION: 24.0.7
       K8S_VERSION: v1.22.17
       K8S_RELEASE: v1.22
       K8S_ARCH: mips64le
@@ -1619,7 +1619,7 @@ steps:
   - name: install-docker-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      DOCKER_VERSION: 24.0.5
+      DOCKER_VERSION: 24.0.7
       K8S_ARCH: amd64
     commands:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
@@ -1631,7 +1631,7 @@ steps:
   - name: ansible-docker-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     environment:
-      DOCKER_VERSION: 24.0.5
+      DOCKER_VERSION: 24.0.7
       K8S_VERSION: v1.20.15
       K8S_RELEASE: v1.20
       K8S_ARCH: amd64
@@ -1682,7 +1682,7 @@ steps:
   - name: install-docker-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      DOCKER_VERSION: 24.0.5
+      DOCKER_VERSION: 24.0.7
       K8S_ARCH: arm64
     commands:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
@@ -1694,7 +1694,7 @@ steps:
   - name: ansible-docker-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     environment:
-      DOCKER_VERSION: 24.0.5
+      DOCKER_VERSION: 24.0.7
       K8S_VERSION: v1.20.15
       K8S_RELEASE: v1.20
       K8S_ARCH: arm64
@@ -1745,7 +1745,7 @@ steps:
   - name: install-docker-mips64le
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      DOCKER_VERSION: 24.0.5
+      DOCKER_VERSION: 24.0.7
       K8S_ARCH: mips64le
     commands:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
@@ -1757,7 +1757,7 @@ steps:
   - name: ansible-docker-mips64le
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     environment:
-      DOCKER_VERSION: 24.0.5
+      DOCKER_VERSION: 24.0.7
       K8S_VERSION: v1.20.15
       K8S_RELEASE: v1.20
       K8S_ARCH: mips64le
@@ -2012,7 +2012,7 @@ steps:
   - name: install-docker-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      DOCKER_VERSION: 24.0.5
+      DOCKER_VERSION: 24.0.7
       K8S_ARCH: amd64
     commands:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
@@ -2024,7 +2024,7 @@ steps:
   - name: ansible-docker-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     environment:
-      DOCKER_VERSION: 24.0.5
+      DOCKER_VERSION: 24.0.7
       K8S_VERSION: v1.18.20
       K8S_RELEASE: v1.18
       K8S_ARCH: amd64
@@ -2075,7 +2075,7 @@ steps:
   - name: install-docker-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      DOCKER_VERSION: 24.0.5
+      DOCKER_VERSION: 24.0.7
       K8S_ARCH: arm64
     commands:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
@@ -2087,7 +2087,7 @@ steps:
   - name: ansible-docker-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     environment:
-      DOCKER_VERSION: 24.0.5
+      DOCKER_VERSION: 24.0.7
       K8S_VERSION: v1.18.20
       K8S_RELEASE: v1.18
       K8S_ARCH: arm64
@@ -2138,7 +2138,7 @@ steps:
   - name: install-docker-mips64le
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      DOCKER_VERSION: 24.0.5
+      DOCKER_VERSION: 24.0.7
       K8S_ARCH: mips64le
     commands:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
@@ -2150,7 +2150,7 @@ steps:
   - name: ansible-docker-mips64le
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     environment:
-      DOCKER_VERSION: 24.0.5
+      DOCKER_VERSION: 24.0.7
       K8S_VERSION: v1.18.20
       K8S_RELEASE: v1.18
       K8S_ARCH: mips64le
