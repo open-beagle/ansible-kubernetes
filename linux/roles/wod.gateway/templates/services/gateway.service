@@ -1,0 +1,15 @@
+[Unit]
+Description=K8S API Gateway
+Wants=network.target
+
+[Service]
+Environment=PATH=/opt/bin:$PATH
+
+ExecStart=/opt/bin/gateway \
+  --configfile /etc/kubernetes/services/k8s-gateway/gateway.yaml
+
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

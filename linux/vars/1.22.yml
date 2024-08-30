@@ -23,7 +23,7 @@ K8S_IMAGES:
     VERSION: "3.7"
   KUBE-CNI-PLUGINS:
     NAME: kube-cni-plugins
-    VERSION: "v1.2.0"
+    VERSION: "v1.5.1"
   ETCD:
     NAME: etcd
     VERSION: "v3.5.9"
@@ -38,16 +38,16 @@ K8S_IMAGES:
     VERSION: "v1.1.2"
   CILIUM:
     NAME: cilium
-    VERSION: "1.14.4"
+    VERSION: "1.14.14"
   CILIUM-OPERATOR:
     NAME: cilium-operator-generic
-    VERSION: "1.14.4"
+    VERSION: "1.14.14"
   CILIUM-HUBBLE-RELAY:
     NAME: cilium-hubble-relay
-    VERSION: "1.14.4"
+    VERSION: "1.14.14"
   CILIUM-ENVOY:
     NAME: cilium-envoy
-    VERSION: "1.26.6"
+    VERSION: "1.29.7"
   COREDNS:
     NAME: coredns
     VERSION: "v1.10.1"

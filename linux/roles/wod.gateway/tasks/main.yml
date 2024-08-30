@@ -1,0 +1,32 @@
+- name: mkdir -p /etc/kubernetes/services/k8s-gateway/config
+  raw: mkdir -p /etc/kubernetes/services/k8s-gateway/config
+
+- name: check need copy fles
+  raw: stat /opt/bin/gateway
+  register: need_copy_files
+  ignore_errors: True
+
+- name: mkdir -p /tmp/gateway
+  raw: mkdir -p /tmp/gateway
+  when: need_copy_files is failed
+
+- name: copy files to /tmp/gateway
+  copy:
+    src: ./
+    dest: /tmp/gateway
+  when: need_copy_files is failed
+
+- name: template gateway.sh
+  template: src=scripts/gateway.sh dest=/etc/kubernetes/scripts/gateway.sh mode=0755
+
+- name: template config/gateway.yaml
+  template: src=config/gateway.yaml dest=/etc/kubernetes/services/k8s-gateway/gateway.yaml
+
+- name: template config/tcp.yaml
+  template: src=config/tcp.yaml dest=/etc/kubernetes/services/k8s-gateway/config/tcp.yaml
+
+- name: template services/k8s-gateway.service
+  template: src=services/gateway.service dest=/etc/systemd/system/k8s-gateway.service
+
+- name: /etc/kubernetes/scripts/gateway.sh
+  raw: /etc/kubernetes/scripts/gateway.sh

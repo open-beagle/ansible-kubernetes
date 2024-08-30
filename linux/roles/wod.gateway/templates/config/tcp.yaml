@@ -1,0 +1,25 @@
+tcp:
+  routers:
+    apiserver:
+      rule: "HostSNI(`*`)"
+      service: "apiserver"
+      entryPoints:
+        - "apiserver"
+    registry:
+      rule: "HostSNI(`*`)"
+      service: "registry"
+      entryPoints:
+        - "regsitry"
+  services:
+    apiserver:
+      loadBalancer:
+        servers:
+{% for host in groups['master'] %}
+          - address: "{{ hostvars[host]['ansible_facts'][IFACE]['ipv4']['address'] }}:6443"
+{% endfor %}
+    registry:
+      loadBalancer:
+        servers:
+{% for host in groups['master'] %}
+          - address: "{{ hostvars[host]['ansible_facts'][IFACE]['ipv4']['address'] }}:6444"
+{% endfor %}

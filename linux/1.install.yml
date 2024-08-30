@@ -7,7 +7,6 @@
   roles:
     - wod.sys
     - wod.k8s-ssl
-    - wod.bpf-mount
     - wod.docker
     - wod.k8s-dropcaches
 
@@ -46,7 +45,7 @@
     K8S_VERSION_NUM: "{{ K8S_VERSION | replace('v', '') }}"
   roles:
     - role: wod.k8s-ssl-kubelet
-    - role: wod.envoy
+    - role: wod.gateway
     - role: wod.docker-login
     - role: wod.k8s-kubelet-docker
       when:

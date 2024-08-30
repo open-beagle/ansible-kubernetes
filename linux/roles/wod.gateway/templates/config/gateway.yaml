@@ -1,0 +1,18 @@
+global:
+  checkNewVersion: false
+  sendAnonymousUsage: false
+api:
+  dashboard: false
+log:
+  level: "INFO"
+  format: "common"
+
+providers:
+  file:
+    directory: /etc/kubernetes/services/k8s-gateway/config
+
+entryPoints:
+  apiserver:
+    address: ":6443"
+  regsitry:
+    address: ":6444"

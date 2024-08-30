@@ -13,7 +13,7 @@
 ### 核心组件
 
 - 容器引擎: containerd 1.7
-- 容器平台: kubernetes v1.24
+- 容器平台: kubernetes v1.26
 - 数据库: etcd v3.5
 - 网络组件: cilium v1.14
 - 扩展组件: coredns 1.10
@@ -37,7 +37,7 @@ EOF
 
 ## 在线一键安装 kubernetes 集群
 
-### 准备 yaml 配置文件 [可选]
+准备 yaml 配置文件 [可选]
 
 请参考[all.yml](./linux/group_vars/all.yml)
 
@@ -58,7 +58,7 @@ sudo curl -sfL https://cache.wodcloud.com/kubernetes/install.sh | sh -
 
 ## 离线一键安装 kubernetes 集群
 
-### 准备 yaml 配置文件 [可选]
+准备 yaml 配置文件 [可选]
 
 请参考[all.yml](./linux/group_vars/all.yml)
 
@@ -85,7 +85,7 @@ export HTTP_SERVER=https://cache.wodcloud.com
 # 平台架构
 export TARGET_ARCH=amd64
 # K8S版本
-export K8S_VERSION=v1.24.17
+export K8S_VERSION=v1.26.15
 # K8S发布版本
 export K8S_RELEASE="${K8S_VERSION%.*}"
 
@@ -98,7 +98,7 @@ curl $HTTP_SERVER/kubernetes/k8s/ansible/$K8S_RELEASE/$TARGET_ARCH/ansible-kuber
 curl $HTTP_SERVER/kubernetes/k8s/ansible/$K8S_RELEASE/$TARGET_ARCH/ansible-kubernetes-$K8S_VERSION.sh > /etc/kubernetes/ansible/ansible-kubernetes-$K8S_VERSION.sh
 
 # 执行脚本
-# bash /etc/kubernetes/ansible/ansible-kubernetes-v1.24.17.sh
+# bash /etc/kubernetes/ansible/ansible-kubernetes-v1.26.15.sh
 bash /etc/kubernetes/ansible/ansible-kubernetes-$K8S_VERSION.sh
 ```
 
@@ -118,9 +118,9 @@ beagle-03                  : ok=37   changed=32   unreachable=0    failed=0    s
 ```bash
 root@beagle-01:~# kubectl get node
 NAME        STATUS   ROLES    AGE   VERSION
-beagle-01   Ready    master   93s   v1.24.17-beagle
-beagle-02   Ready    <none>   79s   v1.24.17-beagle
-beagle-03   Ready    <none>   79s   v1.24.17-beagle
+beagle-01   Ready    master   93s   v1.26.15-beagle
+beagle-02   Ready    <none>   79s   v1.26.15-beagle
+beagle-03   Ready    <none>   79s   v1.26.15-beagle
 
 root@beagle-01:~# kubectl get pod -A -o wide
 NAMESPACE     NAME                                READY   STATUS    RESTARTS   AGE   IP              NODE        NOMINATED NODE   READINESS GATES
