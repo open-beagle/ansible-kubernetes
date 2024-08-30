@@ -26,10 +26,10 @@ docker run -it --rm \
   -c "cp /usr/local/bin/registry /data/output/registry-$REGISTRY_VERSION"
 
 rm -rf ./linux/roles/wod.gateway/files/gateway-*
-GATEWAY_VERSION=6.1.1
+GATEWAY_VERSION=v6.1.1
 docker run -it --rm \
   --entrypoint=sh \
   -e GATEWAY_VERSION=$GATEWAY_VERSION \
   -v $PWD/linux/roles/wod.gateway/files:/data/output \
-  registry.cn-qingdao.aliyuncs.com/wod/awecloud-gateway:v$GATEWAY_VERSION \
+  registry.cn-qingdao.aliyuncs.com/wod/awecloud-gateway:$GATEWAY_VERSION \
   -c "cp /usr/local/bin/gateway /data/output/gateway-$GATEWAY_VERSION"
