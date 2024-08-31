@@ -26,10 +26,10 @@ K8S_IMAGES:
     VERSION: "v1.5.1"
   ETCD:
     NAME: etcd
-    VERSION: "v3.5.9"
+    VERSION: "v3.5.15"
   ETCDCTL:
     NAME: etcdctl
-    VERSION: "v3.5.9"
+    VERSION: "v3.5.15"
   FLANNEL:
     NAME: flannel
     VERSION: "v0.21.3"
@@ -50,10 +50,10 @@ K8S_IMAGES:
     VERSION: "1.29.7"
   COREDNS:
     NAME: coredns
-    VERSION: "v1.10.1"
+    VERSION: "v1.11.3"
   HELM:
     NAME: helm
-    VERSION: "v3.11.1"
+    VERSION: "v3.15.3"
   BUSYBOX:
     NAME: busybox
     VERSION: "1.34"
