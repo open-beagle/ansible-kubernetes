@@ -14,7 +14,7 @@ HTTP_SERVER: "https://cache.wodcloud.com"
 REGISTRY_LOCAL: "registry.beagle.default:6444/k8s"
 
 ## 容器存储路径
-K8S_DATA_PATH: "/var/lib"
+K8S_DATA_PATH: "/data/kubernetes"
 # docker options
 ## DOCKER_DATA_PATH ， docker将数据存储至此目录，转移后docker将数据存储至额外的硬盘，避免系统盘被占满
 # DOCKER_DATA_PATH: "/data/kubernetes"

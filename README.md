@@ -13,10 +13,10 @@
 ### 核心组件
 
 - 容器引擎: containerd 1.7
-- 容器平台: kubernetes v1.26
+- 容器平台: kubernetes v1.30
 - 数据库: etcd v3.5
 - 网络组件: cilium v1.14
-- 扩展组件: coredns 1.10
+- 扩展组件: coredns 1.11
 
 ## 准备 hosts 文件
 
@@ -37,69 +37,36 @@ EOF
 
 ## 在线一键安装 kubernetes 集群
 
-准备 yaml 配置文件 [可选]
-
-请参考[all.yml](./linux/group_vars/all.yml)
+配置文件请参考[all.yml](./linux/group_vars/all.yml)
 
 ```bash
+# 准备 yaml 配置文件
 mkdir -p /etc/kubernetes/ansible && \
-rm -rf /etc/kubernetes/ansible/beagle.yaml && \
-cat > /etc/kubernetes/ansible/beagle.yaml <<\EOF
-## REGISTRY_LOCAL , Docker镜像服务器
-## 安装过程种使用的容器镜像服务器
+  rm -rf /etc/kubernetes/ansible/beagle.yaml && \
+  cat > /etc/kubernetes/ansible/beagle.yaml <<\EOF
 REGISTRY_LOCAL: 'registry.cn-qingdao.aliyuncs.com/wod'
+EOF
+
+sudo curl -sfL https://cache.wodcloud.com/kubernetes/install.sh | sh -
 ```
 
 ### 开始安装
 
 ```bash
-sudo curl -sfL https://cache.wodcloud.com/kubernetes/install.sh | sh -
+
 ```
 
 ## 离线一键安装 kubernetes 集群
 
-准备 yaml 配置文件 [可选]
-
-请参考[all.yml](./linux/group_vars/all.yml)
-
 ```bash
+# 准备 yaml 配置文件
 mkdir -p /etc/kubernetes/ansible && \
-rm -rf /etc/kubernetes/ansible/beagle.yaml && \
-cat > /etc/kubernetes/ansible/beagle.yaml <<\EOF
-## REGISTRY_LOCAL , Docker镜像服务器
-## 安装过程种使用的容器镜像服务器
+  rm -rf /etc/kubernetes/ansible/beagle.yaml && \
+  cat > /etc/kubernetes/ansible/beagle.yaml <<\EOF
 REGISTRY_LOCAL: 'registry.beagle.default:6444/k8s'
-
-## 容器存储路径
-K8S_DATA_PATH: "/data/kubernetes"
 EOF
-```
 
-### 准备文件
-
-下载好安装所需资源及文件，运行脚本时整个安装过程完全离线。
-
-```bash
-# HTTPS服务器
-export HTTP_SERVER=https://cache.wodcloud.com
-# 平台架构
-export TARGET_ARCH=amd64
-# K8S版本
-export K8S_VERSION=v1.26.15
-# K8S发布版本
-export K8S_RELEASE="${K8S_VERSION%.*}"
-
-mkdir -p /etc/kubernetes/ansible
-# 下载文件
-curl $HTTP_SERVER/kubernetes/k8s/ansible/$K8S_RELEASE/$TARGET_ARCH/ansible-docker-$K8S_VERSION-$TARGET_ARCH.tgz > /etc/kubernetes/ansible/ansible-docker-$K8S_VERSION-$TARGET_ARCH.tgz
-curl $HTTP_SERVER/kubernetes/k8s/ansible/$K8S_RELEASE/$TARGET_ARCH/ansible-kubernetes-images-$K8S_VERSION-$TARGET_ARCH.tgz > /etc/kubernetes/ansible/ansible-kubernetes-images-$K8S_VERSION-$TARGET_ARCH.tgz
-curl $HTTP_SERVER/kubernetes/k8s/ansible/$K8S_RELEASE/$TARGET_ARCH/ansible-kubernetes-$K8S_VERSION-$TARGET_ARCH.tgz > /etc/kubernetes/ansible/ansible-kubernetes-$K8S_VERSION-$TARGET_ARCH.tgz
-# 下载脚本
-curl $HTTP_SERVER/kubernetes/k8s/ansible/$K8S_RELEASE/$TARGET_ARCH/ansible-kubernetes-$K8S_VERSION.sh > /etc/kubernetes/ansible/ansible-kubernetes-$K8S_VERSION.sh
-
-# 执行脚本
-# bash /etc/kubernetes/ansible/ansible-kubernetes-v1.26.15.sh
-bash /etc/kubernetes/ansible/ansible-kubernetes-$K8S_VERSION.sh
+sudo curl -sfL https://cache.wodcloud.com/kubernetes/install-offline.sh | sh -
 ```
 
 ### 完成安装
@@ -118,9 +85,9 @@ beagle-03                  : ok=37   changed=32   unreachable=0    failed=0    s
 ```bash
 root@beagle-01:~# kubectl get node
 NAME        STATUS   ROLES    AGE   VERSION
-beagle-01   Ready    master   93s   v1.26.15-beagle
-beagle-02   Ready    <none>   79s   v1.26.15-beagle
-beagle-03   Ready    <none>   79s   v1.26.15-beagle
+beagle-01   Ready    master   93s   v1.30.4-beagle
+beagle-02   Ready    <none>   79s   v1.30.4-beagle
+beagle-03   Ready    <none>   79s   v1.30.4-beagle
 
 root@beagle-01:~# kubectl get pod -A -o wide
 NAMESPACE     NAME                                READY   STATUS    RESTARTS   AGE   IP              NODE        NOMINATED NODE   READINESS GATES
@@ -139,16 +106,6 @@ kube-system   kube-scheduler-beagle-01            1/1     Running   0          9
 ```
 
 ## FAQ
-
-### TASK [wod.docker-login : login.sh] 中断
-
-ERRO[0095] error waiting for container: unexpected EOF
-
-- 执行安装任务时意外中断。
-- 日志显示安装 wod.docker-login 任务时，中断
-- 此任务为离线安装，准备镜像 Registry 服务，初始化认证参数时，需要重启 Containerd，重启 Containerd 导致退出容器。
-- 如果安装服务器同时在本机上安装 K8S 节点则会导致中断。
-- 忽略此错误，继续运行脚本 ansible-playbook 1.install.yml 可以解决问题。
 
 ### Ubuntu 18.04 如何安装
 
