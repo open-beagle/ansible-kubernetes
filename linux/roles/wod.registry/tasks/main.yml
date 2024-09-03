@@ -1,45 +1,36 @@
 - name: mkdir -p /etc/kubernetes/services/k8s-registry
   raw: mkdir -p /etc/kubernetes/services/k8s-registry
 
-- name: check regsitry version
-  raw: stat /etc/kubernetes/services/k8s-registry/.beagle_registry_version_{{ BEAGLE_REGISTRY_VERSION }}
-  register: need_change_version
-  ignore_errors: True
+- name: mkdir -p /etc/kubernetes/ansible
+  raw: mkdir -p /etc/kubernetes/ansible
+
+- name: mkdir -p /etc/kubernetes/downloads
+  raw: mkdir -p /etc/kubernetes/downloads
 
 - name: check need copy images
-  raw: stat {{ K8S_DATA_PATH }}/registry/docker/registry/v2/repositories
+  raw: stat /etc/kubernetes/ansible/ansible-kubernetes-images-{{ K8S_VERSION }}-{{ K8S_ARCH }}.tgz
   register: need_copy_images
   ignore_errors: True
 
-- name: mkdir -p /tmp/registry/images
-  raw: mkdir -p /tmp/registry/images
-  when: 
-    - REGISTRY_LOCAL == "registry.beagle.default:6444/k8s" 
-    - need_copy_images is failed or need_change_version is failed
-
-- name: copy files to /tmp/registry/images
+- name: copy files to /etc/kubernetes/ansible
   copy:
     src: ./images
-    dest: /tmp/registry
-  when: 
-    - REGISTRY_LOCAL == "registry.beagle.default:6444/k8s" 
-    - need_copy_images is failed or need_change_version is failed
+    dest: /etc/kubernetes/ansible
+  when:
+    - REGISTRY_LOCAL == "registry.beagle.default:6444/k8s"
+    - need_copy_images is failed
 
 - name: check need copy bin
-  raw: stat /opt/bin/registry
+  raw: stat /etc/kubernetes/downloads/registry-{{ BEAGLE_REGISTRY_VERSION }}
   register: need_copy_bin
   ignore_errors: True
 
-- name: mkdir -p /tmp/registry/bin
-  raw: mkdir -p /tmp/registry/bin
-  when: need_copy_bin is failed
-
-- name: copy files to /tmp/registry/bin
+- name: copy files to /etc/kubernetes/downloads
   copy:
     src: ./bin
-    dest: /tmp/registry
-  when: 
-    - need_copy_bin is failed or need_change_version is failed
+    dest: /etc/kubernetes/downloads
+  when:
+    - need_copy_bin is failed
 
 - name: template registry.beagle.default.cnf
   template: src=config/registry.beagle.default.cnf dest=/etc/kubernetes/services/k8s-registry/registry.beagle.default.cnf

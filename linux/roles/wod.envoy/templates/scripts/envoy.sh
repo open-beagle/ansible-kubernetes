@@ -2,25 +2,10 @@
 
 set -e
 
-mkdir -p /etc/kubernetes/downloads
-mkdir -p /opt/bin
+if [-e /etc/systemd/system/k8s-envoy.service ]; then
+  mkdir -p /etc/kubernetes/services
 
-for file in `find /tmp/envoy -name "envoy-*"`; do  
-  rm -rf /opt/bin/envoy
-  filename=$(basename $file)
-  mv /tmp/envoy/$filename /etc/kubernetes/downloads/$filename
-  chmod +x /etc/kubernetes/downloads/$filename
-  ln -s /etc/kubernetes/downloads/$filename /opt/bin/envoy
-done
-
-if ! (grep -q "kubernetes.beagle.default" /etc/hosts) ; then
-  echo "127.0.0.1 kubernetes.beagle.default" >> /etc/hosts
+  system disable k8s-envoy.service
+  system stop k8s-envoy.service
+  mv k8s-envoy.service /etc/kubernetes/services/k8s-envoy.service
 fi
-sed -i --expression "s?.*kubernetes.beagle.default?127.0.0.1 kubernetes.beagle.default?" /etc/hosts
-
-if ! (grep -q "registry.beagle.default" /etc/hosts) ; then
-  echo "127.0.0.1 registry.beagle.default" >> /etc/hosts
-fi
-sed -i --expression "s?.*registry.beagle.default?127.0.0.1 registry.beagle.default?" /etc/hosts
-
-systemctl daemon-reload && systemctl enable k8s-envoy.service && systemctl restart k8s-envoy.service
