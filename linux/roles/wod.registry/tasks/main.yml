@@ -1,11 +1,5 @@
 - name: mkdir -p /etc/kubernetes/services/k8s-registry
-  raw: mkdir -p /etc/kubernetes/services/k8s-registry
-
-- name: mkdir -p /etc/kubernetes/ansible
-  raw: mkdir -p /etc/kubernetes/ansible
-
-- name: mkdir -p /etc/kubernetes/downloads
-  raw: mkdir -p /etc/kubernetes/downloads
+  raw: mkdir -p /etc/kubernetes/services/k8s-registry /etc/kubernetes/scripts /etc/kubernetes/ansible /etc/kubernetes/downloads
 
 - name: check need copy images
   raw: stat /etc/kubernetes/ansible/ansible-kubernetes-images-{{ K8S_VERSION }}-{{ K8S_ARCH }}.tgz
@@ -14,7 +8,7 @@
 
 - name: copy files to /etc/kubernetes/ansible
   copy:
-    src: ./images
+    src: ./images/
     dest: /etc/kubernetes/ansible
   when:
     - REGISTRY_LOCAL == "registry.beagle.default:6444/k8s"
@@ -27,7 +21,7 @@
 
 - name: copy files to /etc/kubernetes/downloads
   copy:
-    src: ./bin
+    src: ./bin/
     dest: /etc/kubernetes/downloads
   when:
     - need_copy_bin is failed
