@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export PATH=/opt/bin:$PATH
+
 set -ex
 
 # HTTPS服务器
@@ -64,7 +66,7 @@ docker load -i /etc/kubernetes/ansible/ansible-kubernetes-$K8S_VERSION-$TARGET_A
 
 if [ ! -e /etc/kubernetes/ansible/beagle.yaml ]; then
   mkdir -p /etc/kubernetes/ansible
-  cat > /etc/kubernetes/ansible/beagle.yaml <<EOF
+  cat >/etc/kubernetes/ansible/beagle.yaml <<EOF
 # REGISTRY_LOCAL: Docker镜像服务器
 # 安装过程种使用的容器镜像服务器
 REGISTRY_LOCAL: 'registry.beagle.default:6444/k8s'

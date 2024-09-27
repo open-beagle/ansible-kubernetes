@@ -1,6 +1,8 @@
-#!/bin/bash 
+#!/bin/bash
 
-set -e  
+export PATH=/opt/bin:$PATH
+
+set -e
 
 REGISTRY_LOCAL="{{ REGISTRY_LOCAL }}"
 REGISTRY_REPO="{{ K8S_IMAGES['KUBECTL']['NAME'] }}"
@@ -26,8 +28,8 @@ fi
 /opt/bin/kubectl config set-cluster kubernetes --server=https://{{ K8S_MASTER_HOST }}:{{ K8S_MASTER_PORT }} --certificate-authority=/etc/kubernetes/ssl/ca.crt
 /opt/bin/kubectl config set-credentials default --client-certificate=/etc/kubernetes/ssl/admin.crt --client-key=/etc/kubernetes/ssl/admin.key
 /opt/bin/kubectl config set-context kubernetes --cluster=kubernetes --user=default
-/opt/bin/kubectl config use-context kubernetes  
+/opt/bin/kubectl config use-context kubernetes
 
 if ! (grep -q "source <(/opt/bin/kubectl completion bash)" ~/.bashrc); then
-  echo "source <(/opt/bin/kubectl completion bash)" >> ~/.bashrc
+  echo "source <(/opt/bin/kubectl completion bash)" >>~/.bashrc
 fi

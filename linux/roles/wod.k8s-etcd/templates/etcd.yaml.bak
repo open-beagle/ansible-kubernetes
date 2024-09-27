@@ -25,11 +25,31 @@ spec:
   - name: etcd
     image: {{ REGISTRY_LOCAL }}/{{ K8S_IMAGES['ETCD']['NAME'] }}:{{ K8S_IMAGES['ETCD']['VERSION'] }}{{ "-%s" | format(K8S_ARCH) | replace("-amd64", "") }}
     imagePullPolicy: IfNotPresent
+    # livenessProbe:
+    #   failureThreshold: 8
+    #   httpGet:
+    #     host: 127.0.0.1
+    #     path: /health
+    #     port: 2381
+    #     scheme: HTTP
+    #   initialDelaySeconds: 10
+    #   periodSeconds: 10
+    #   timeoutSeconds: 15
     resources:
       requests:
         cpu: 100m
         ephemeral-storage: 100Mi
         memory: 100Mi
+    # startupProbe:
+    #   failureThreshold: 24
+    #   httpGet:
+    #     host: 127.0.0.1
+    #     path: /health
+    #     port: 2381
+    #     scheme: HTTP
+    #   initialDelaySeconds: 10
+    #   periodSeconds: 10
+    #   timeoutSeconds: 15
     volumeMounts:
     - mountPath: /etc/kubernetes/data/etcd
       name: etcd-data

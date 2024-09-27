@@ -1,5 +1,5 @@
 - name: check need copy fles
-  raw: stat /opt/docker/VERSION-{{ DOCKER_VERSION }}.md
+  raw: stat /opt/docker/{{ DOCKER_VERSION }}/bin/docker
   register: need_copy_files
   ignore_errors: True
 
@@ -12,12 +12,5 @@
     dest: /opt/docker
   when: need_copy_files is failed
 
-- name: template install.sh
-  template: src=install.sh dest=/opt/docker/install.sh mode=0755
-
-- name: template uninstall.sh
-  template: src=uninstall.sh dest=/opt/docker/uninstall.sh mode=0755
-
 - name: /opt/docker/install.sh
-  raw: /opt/docker/install.sh
-  when: need_copy_files is failed
+  raw: bash /opt/docker/install.sh

@@ -12,7 +12,7 @@
 
 ### 核心组件
 
-- 容器引擎: containerd 1.7
+- 容器引擎: containerd 2.0
 - 容器平台: kubernetes v1.30
 - 数据库: etcd v3.5
 - 网络组件: cilium v1.14
@@ -47,7 +47,8 @@ mkdir -p /etc/kubernetes/ansible && \
 REGISTRY_LOCAL: 'registry.cn-qingdao.aliyuncs.com/wod'
 EOF
 
-sudo curl -sfL https://cache.wodcloud.com/kubernetes/install.sh | sh -
+curl -sL https://cache.wodcloud.com/kubernetes/install.sh > /etc/kubernetes/ansible/install.sh && \
+bash install.sh
 ```
 
 ### 开始安装
@@ -66,7 +67,8 @@ mkdir -p /etc/kubernetes/ansible && \
 REGISTRY_LOCAL: 'registry.beagle.default:6444/k8s'
 EOF
 
-sudo curl -sfL https://cache.wodcloud.com/kubernetes/install-offline.sh | sh -
+curl -sL https://cache.wodcloud.com/kubernetes/install.sh > /etc/kubernetes/ansible/install-offline.sh && \
+bash install-offline.s
 ```
 
 ### 完成安装

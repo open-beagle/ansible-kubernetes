@@ -165,7 +165,7 @@ registry.beagle.default:6444/k8s/devops-docker-images:1.0
 
 ```toml
 [plugins."io.containerd.grpc.v1.cri"]
-  sandbox_image = "registry.k8s.io/pause:3.2"
+  sandbox = "registry.k8s.io/pause:3.2"
 ```
 
 - 设置过后重启 Containerd 方能生效。

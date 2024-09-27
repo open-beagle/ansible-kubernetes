@@ -1,6 +1,8 @@
-#!/bin/bash 
+#!/bin/bash
 
-set -e  
+export PATH=/opt/bin:$PATH
+
+set -e
 
 # cni-plugins-linux-amd64-v0.8.7.tgz
 
@@ -28,10 +30,6 @@ else
 fi
 
 if ! [ -e /etc/kubernetes/downloads/cni-plugins-linux-$REGISTRY_VERSION ]; then
-  if ! [ -d "/opt/cni/bin" ]; then
-    mv "/opt/cni/bin" "/opt/cni/bin-bak"
-  fi
   docker run -v /opt/cni/bin:/data/output --rm $REGISTRY_LOCAL/$REGISTRY_REPO:$REGISTRY_VERSION
   touch /etc/kubernetes/downloads/cni-plugins-linux-$REGISTRY_VERSION
-  echo 'cni bin download completed!'
 fi

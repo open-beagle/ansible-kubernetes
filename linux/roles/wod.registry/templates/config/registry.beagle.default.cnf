@@ -9,3 +9,4 @@ subjectAltName = @alt_names
 [alt_names]
 DNS.1 = registry.beagle.default
 IP.1 = 127.0.0.1
+IP.2 = {{ HOST_IP }}

@@ -1,6 +1,8 @@
-#!/bin/bash 
+#!/bin/bash
 
-set -e  
+export PATH=/opt/bin:$PATH
+
+set -e
 
 REGISTRY_LOCAL="{{ REGISTRY_LOCAL }}"
 
@@ -32,8 +34,8 @@ else
 fi
 
 {% for host in groups['master'] %}
-if ! (grep -q "{{ host }}" /etc/hosts) ; then
-  echo "{{ hostvars[host]['ansible_facts'][IFACE]['ipv4']['address'] }} {{ host }}" >> /etc/hosts
+if ! (grep -q "{{ host }}" /etc/hosts); then
+  echo "{{ hostvars[host]['ansible_facts'][IFACE]['ipv4']['address'] }} {{ host }}" >>/etc/hosts
 fi
 {% endfor %}
 

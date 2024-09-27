@@ -1,6 +1,8 @@
-#!/bin/bash 
+#!/bin/bash
 
-set -e  
+export PATH=/opt/bin:$PATH
+
+set -e
 
 REGISTRY_LOCAL="{{ REGISTRY_LOCAL }}"
 REGISTRY_REPO="{{ K8S_IMAGES['HELM']['NAME'] }}"
@@ -37,5 +39,5 @@ if ! [ -e /etc/kubernetes/downloads/helm-linux-$REGISTRY_VERSION ]; then
   rm -rf /opt/bin/helm /usr/local/bin/helm
   ln -s /etc/kubernetes/downloads/helm-linux-$REGISTRY_VERSION /opt/bin/helm
   ln -s /etc/kubernetes/downloads/helm-linux-$REGISTRY_VERSION /usr/local/bin/helm
-  
+
 fi

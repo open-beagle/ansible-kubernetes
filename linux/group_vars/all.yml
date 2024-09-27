@@ -19,7 +19,7 @@ K8S_DATA_PATH: "/var/lib"
 ## DOCKER_DATA_PATH ， docker将数据存储至此目录，转移后docker将数据存储至额外的硬盘，避免系统盘被占满
 # DOCKER_DATA_PATH: "/data/kubernetes"
 ## DOCKER_VERSION , docker的安装版本
-DOCKER_VERSION: "26.1.5"
+DOCKER_VERSION: "27.3.1"
 
 ## K8S_ARCH, 服务器的CPU架构
 ## 可选值：amd64，arm64，ppc64le，mips64le
@@ -59,10 +59,10 @@ K8S_IMAGES:
     VERSION: "v1.30.4"
   ETCD:
     NAME: etcd
-    VERSION: "v3.5.15"
+    VERSION: "v3.5.16"
   ETCDCTL:
     NAME: etcdctl
-    VERSION: "v3.5.15"
+    VERSION: "v3.5.16"
   FLANNEL:
     NAME: flannel
     VERSION: "v0.21.3"

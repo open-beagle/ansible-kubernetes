@@ -7,7 +7,7 @@ gateway-*
 envoy-*
 
 .registry/
-linux/roles/wod.docker/templates/*.sh
+linux/roles/wod.docker/files/
 
 # kernel
 *.deb

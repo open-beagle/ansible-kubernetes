@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export PATH=/opt/bin:$PATH
+
 set -ex
 
 # HTTPS服务器

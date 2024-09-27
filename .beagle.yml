@@ -55,27 +55,27 @@ steps:
   - name: install-docker-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      DOCKER_VERSION: 26.1.5
+      DOCKER_VERSION: 27.3.1
       K8S_ARCH: amd64
     commands:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
-      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/templates/install.sh
-      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/files/install.sh
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/files/uninstall.sh
       - |
-        sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/templates/install.sh
+        sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/files/install.sh
 
   - name: ansible-docker-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     environment:
-      DOCKER_VERSION: 26.1.5
+      DOCKER_VERSION: 27.3.1
       K8S_VERSION: v1.30.4
       K8S_RELEASE: v1.30
       K8S_ARCH: amd64
     commands:
       - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
       - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
-      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
-      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
+      - cp ./linux/roles/wod.docker/files/install.sh .tmp/docker/$K8S_ARCH/install.sh
+      - cp ./linux/roles/wod.docker/files/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
       - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
       - rm -rf .tmp/docker
 
@@ -118,27 +118,27 @@ steps:
   - name: install-docker-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      DOCKER_VERSION: 26.1.5
+      DOCKER_VERSION: 27.3.1
       K8S_ARCH: arm64
     commands:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
-      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/templates/install.sh
-      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/files/install.sh
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/files/uninstall.sh
       - |
-        sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/templates/install.sh
+        sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/files/install.sh
 
   - name: ansible-docker-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     environment:
-      DOCKER_VERSION: 26.1.5
+      DOCKER_VERSION: 27.3.1
       K8S_VERSION: v1.30.4
       K8S_RELEASE: v1.30
       K8S_ARCH: arm64
     commands:
       - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
       - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
-      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
-      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
+      - cp ./linux/roles/wod.docker/files/install.sh .tmp/docker/$K8S_ARCH/install.sh
+      - cp ./linux/roles/wod.docker/files/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
       - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
       - rm -rf .tmp/docker
 
@@ -340,27 +340,27 @@ steps:
   - name: install-docker-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      DOCKER_VERSION: 26.1.5
+      DOCKER_VERSION: 27.3.1
       K8S_ARCH: amd64
     commands:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
-      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/templates/install.sh
-      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/files/install.sh
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/files/uninstall.sh
       - |
-        sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/templates/install.sh
+        sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/files/install.sh
 
   - name: ansible-docker-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     environment:
-      DOCKER_VERSION: 26.1.5
+      DOCKER_VERSION: 27.3.1
       K8S_VERSION: v1.30.4
       K8S_RELEASE: v1.30
       K8S_ARCH: amd64
     commands:
       - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
       - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
-      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
-      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
+      - cp ./linux/roles/wod.docker/files/install.sh .tmp/docker/$K8S_ARCH/install.sh
+      - cp ./linux/roles/wod.docker/files/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
       - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
       - rm -rf .tmp/docker
 
@@ -403,27 +403,27 @@ steps:
   - name: install-docker-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      DOCKER_VERSION: 26.1.5
+      DOCKER_VERSION: 27.3.1
       K8S_ARCH: arm64
     commands:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
-      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/templates/install.sh
-      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/files/install.sh
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/files/uninstall.sh
       - |
-        sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/templates/install.sh
+        sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/files/install.sh
 
   - name: ansible-docker-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     environment:
-      DOCKER_VERSION: 26.1.5
+      DOCKER_VERSION: 27.3.1
       K8S_VERSION: v1.30.4
       K8S_RELEASE: v1.30
       K8S_ARCH: arm64
     commands:
       - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
       - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
-      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
-      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
+      - cp ./linux/roles/wod.docker/files/install.sh .tmp/docker/$K8S_ARCH/install.sh
+      - cp ./linux/roles/wod.docker/files/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
       - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
       - rm -rf .tmp/docker
 
@@ -630,27 +630,27 @@ steps:
   - name: install-docker-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      DOCKER_VERSION: 26.1.5
+      DOCKER_VERSION: 27.3.1
       K8S_ARCH: amd64
     commands:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
-      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/templates/install.sh
-      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/files/install.sh
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/files/uninstall.sh
       - |
-        sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/templates/install.sh
+        sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/files/install.sh
 
   - name: ansible-docker-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     environment:
-      DOCKER_VERSION: 26.1.5
+      DOCKER_VERSION: 27.3.1
       K8S_VERSION: v1.28.13
       K8S_RELEASE: v1.28
       K8S_ARCH: amd64
     commands:
       - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
       - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
-      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
-      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
+      - cp ./linux/roles/wod.docker/files/install.sh .tmp/docker/$K8S_ARCH/install.sh
+      - cp ./linux/roles/wod.docker/files/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
       - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
       - rm -rf .tmp/docker
 
@@ -693,27 +693,27 @@ steps:
   - name: install-docker-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      DOCKER_VERSION: 26.1.5
+      DOCKER_VERSION: 27.3.1
       K8S_ARCH: arm64
     commands:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
-      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/templates/install.sh
-      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/files/install.sh
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/files/uninstall.sh
       - |
-        sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/templates/install.sh
+        sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/files/install.sh
 
   - name: ansible-docker-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     environment:
-      DOCKER_VERSION: 26.1.5
+      DOCKER_VERSION: 27.3.1
       K8S_VERSION: v1.28.13
       K8S_RELEASE: v1.28
       K8S_ARCH: arm64
     commands:
       - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
       - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
-      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
-      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
+      - cp ./linux/roles/wod.docker/files/install.sh .tmp/docker/$K8S_ARCH/install.sh
+      - cp ./linux/roles/wod.docker/files/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
       - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
       - rm -rf .tmp/docker
 
@@ -920,27 +920,27 @@ steps:
   - name: install-docker-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      DOCKER_VERSION: 26.1.5
+      DOCKER_VERSION: 27.3.1
       K8S_ARCH: amd64
     commands:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
-      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/templates/install.sh
-      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/files/install.sh
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/files/uninstall.sh
       - |
-        sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/templates/install.sh
+        sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/files/install.sh
 
   - name: ansible-docker-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     environment:
-      DOCKER_VERSION: 26.1.5
+      DOCKER_VERSION: 27.3.1
       K8S_VERSION: v1.26.15
       K8S_RELEASE: v1.26
       K8S_ARCH: amd64
     commands:
       - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
       - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
-      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
-      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
+      - cp ./linux/roles/wod.docker/files/install.sh .tmp/docker/$K8S_ARCH/install.sh
+      - cp ./linux/roles/wod.docker/files/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
       - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
       - rm -rf .tmp/docker
 
@@ -983,27 +983,27 @@ steps:
   - name: install-docker-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      DOCKER_VERSION: 26.1.5
+      DOCKER_VERSION: 27.3.1
       K8S_ARCH: arm64
     commands:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
-      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/templates/install.sh
-      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/files/install.sh
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/files/uninstall.sh
       - |
-        sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/templates/install.sh
+        sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/files/install.sh
 
   - name: ansible-docker-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     environment:
-      DOCKER_VERSION: 26.1.5
+      DOCKER_VERSION: 27.3.1
       K8S_VERSION: v1.26.15
       K8S_RELEASE: v1.26
       K8S_ARCH: arm64
     commands:
       - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
       - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
-      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
-      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
+      - cp ./linux/roles/wod.docker/files/install.sh .tmp/docker/$K8S_ARCH/install.sh
+      - cp ./linux/roles/wod.docker/files/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
       - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
       - rm -rf .tmp/docker
 
@@ -1210,27 +1210,27 @@ steps:
   - name: install-docker-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      DOCKER_VERSION: 26.1.5
+      DOCKER_VERSION: 27.3.1
       K8S_ARCH: amd64
     commands:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
-      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/templates/install.sh
-      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/files/install.sh
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/files/uninstall.sh
       - |
-        sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/templates/install.sh
+        sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/files/install.sh
 
   - name: ansible-docker-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     environment:
-      DOCKER_VERSION: 26.1.5
+      DOCKER_VERSION: 27.3.1
       K8S_VERSION: v1.24.17
       K8S_RELEASE: v1.24
       K8S_ARCH: amd64
     commands:
       - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
       - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
-      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
-      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
+      - cp ./linux/roles/wod.docker/files/install.sh .tmp/docker/$K8S_ARCH/install.sh
+      - cp ./linux/roles/wod.docker/files/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
       - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
       - rm -rf .tmp/docker
 
@@ -1273,27 +1273,27 @@ steps:
   - name: install-docker-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      DOCKER_VERSION: 26.1.5
+      DOCKER_VERSION: 27.3.1
       K8S_ARCH: arm64
     commands:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
-      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/templates/install.sh
-      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/files/install.sh
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/files/uninstall.sh
       - |
-        sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/templates/install.sh
+        sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/files/install.sh
 
   - name: ansible-docker-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     environment:
-      DOCKER_VERSION: 26.1.5
+      DOCKER_VERSION: 27.3.1
       K8S_VERSION: v1.24.17
       K8S_RELEASE: v1.24
       K8S_ARCH: arm64
     commands:
       - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
       - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
-      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
-      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
+      - cp ./linux/roles/wod.docker/files/install.sh .tmp/docker/$K8S_ARCH/install.sh
+      - cp ./linux/roles/wod.docker/files/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
       - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
       - rm -rf .tmp/docker
 
@@ -1500,27 +1500,27 @@ steps:
   - name: install-docker-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      DOCKER_VERSION: 26.1.5
+      DOCKER_VERSION: 27.3.1
       K8S_ARCH: amd64
     commands:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
-      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/templates/install.sh
-      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/files/install.sh
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/files/uninstall.sh
       - |
-        sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/templates/install.sh
+        sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/files/install.sh
 
   - name: ansible-docker-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     environment:
-      DOCKER_VERSION: 26.1.5
+      DOCKER_VERSION: 27.3.1
       K8S_VERSION: v1.22.17
       K8S_RELEASE: v1.22
       K8S_ARCH: amd64
     commands:
       - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
       - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
-      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
-      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
+      - cp ./linux/roles/wod.docker/files/install.sh .tmp/docker/$K8S_ARCH/install.sh
+      - cp ./linux/roles/wod.docker/files/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
       - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
       - rm -rf .tmp/docker
 
@@ -1563,27 +1563,27 @@ steps:
   - name: install-docker-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      DOCKER_VERSION: 26.1.5
+      DOCKER_VERSION: 27.3.1
       K8S_ARCH: arm64
     commands:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
-      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/templates/install.sh
-      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/files/install.sh
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/files/uninstall.sh
       - |
-        sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/templates/install.sh
+        sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/files/install.sh
 
   - name: ansible-docker-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     environment:
-      DOCKER_VERSION: 26.1.5
+      DOCKER_VERSION: 27.3.1
       K8S_VERSION: v1.22.17
       K8S_RELEASE: v1.22
       K8S_ARCH: arm64
     commands:
       - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
       - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
-      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
-      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
+      - cp ./linux/roles/wod.docker/files/install.sh .tmp/docker/$K8S_ARCH/install.sh
+      - cp ./linux/roles/wod.docker/files/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
       - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
       - rm -rf .tmp/docker
 
@@ -1790,27 +1790,27 @@ steps:
   - name: install-docker-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      DOCKER_VERSION: 26.1.5
+      DOCKER_VERSION: 27.3.1
       K8S_ARCH: amd64
     commands:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
-      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/templates/install.sh
-      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/files/install.sh
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/files/uninstall.sh
       - |
-        sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/templates/install.sh
+        sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/files/install.sh
 
   - name: ansible-docker-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     environment:
-      DOCKER_VERSION: 26.1.5
+      DOCKER_VERSION: 27.3.1
       K8S_VERSION: v1.20.15
       K8S_RELEASE: v1.20
       K8S_ARCH: amd64
     commands:
       - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
       - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
-      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
-      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
+      - cp ./linux/roles/wod.docker/files/install.sh .tmp/docker/$K8S_ARCH/install.sh
+      - cp ./linux/roles/wod.docker/files/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
       - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
       - rm -rf .tmp/docker
 
@@ -1853,27 +1853,27 @@ steps:
   - name: install-docker-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      DOCKER_VERSION: 26.1.5
+      DOCKER_VERSION: 27.3.1
       K8S_ARCH: arm64
     commands:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
-      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/templates/install.sh
-      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/files/install.sh
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/files/uninstall.sh
       - |
-        sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/templates/install.sh
+        sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/files/install.sh
 
   - name: ansible-docker-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     environment:
-      DOCKER_VERSION: 26.1.5
+      DOCKER_VERSION: 27.3.1
       K8S_VERSION: v1.20.15
       K8S_RELEASE: v1.20
       K8S_ARCH: arm64
     commands:
       - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
       - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
-      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
-      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
+      - cp ./linux/roles/wod.docker/files/install.sh .tmp/docker/$K8S_ARCH/install.sh
+      - cp ./linux/roles/wod.docker/files/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
       - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
       - rm -rf .tmp/docker
 
@@ -2080,27 +2080,27 @@ steps:
   - name: install-docker-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      DOCKER_VERSION: 26.1.5
+      DOCKER_VERSION: 27.3.1
       K8S_ARCH: amd64
     commands:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
-      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/templates/install.sh
-      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/files/install.sh
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/files/uninstall.sh
       - |
-        sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/templates/install.sh
+        sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/files/install.sh
 
   - name: ansible-docker-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     environment:
-      DOCKER_VERSION: 26.1.5
+      DOCKER_VERSION: 27.3.1
       K8S_VERSION: v1.18.20
       K8S_RELEASE: v1.18
       K8S_ARCH: amd64
     commands:
       - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
       - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
-      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
-      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
+      - cp ./linux/roles/wod.docker/files/install.sh .tmp/docker/$K8S_ARCH/install.sh
+      - cp ./linux/roles/wod.docker/files/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
       - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
       - rm -rf .tmp/docker
 
@@ -2143,27 +2143,27 @@ steps:
   - name: install-docker-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      DOCKER_VERSION: 26.1.5
+      DOCKER_VERSION: 27.3.1
       K8S_ARCH: arm64
     commands:
       - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
-      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/templates/install.sh
-      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/templates/uninstall.sh
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/files/install.sh
+      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/files/uninstall.sh
       - |
-        sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/templates/install.sh
+        sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/files/install.sh
 
   - name: ansible-docker-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     environment:
-      DOCKER_VERSION: 26.1.5
+      DOCKER_VERSION: 27.3.1
       K8S_VERSION: v1.18.20
       K8S_RELEASE: v1.18
       K8S_ARCH: arm64
     commands:
       - mkdir -p .tmp/$K8S_RELEASE/$K8S_ARCH .tmp/docker/$K8S_ARCH
       - cp ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz .tmp/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz
-      - cp ./linux/roles/wod.docker/templates/install.sh .tmp/docker/$K8S_ARCH/install.sh
-      - cp ./linux/roles/wod.docker/templates/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
+      - cp ./linux/roles/wod.docker/files/install.sh .tmp/docker/$K8S_ARCH/install.sh
+      - cp ./linux/roles/wod.docker/files/uninstall.sh .tmp/docker/$K8S_ARCH/uninstall.sh
       - tar czvf .tmp/$K8S_RELEASE/$K8S_ARCH/ansible-docker-$K8S_VERSION-$K8S_ARCH.tgz -C .tmp/docker/$K8S_ARCH .
       - rm -rf .tmp/docker
 

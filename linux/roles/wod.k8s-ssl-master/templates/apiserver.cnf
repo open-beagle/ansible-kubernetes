@@ -12,5 +12,5 @@ DNS.2 = kubernetes.default
 DNS.3 = kubernetes.default.svc
 DNS.4 = kubernetes.default.svc.cluster.local
 DNS.5 = kubernetes.beagle.default
-IP.1 = {{ K8S_SERVICE_IP }}
-IP.3 = 127.0.0.1
+IP.1 = 127.0.0.1
+IP.2 = {{ K8S_SERVICE_IP }}

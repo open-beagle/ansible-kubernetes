@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export PATH=/opt/bin:$PATH
+
 set -e
 
 REGISTRY_LOCAL="{{ REGISTRY_LOCAL }}"
@@ -12,12 +14,14 @@ mkdir -p /etc/kubernetes/config
 mkdir -p /opt/bin
 
 mkdir -p /etc/containerd
-if ! [ -e /etc/containerd/config.toml ]; then  
-  containerd config default > /etc/containerd/config.toml
+if ! [ -e /etc/containerd/config.toml ]; then
+  containerd config default >/etc/containerd/config.toml
 fi
-if ! (grep -q $PAUSE_IMAGE /etc/containerd/config.toml) ; then 
-  sed -i --expression "s?sandbox_image =.*?sandbox_image = \"$PAUSE_IMAGE\"?" /etc/containerd/config.toml
-  sed -i -e 's/SystemdCgroup = false/SystemdCgroup = true/' /etc/containerd/config.toml
+if ! (grep -q $PAUSE_IMAGE /etc/containerd/config.toml); then
+  dasel -f /etc/containerd/config.toml -r toml -w yaml >/etc/containerd/config.yaml
+  yq eval ".plugins.\"io.containerd.cri.v1.images\".pinned_images.sandbox = \"$PAUSE_IMAGE\"" /etc/containerd/config.yaml -i
+  dasel -f /etc/containerd/config.yaml -r yaml -w toml >/etc/containerd/config.toml
+  rm -rf /etc/containerd/config.yaml
   systemctl restart containerd
 fi
 
