@@ -115,3 +115,9 @@ kube-system   kube-scheduler-beagle-01            1/1     Running   0          9
 
 - Linux Kernel 3.10 时，将会默认安装 Flannel 网络插件
 - 升级 Linux Kernel 至大于等于 4.9.17 时，将会安装 Cilium 网络插件
+
+### 安装前准备
+
+- 检查 python ， 确保服务器安装了 python2 或 python3
+- 检查 iptable ， 确保服务器安装了 iptable
+- 关闭防火墙 ， 确保服务器关闭了默认防火墙

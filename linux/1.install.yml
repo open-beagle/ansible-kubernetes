@@ -19,7 +19,6 @@
     - role: wod.k8s-ssl-etcd
     - role: wod.registry
     - role: wod.docker-login
-    - role: wod.k8s-cni
     - role: wod.k8s-etcd
     - role: wod.k8s-master
     - role: wod.k8s-kubelet-images-docker
@@ -48,7 +47,6 @@
     - role: wod.envoy
     - role: wod.gateway
     - role: wod.docker-login
-    - role: wod.k8s-cni
     - role: wod.k8s-kubelet-images-pause-docker
       when:
         - K8S_VERSION_NUM is version('1.24','<')

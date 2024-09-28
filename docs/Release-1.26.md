@@ -2,4 +2,11 @@
 
 ## gateway
 
-移除envoy，使用自研gateway，替换node节点的apiserver网关。
+- 自研 gateway
+- 部署在 node 节点
+- 提供 apiserver 负载均衡
+- 取代 envoy
+
+## envoy
+
+移除 envoy

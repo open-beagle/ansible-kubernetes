@@ -21,9 +21,6 @@ K8S_IMAGES:
   PAUSE:
     NAME: pause
     VERSION: "3.7"
-  KUBE-CNI-PLUGINS:
-    NAME: kube-cni-plugins
-    VERSION: "v1.5.1"
   ETCD:
     NAME: etcd
     VERSION: "v3.5.16"
