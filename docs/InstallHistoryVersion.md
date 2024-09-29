@@ -14,7 +14,7 @@ k8s 在 1.24 首次取消了对 docker 的支持。
 mkdir -p /etc/kubernetes/ansible
 
 # 准备ansible-kubernetes镜像
-curl -sL https://cache.wodcloud.com/kubernetes/k8s/ansible/ansible-kubernetes-v1.30.5-amd64.tgz >/etc/kubernetes/ansible/ansible-kubernetes-v1.30.5-amd64.tgz && \
+curl -sL https://cache.wodcloud.com/kubernetes/k8s/ansible/ansible-kubernetes-latest-amd64.tgz >/etc/kubernetes/ansible/ansible-kubernetes-latest-amd64.tgz && \
 
 # 准备k8s-1.24离线镜像
 curl -sL https://cache.wodcloud.com/kubernetes/k8s/ansible/ansible-kubernetes-images-v1.24.17-amd64.tgz >/etc/kubernetes/ansible/ansible-kubernetes-images-v1.24.17-amd64.tgz && \
@@ -35,7 +35,7 @@ K8S_VERSION: "v1.24.17"
 EOF
 
 # 加载ansible-kubernetes镜像
-docker load -i /etc/kubernetes/ansible/ansible-kubernetes-v1.30.5-amd64.tgz
+docker load -i /etc/kubernetes/ansible/ansible-kubernetes-latest-amd64.tgz
 
 # 运行ansible-kubernetes容器
 # 安装k8s
@@ -46,7 +46,7 @@ docker run \
   -v /etc/kubernetes/ansible/beagle.yaml:/etc/ansible/linux/beagle_vars/beagle.yaml \
   -v /etc/kubernetes/ansible/ansible-kubernetes-images-v1.24.17-amd64:/etc/ansible/linux/roles/wod.registry/files/images/ansible-kubernetes-images-v1.24.17-amd64.tgz \
   -w /etc/ansible/linux \
-  registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.30.5-amd64 \
+  registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:latest-amd64 \
   ansible-playbook 1.install.yml \
   --extra-vars "@./beagle_vars/beagle.yaml" \
   --extra-vars "@./vars/1.24.yaml"

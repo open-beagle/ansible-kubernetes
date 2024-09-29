@@ -11,7 +11,8 @@ TARGET_ARCH="${TARGET_ARCH:-amd64}"
 # K8S版本
 K8S_VERSION="${K8S_VERSION:-v1.30.5}"
 # K8S发布版本
-K8S_RELEASE="${K8S_VERSION%.*}"
+K8S_RELEASE="${K8S_VERSION#v}"
+K8S_RELEASE="${K8S_RELEASE%.*}"
 
 LOCAL_KERNEL=$(uname -r | head -c 3)
 LOCAL_ARCH=$(uname -m)
@@ -38,15 +39,15 @@ if ! [ -e /etc/kubernetes/ansible/ansible-kubernetes-images-${K8S_VERSION}-${TAR
   curl -sL $HTTP_SERVER/kubernetes/k8s/ansible/ansible-kubernetes-images-${K8S_VERSION}-${TARGET_ARCH}.tgz >/etc/kubernetes/ansible/ansible-kubernetes-images-${K8S_VERSION}-${TARGET_ARCH}.tgz
 fi
 
-if ! [ -e /etc/kubernetes/ansible/ansible-kubernetes-${K8S_VERSION}-${TARGET_ARCH}.tgz ]; then
+if ! [ -e /etc/kubernetes/ansible/ansible-kubernetes-latest-${TARGET_ARCH}.tgz ]; then
   mkdir -p /etc/kubernetes/ansible
   # 下载文件
-  # 安装脚本 ansible-kubernetes-$K8S_VERSION-amd64.tgz 276MB
-  curl -sL $HTTP_SERVER/kubernetes/k8s/ansible/ansible-kubernetes-${K8S_VERSION}-${TARGET_ARCH}.tgz >/etc/kubernetes/ansible/ansible-kubernetes-${K8S_VERSION}-${TARGET_ARCH}.tgz
+  # 安装脚本 ansible-kubernetes-latest-amd64.tgz 276MB
+  curl -sL $HTTP_SERVER/kubernetes/k8s/ansible/ansible-kubernetes-latest-${TARGET_ARCH}.tgz >/etc/kubernetes/ansible/ansible-kubernetes-latest-${TARGET_ARCH}.tgz
 fi
 
 # 加载ansible-kubernetes镜像
-docker load -i /etc/kubernetes/ansible/ansible-kubernetes-${K8S_VERSION}-${TARGET_ARCH}.tgz
+docker load -i /etc/kubernetes/ansible/ansible-kubernetes-latest-${TARGET_ARCH}.tgz
 
 # 为ansible-kubernetes准备配置文件
 if [ ! -e /etc/kubernetes/ansible/beagle.yaml ]; then
@@ -64,6 +65,7 @@ docker run \
   -v /etc/kubernetes/ansible/beagle.yaml:/etc/ansible/linux/beagle_vars/beagle.yaml \
   -v /etc/kubernetes/ansible/ansible-kubernetes-images-${K8S_VERSION}-${TARGET_ARCH}.tgz:/etc/ansible/linux/roles/wod.registry/files/images/ansible-kubernetes-images-${K8S_VERSION}-${TARGET_ARCH}.tgz \
   -w /etc/ansible/linux \
-  registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:${K8S_VERSION}-${TARGET_ARCH} \
+  registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:latest-${TARGET_ARCH} \
   ansible-playbook 1.install.yml \
-  --extra-vars "@./beagle_vars/beagle.yaml"
+  --extra-vars "@./beagle_vars/beagle.yaml" \
+  --extra-vars "@./vars/${K8S_RELEASE}.yaml"

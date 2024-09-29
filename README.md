@@ -40,7 +40,7 @@ EOF
 - [master] , k8s 控制平面-管理节点配置；
 - [node] , k8s 计算节点配置；
 
-## 在线一键安装 kubernetes 集群
+## 在线安装 kubernetes 集群
 
 配置文件请参考[all.yml](./linux/group_vars/all.yml)
 
@@ -55,7 +55,7 @@ curl -sL https://cache.wodcloud.com/kubernetes/install.sh > /etc/kubernetes/ansi
 bash /etc/kubernetes/ansible/install.sh
 ```
 
-## 离线一键安装 kubernetes 集群
+## 离线安装 kubernetes 集群
 
 ```bash
 # 安装docker
@@ -69,12 +69,11 @@ bash /opt/docker/27.3.1/scripts/install.sh
 
 # 开始安装k8s
 # K8S_VERSION=v1.30.5
-# K8S_RELEASE=v1.30
 mkdir -p /etc/kubernetes/ansible && \
-curl -sL https://cache.wodcloud.com/kubernetes/k8s/ansible/v1.30/ansible-kubernetes-images-v1.30.5-amd64.tgz >/etc/kubernetes/ansible/ansible-kubernetes-images-v1.30.5-amd64.tgz && \
-curl -sL https://cache.wodcloud.com/kubernetes/k8s/ansible/v1.30/ansible-kubernetes-v1.30.5-amd64.tgz >/etc/kubernetes/ansible/ansible-kubernetes-v1.30.5-amd64.tgz && \
-curl -sL https://cache.wodcloud.com/kubernetes/k8s/ansible/v1.30/ansible-kubernetes-v1.30.5.sh > /etc/kubernetes/ansible/ansible-kubernetes-v1.30.5.sh && \
-bash /etc/kubernetes/ansible/ansible-kubernetes-v1.30.5.sh
+curl -sL https://cache.wodcloud.com/kubernetes/k8s/ansible/ansible-kubernetes-images-v1.30.5-amd64.tgz >/etc/kubernetes/ansible/ansible-kubernetes-images-v1.30.5-amd64.tgz && \
+curl -sL https://cache.wodcloud.com/kubernetes/k8s/ansible/ansible-kubernetes-latest-amd64.tgz >/etc/kubernetes/ansible/ansible-kubernetes-latest-amd64.tgz && \
+curl -sL https://cache.wodcloud.com/kubernetes/k8s/ansible/ansible-kubernetes-latest.sh > /etc/kubernetes/ansible/ansible-kubernetes-latest.sh && \
+bash /etc/kubernetes/ansible/ansible-kubernetes-latest.sh
 ```
 
 ### 完成安装
