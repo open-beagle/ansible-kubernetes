@@ -14,3 +14,4 @@
 
 - name: /opt/docker/install.sh
   raw: bash /opt/docker/install.sh
+  when: need_copy_files is failed
