@@ -172,7 +172,6 @@ steps:
       K8S_ARCH: amd64
     commands:
       - mkdir -p .tmp
-      - cp install-offline.sh .tmp/$K8S_REPO-$K8S_VERSION.sh
       - docker pull $REGISTRY_REMOTE/$K8S_REPO:$K8S_VERSION-$K8S_ARCH
       - docker save $REGISTRY_REMOTE/$K8S_REPO:$K8S_VERSION-$K8S_ARCH | gzip > .tmp/$K8S_REPO-$K8S_VERSION-$K8S_ARCH.tgz
 
@@ -188,7 +187,6 @@ steps:
       K8S_ARCH: arm64
     commands:
       - mkdir -p .tmp
-      - cp install-offline.sh .tmp/$K8S_REPO-$K8S_VERSION.sh
       - docker pull $REGISTRY_REMOTE/$K8S_REPO:$K8S_VERSION-$K8S_ARCH
       - docker save $REGISTRY_REMOTE/$K8S_REPO:$K8S_VERSION-$K8S_ARCH | gzip > .tmp/$K8S_REPO-$K8S_VERSION-$K8S_ARCH.tgz
 
@@ -200,6 +198,7 @@ steps:
       S3_SECRET_KEY:
         from_secret: SECRET_KEY_MINIO
     commands:
+      - cp install-offline.sh .tmp/ansible-kubernetes-v1.30.5.sh
       - mc alias set cache --api=S3v4 https://cache.wodcloud.com $S3_ACCESS_KEY $S3_SECRET_KEY
       - mc cp --recursive .tmp/ cache/kubernetes/k8s/ansible
 
@@ -210,6 +209,11 @@ name: main
 trigger:
   branch:
     - main
+
+volumes:
+  - name: docker
+    host:
+      path: /var/run/docker.sock
 
 clone:
   disable: true
@@ -274,11 +278,9 @@ steps:
     environment:
       REGISTRY_REMOTE: registry.cn-qingdao.aliyuncs.com/wod
       K8S_REPO: ansible-kubernetes
-      K8S_VERSION: v1.30.5
       K8S_ARCH: amd64
     commands:
       - mkdir -p .tmp
-      - cp install-offline.sh .tmp/$K8S_REPO-latest.sh
       - docker pull $REGISTRY_REMOTE/$K8S_REPO:latest-$K8S_ARCH
       - docker save $REGISTRY_REMOTE/$K8S_REPO:latest-$K8S_ARCH | gzip > .tmp/$K8S_REPO-latest-$K8S_ARCH.tgz
 
@@ -290,11 +292,9 @@ steps:
     environment:
       REGISTRY_REMOTE: registry.cn-qingdao.aliyuncs.com/wod
       K8S_REPO: ansible-kubernetes
-      K8S_VERSION: v1.30.5
       K8S_ARCH: arm64
     commands:
       - mkdir -p .tmp
-      - cp install-offline.sh .tmp/$K8S_REPO-latest.sh
       - docker pull $REGISTRY_REMOTE/$K8S_REPO:latest-$K8S_ARCH
       - docker save $REGISTRY_REMOTE/$K8S_REPO:latest-$K8S_ARCH | gzip > .tmp/$K8S_REPO-latest-$K8S_ARCH.tgz
 
@@ -306,10 +306,10 @@ steps:
       S3_SECRET_KEY:
         from_secret: SECRET_KEY_MINIO
     commands:
+      - cp install.sh .tmp/ansible-kubernetes.sh
+      - cp install-offline.sh .tmp/ansible-kubernetes-latest.sh
       - mc alias set cache --api=S3v4 https://cache.wodcloud.com $S3_ACCESS_KEY $S3_SECRET_KEY
       - mc cp --recursive .tmp/ cache/kubernetes/k8s/ansible
-      - mc cp install.sh cache/kubernetes/install.sh
-      - mc cp install-offline.sh cache/kubernetes/install-offline.sh
 
 ---
 kind: pipeline
