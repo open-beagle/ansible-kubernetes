@@ -51,6 +51,7 @@ curl -sL https://cache.wodcloud.com/kubernetes/k8s/ansible/ansible-docker.sh > /
 bash /opt/docker/ansible-docker.sh
 
 # 安装k8s
+mkdir -p /etc/kubernetes/ansible && \
 curl -sL https://cache.wodcloud.com/kubernetes/k8s/ansible/ansible-kubernetes.sh > /etc/kubernetes/ansible/ansible-kubernetes.sh && \
 bash /etc/kubernetes/ansible/ansible-kubernetes.sh
 ```
