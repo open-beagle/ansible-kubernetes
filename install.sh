@@ -28,4 +28,4 @@ docker run \
   registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:${ANSIBLE_K8S_VERSION} \
   ansible-playbook 1.install.yml \
   --extra-vars "@./beagle_vars/beagle.yaml" \
-  --extra-vars "@./vars/${K8S_RELEASE}.yaml"
+  --extra-vars "@./linux/vars/${K8S_RELEASE}.yml"
