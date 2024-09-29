@@ -47,12 +47,12 @@ EOF
 ```bash
 # 安装docker
 mkdir -p /opt/docker && \
-curl -sL https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > /opt/docker/install.sh && \
-bash /opt/docker/install.sh
+curl -sL https://cache.wodcloud.com/kubernetes/k8s/ansible/ansible-docker.sh > /opt/docker/ansible-docker.sh && \
+bash /opt/docker/ansible-docker.sh
 
 # 安装k8s
-curl -sL https://cache.wodcloud.com/kubernetes/install.sh > /etc/kubernetes/ansible/install.sh && \
-bash /etc/kubernetes/ansible/install.sh
+curl -sL https://cache.wodcloud.com/kubernetes/k8s/ansible/ansible-kubernetes.sh > /etc/kubernetes/ansible/ansible-kubernetes.sh && \
+bash /etc/kubernetes/ansible/ansible-kubernetes.sh
 ```
 
 ## 离线安装 kubernetes 集群
@@ -62,9 +62,9 @@ bash /etc/kubernetes/ansible/install.sh
 # HTTP_SERVER=https://cache.wodcloud.com
 # TARGET_ARCH=amd64;arm64;
 # DOCKER_VERSION=27.3.1
-mkdir -p /opt/docker && \
-curl -sL https://cache.wodcloud.com/kubernetes/k8s/docker/amd64/docker-27.3.1.tgz >/opt/docker/docker-27.3.1.tgz && \
-tar -xzvf /opt/docker/docker-27.3.1.tgz -C /opt/docker/27.3.1 && \
+mkdir -p /opt/docker/27.3.1 && \
+curl https://cache.wodcloud.com/kubernetes/k8s/ansible/ansible-docker-27.3.1-amd64.tgz > /opt/docker/ansible-docker-27.3.1-amd64.tgz && \
+tar -xzvf /opt/docker/ansible-docker-27.3.1-amd64.tgz -C /opt/docker/27.3.1 && \
 bash /opt/docker/27.3.1/scripts/install.sh
 
 # 开始安装k8s
