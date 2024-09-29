@@ -319,11 +319,6 @@ trigger:
   branch:
     - release-1.30
 
-volumes:
-  - name: docker
-    host:
-      path: /var/run/docker.sock
-
 clone:
   disable: true
 
@@ -384,11 +379,6 @@ name: release-1.28
 trigger:
   branch:
     - release-1.28
-
-volumes:
-  - name: docker
-    host:
-      path: /var/run/docker.sock
 
 clone:
   disable: true
@@ -451,11 +441,6 @@ trigger:
   branch:
     - release-1.26
 
-volumes:
-  - name: docker
-    host:
-      path: /var/run/docker.sock
-
 clone:
   disable: true
 
@@ -516,11 +501,6 @@ name: release-1.24
 trigger:
   branch:
     - release-1.24
-
-volumes:
-  - name: docker
-    host:
-      path: /var/run/docker.sock
 
 clone:
   disable: true
@@ -583,11 +563,6 @@ trigger:
   branch:
     - release-1.22
 
-volumes:
-  - name: docker
-    host:
-      path: /var/run/docker.sock
-
 clone:
   disable: true
 
@@ -649,11 +624,6 @@ trigger:
   branch:
     - release-1.20
 
-volumes:
-  - name: docker
-    host:
-      path: /var/run/docker.sock
-
 clone:
   disable: true
 
@@ -714,11 +684,6 @@ name: release-1.18
 trigger:
   branch:
     - release-1.18
-
-volumes:
-  - name: docker
-    host:
-      path: /var/run/docker.sock
 
 clone:
   disable: true
