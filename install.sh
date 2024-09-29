@@ -9,27 +9,28 @@ HTTP_SERVER="${HTTP_SERVER:-https://cache.wodcloud.com}"
 # 平台架构
 TARGET_ARCH="${TARGET_ARCH:-amd64}"
 # K8S版本
-K8S_VERSION="${K8S_VERSION:-v1.30.4}"
+K8S_VERSION="${K8S_VERSION:-v1.30.5}"
 # K8S发布版本
 K8S_RELEASE="${K8S_VERSION%.*}"
 
 LOCAL_KERNEL=$(uname -r | head -c 3)
 LOCAL_ARCH=$(uname -m)
 
+LOCAL_ARCH=$(uname -m)
 if [ "$LOCAL_ARCH" = "x86_64" ]; then
   TARGET_ARCH="amd64"
 elif [ "$(echo $LOCAL_ARCH | head -c 5)" = "armv8" ]; then
   TARGET_ARCH="arm64"
 elif [ "$LOCAL_ARCH" = "aarch64" ]; then
   TARGET_ARCH="arm64"
-elif [ "$(echo $LOCAL_ARCH | head -c 5)" = "ppc64" ]; then
-  # TARGET_ARCH="ppc64le"
-  TARGET_ARCH="unsupported"
-elif [ "$(echo $LOCAL_ARCH | head -c 6)" = "mips64" ]; then
-  TARGET_ARCH="unsupported"
+elif [ "$LOCAL_ARCH" = "loongarch64" ]; then
+  TARGET_ARCH="loong64"
 else
-  echo "This system's architecture $(LOCAL_ARCH) isn't supported"
   TARGET_ARCH="unsupported"
+fi
+if [ "$LOCAL_ARCH" = "unsupported" ]; then
+  echo "This system's architecture ${LOCAL_ARCH} isn't supported"
+  exit 0
 fi
 
 if ! [ -e /etc/kubernetes/ansible/ansible-docker-$K8S_VERSION-$TARGET_ARCH.tgz ]; then

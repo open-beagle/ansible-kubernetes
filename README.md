@@ -87,9 +87,9 @@ beagle-03                  : ok=37   changed=32   unreachable=0    failed=0    s
 ```bash
 root@beagle-01:~# kubectl get node
 NAME        STATUS   ROLES    AGE   VERSION
-beagle-01   Ready    master   93s   v1.30.4-beagle
-beagle-02   Ready    <none>   79s   v1.30.4-beagle
-beagle-03   Ready    <none>   79s   v1.30.4-beagle
+beagle-01   Ready    master   93s   v1.30.5-beagle
+beagle-02   Ready    <none>   79s   v1.30.5-beagle
+beagle-03   Ready    <none>   79s   v1.30.5-beagle
 
 root@beagle-01:~# kubectl get pod -A -o wide
 NAMESPACE     NAME                                READY   STATUS    RESTARTS   AGE   IP              NODE        NOMINATED NODE   READINESS GATES
