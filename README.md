@@ -24,8 +24,8 @@
 
 ```bash
 mkdir -p /etc/kubernetes/ansible && \
-rm -rf /etc/kubernetes/ansible/hosts.ini && \
-cat > /etc/kubernetes/ansible/hosts.ini <<-EOF
+rm -rf /etc/kubernetes/ansible/ansible-kubernetes.ini && \
+cat > /etc/kubernetes/ansible/ansible-kubernetes.ini <<-EOF
 [master]
 beagle-01 ansible_ssh_host=192.168.1.201 ansible_ssh_port=22 ansible_ssh_user=root
 

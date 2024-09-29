@@ -21,7 +21,7 @@ registry.cn-qingdao.aliyuncs.com/wod/ansible:2
 
 # 使用自定义配置安装集群
 ap linux/1.install.yml \
---extra-vars "@./.vscode/beagle.yaml"
+--extra-vars "@./.vscode/beagle.yml"
 
 # 离线安装kubernetes集群
 ap linux/1.install.yml

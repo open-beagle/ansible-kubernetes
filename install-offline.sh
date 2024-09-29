@@ -52,9 +52,9 @@ fi
 docker load -i /etc/kubernetes/ansible/ansible-kubernetes-${ANSIBLE_K8S_VERSION}-${TARGET_ARCH}.tgz
 
 # 为ansible-kubernetes准备配置文件
-if [ ! -e /etc/kubernetes/ansible/beagle.yaml ]; then
+if [ ! -e /etc/kubernetes/ansible/ansible-kubernetes.yml ]; then
   mkdir -p /etc/kubernetes/ansible
-  cat >/etc/kubernetes/ansible/beagle.yaml <<-EOF
+  cat >/etc/kubernetes/ansible/ansible-kubernetes.yml <<-EOF
 K8S_VERSION: "${K8S_VERSION}"
 EOF
 fi
@@ -63,11 +63,11 @@ fi
 docker run \
   -t \
   --rm \
-  -v /etc/kubernetes/ansible/hosts.ini:/etc/ansible/hosts \
-  -v /etc/kubernetes/ansible/beagle.yaml:/etc/ansible/linux/beagle_vars/beagle.yaml \
+  -v /etc/kubernetes/ansible/ansible-kubernetes.ini:/etc/ansible/hosts \
+  -v /etc/kubernetes/ansible/ansible-kubernetes.yml:/etc/ansible/linux/beagle_vars/ansible-kubernetes.yml \
   -v /etc/kubernetes/ansible/ansible-kubernetes-images-${K8S_VERSION}-${TARGET_ARCH}.tgz:/etc/ansible/linux/roles/wod.registry/files/images/ansible-kubernetes-images-${K8S_VERSION}-${TARGET_ARCH}.tgz \
   -w /etc/ansible/linux \
   registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:${ANSIBLE_K8S_VERSION}-${TARGET_ARCH} \
   ansible-playbook 1.install.yml \
-  --extra-vars "@./beagle_vars/beagle.yaml" \
+  --extra-vars "@./beagle_vars/ansible-kubernetes.yml" \
   --extra-vars "@./linux/vars/${K8S_RELEASE}.yml"

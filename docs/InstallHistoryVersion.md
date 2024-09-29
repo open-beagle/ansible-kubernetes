@@ -20,7 +20,7 @@ curl -sL https://cache.wodcloud.com/kubernetes/k8s/ansible/ansible-kubernetes-la
 curl -sL https://cache.wodcloud.com/kubernetes/k8s/ansible/ansible-kubernetes-images-v1.24.17-amd64.tgz >/etc/kubernetes/ansible/ansible-kubernetes-images-v1.24.17-amd64.tgz && \
 
 # 准备hosts文件
-cat > /etc/kubernetes/ansible/hosts.ini <<-EOF
+cat > /etc/kubernetes/ansible/ansible-kubernetes.ini <<-EOF
 [master]
 beagle-01 ansible_ssh_host=192.168.1.201 ansible_ssh_port=22 ansible_ssh_user=root
 
@@ -30,7 +30,7 @@ beagle-03 ansible_ssh_host=192.168.1.203 ansible_ssh_port=22 ansible_ssh_user=ro
 EOF
 
 # 准备ansible-kubernetes配置文件
-cat >/etc/kubernetes/ansible/beagle.yaml <<-EOF
+cat >/etc/kubernetes/ansible/ansible-kubernetes.yml <<-EOF
 K8S_VERSION: "v1.24.17"
 EOF
 
@@ -42,12 +42,12 @@ docker load -i /etc/kubernetes/ansible/ansible-kubernetes-latest-amd64.tgz
 docker run \
   -t \
   --rm \
-  -v /etc/kubernetes/ansible/hosts.ini:/etc/ansible/hosts \
-  -v /etc/kubernetes/ansible/beagle.yaml:/etc/ansible/linux/beagle_vars/beagle.yaml \
+  -v /etc/kubernetes/ansible/ansible-kubernetes.ini:/etc/ansible/hosts \
+  -v /etc/kubernetes/ansible/ansible-kubernetes.yml:/etc/ansible/linux/beagle_vars/ansible-kubernetes.yml \
   -v /etc/kubernetes/ansible/ansible-kubernetes-images-v1.24.17-amd64:/etc/ansible/linux/roles/wod.registry/files/images/ansible-kubernetes-images-v1.24.17-amd64.tgz \
   -w /etc/ansible/linux \
   registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:latest-amd64 \
   ansible-playbook 1.install.yml \
-  --extra-vars "@./beagle_vars/beagle.yaml" \
-  --extra-vars "@./vars/1.24.yaml"
+  --extra-vars "@./beagle_vars/ansible-kubernetes.yml" \
+  --extra-vars "@./vars/1.24.yml"
 ```
