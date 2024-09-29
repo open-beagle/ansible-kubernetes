@@ -54,7 +54,7 @@ uname -ar
 docker run \
 -t --rm \
 -v $PWD/:/etc/ansible \
--v $PWD/.vscode/hosts.ini:/etc/ansible/hosts \
+-v $PWD/.vscode/ansible-kubernetes.ini:/etc/ansible/hosts \
 -w /etc/ansible/linux \
 registry.cn-qingdao.aliyuncs.com/wod/ansible:2 \
 ansible-playbook 5.kernel.yml
@@ -63,7 +63,7 @@ ansible-playbook 5.kernel.yml
 docker run \
 -t --rm \
 -v $PWD/:/etc/ansible \
--v $PWD/.vscode/hosts.ini:/etc/ansible/hosts \
+-v $PWD/.vscode/ansible-kubernetes.ini:/etc/ansible/hosts \
 -w /etc/ansible/linux \
 registry.cn-qingdao.aliyuncs.com/wod/ansible:2 \
 ansible-playbook 8.test-var.yml

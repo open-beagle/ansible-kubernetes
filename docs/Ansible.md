@@ -1,8 +1,8 @@
 # ansible
 
-## hosts.ini
+## ansible-kubernetes.ini
 
-hosts.ini 如何准备
+ansible-kubernetes.ini 如何准备
 
 ```ini
 [master]

@@ -14,14 +14,14 @@ docker pull registry.cn-qingdao.aliyuncs.com/wod/ansible:2 && \
 docker run \
 -it --rm \
 -v $PWD/:/etc/ansible \
--v $PWD/.vscode/hosts.ini:/etc/ansible/hosts \
+-v $PWD/.vscode/ansible-kubernetes.ini:/etc/ansible/hosts \
 -w /etc/ansible \
 --entrypoint=bash \
 registry.cn-qingdao.aliyuncs.com/wod/ansible:2
 
 # 使用自定义配置安装集群
 ap linux/1.install.yml \
---extra-vars "@./.vscode/beagle.yml"
+--extra-vars "@./.vscode/ansible-kubernetes.yml"
 
 # 离线安装kubernetes集群
 ap linux/1.install.yml
@@ -47,7 +47,7 @@ ansible all -m shell -a 'rm -rf /opt/docker'
 docker run \
 -it --rm \
 -v $PWD/:/etc/ansible \
--v $PWD/.vscode/hosts.ini:/etc/ansible/hosts \
+-v $PWD/.vscode/ansible-kubernetes.ini:/etc/ansible/hosts \
 -w /etc/ansible/linux \
 registry.cn-qingdao.aliyuncs.com/wod/ansible:2 \
 ansible-playbook 1.install.yml \
@@ -58,7 +58,7 @@ ansible-playbook 1.install.yml \
 docker run \
 -it --rm \
 -v $PWD/:/etc/ansible \
--v $PWD/.vscode/hosts.ini:/etc/ansible/hosts \
+-v $PWD/.vscode/ansible-kubernetes.ini:/etc/ansible/hosts \
 -w /etc/ansible/linux \
 registry.cn-qingdao.aliyuncs.com/wod/ansible:2 \
 ansible-playbook 1.install.yml \
@@ -69,7 +69,7 @@ ansible-playbook 1.install.yml \
 docker run \
 -it --rm \
 -v $PWD/:/etc/ansible \
--v $PWD/.vscode/hosts.ini:/etc/ansible/hosts \
+-v $PWD/.vscode/ansible-kubernetes.ini:/etc/ansible/hosts \
 -w /etc/ansible/linux \
 registry.cn-qingdao.aliyuncs.com/wod/ansible:2 \
 ansible-playbook 1.install.yml \
@@ -80,7 +80,7 @@ ansible-playbook 1.install.yml \
 docker run \
 -it --rm \
 -v $PWD/:/etc/ansible \
--v $PWD/.vscode/hosts.ini:/etc/ansible/hosts \
+-v $PWD/.vscode/ansible-kubernetes.ini:/etc/ansible/hosts \
 -w /etc/ansible/linux \
 registry.cn-qingdao.aliyuncs.com/wod/ansible:2 \
 ansible-playbook 1.install.yml \
@@ -92,7 +92,7 @@ ansible-playbook 1.install.yml \
 docker run \
 -it --rm \
 -v $PWD/:/etc/ansible \
--v $PWD/.vscode/hosts.ini:/etc/ansible/hosts \
+-v $PWD/.vscode/ansible-kubernetes.ini:/etc/ansible/hosts \
 -w /etc/ansible/linux \
 registry.cn-qingdao.aliyuncs.com/wod/ansible:2 \
 ansible-playbook 1.install.yml \
