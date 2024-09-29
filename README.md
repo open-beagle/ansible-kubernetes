@@ -23,6 +23,7 @@
 请参考[Ansible.md](./docs/Ansible.md)
 
 ```bash
+# 单主节点集群
 mkdir -p /etc/kubernetes/ansible && \
 rm -rf /etc/kubernetes/ansible/ansible-kubernetes.ini && \
 cat > /etc/kubernetes/ansible/ansible-kubernetes.ini <<-EOF
@@ -32,6 +33,19 @@ beagle-01 ansible_ssh_host=192.168.1.201 ansible_ssh_port=22 ansible_ssh_user=ro
 [node]
 beagle-02 ansible_ssh_host=192.168.1.202 ansible_ssh_port=22 ansible_ssh_user=root
 beagle-03 ansible_ssh_host=192.168.1.203 ansible_ssh_port=22 ansible_ssh_user=root
+EOF
+
+# 高可用集群
+mkdir -p /etc/kubernetes/ansible && \
+rm -rf /etc/kubernetes/ansible/ansible-kubernetes.ini && \
+cat > /etc/kubernetes/ansible/ansible-kubernetes.ini <<-EOF
+[master]
+beagle-01 ansible_ssh_host=192.168.1.201 ansible_ssh_port=22 ansible_ssh_user=root
+beagle-02 ansible_ssh_host=192.168.1.202 ansible_ssh_port=22 ansible_ssh_user=root
+beagle-03 ansible_ssh_host=192.168.1.203 ansible_ssh_port=22 ansible_ssh_user=root
+
+[node]
+beagle-04 ansible_ssh_host=192.168.1.204 ansible_ssh_port=22 ansible_ssh_user=root
 EOF
 ```
 
