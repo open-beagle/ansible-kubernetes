@@ -32,19 +32,6 @@ steps:
       proxy:
         from_secret: SOCKS5_PROXY
 
-  - name: version
-    image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
-    environment:
-      K8S_VERSION: v1.30.5
-      K8S_RELEASE: v1.30
-    commands:
-      - |
-        sed -i --expression "s?K8S_VERSION:.*?K8S_VERSION: \"$K8S_VERSION\"?" linux/group_vars/all.yml
-      - |
-        sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\$\{K8S_VERSION\:\-$K8S_VERSION\}\"?" install-offline.sh
-      - |
-        sed -i --expression "s?K8S_VERSION=.*?K8S_VERSION=\"\$\{K8S_VERSION\:\-$K8S_VERSION\}\"?" install.sh
-
   - name: curl
     image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:

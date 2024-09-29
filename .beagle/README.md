@@ -174,18 +174,40 @@ registry.beagle.default:6444/k8s/devops-docker-images:1.0
 systemctl restart containerd
 ```
 
-### 离线测试
+### 安装测试
 
 ```bash
-# v1.30.5
-export K8S_VERSION=v1.30.5
-curl -sL https://cache.wodcloud.com/kubernetes/k8s/ansible/ansible-kubernetes-latest.sh > /etc/kubernetes/ansible/ansible-kubernetes-latest.sh && \
-bash /etc/kubernetes/ansible/ansible-kubernetes-latest.sh
+# 安装docker
+mkdir -p /opt/docker && \
+curl -sL https://cache.wodcloud.com/kubernetes/k8s/ansible/ansible-docker.sh > /opt/docker/ansible-docker.sh && \
+bash /opt/docker/ansible-docker.sh
 
-# v1.24.17
+# 在线安装k8s
+export ANSIBLE_K8S_VERSION=v1.30.5
+export K8S_VERSION=v1.30.5
+mkdir -p /etc/kubernetes/ansible && \
+curl -sL https://cache.wodcloud.com/kubernetes/k8s/ansible/ansible-kubernetes.sh > /etc/kubernetes/ansible/ansible-kubernetes.sh && \
+bash /etc/kubernetes/ansible/ansible-kubernetes.sh
+
+# 在线安装k8s
+export ANSIBLE_K8S_VERSION=v1.30.5
 export K8S_VERSION=v1.24.17
-curl -sL https://cache.wodcloud.com/kubernetes/k8s/ansible/ansible-kubernetes-latest.sh > /etc/kubernetes/ansible/ansible-kubernetes-latest.sh && \
-bash /etc/kubernetes/ansible/ansible-kubernetes-latest.sh
+mkdir -p /etc/kubernetes/ansible && \
+curl -sL https://cache.wodcloud.com/kubernetes/k8s/ansible/ansible-kubernetes.sh > /etc/kubernetes/ansible/ansible-kubernetes.sh && \
+bash /etc/kubernetes/ansible/ansible-kubernetes.sh
+
+# 离线安装k8s
+export ANSIBLE_K8S_VERSION=v1.30.5
+export K8S_VERSION=v1.30.5
+mkdir -p /etc/kubernetes/ansible && \
+curl -sL https://cache.wodcloud.com/kubernetes/k8s/ansible/ansible-kubernetes-$ANSIBLE_K8S_VERSION.sh > /etc/kubernetes/ansible/ansible-kubernetes-$ANSIBLE_K8S_VERSION.sh && \
+bash /etc/kubernetes/ansible/ansible-kubernetes-$ANSIBLE_K8S_VERSION.sh
+
+export ANSIBLE_K8S_VERSION=v1.30.5
+export K8S_VERSION=v1.24.17
+mkdir -p /etc/kubernetes/ansible && \
+curl -sL https://cache.wodcloud.com/kubernetes/k8s/ansible/ansible-kubernetes-$ANSIBLE_K8S_VERSION.sh > /etc/kubernetes/ansible/ansible-kubernetes-$ANSIBLE_K8S_VERSION.sh && \
+bash /etc/kubernetes/ansible/ansible-kubernetes-$ANSIBLE_K8S_VERSION.sh
 ```
 
 ## cache
