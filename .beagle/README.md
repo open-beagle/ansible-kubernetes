@@ -174,10 +174,18 @@ registry.beagle.default:6444/k8s/devops-docker-images:1.0
 systemctl restart containerd
 ```
 
-### 一键离线测试
+### 离线测试
 
 ```bash
-curl -sfL https://cache.wodcloud.com/kubernetes/install-offline.sh | sh -
+# v1.30.5
+export K8S_VERSION=v1.30.5
+curl -sL https://cache.wodcloud.com/kubernetes/k8s/ansible/ansible-kubernetes-latest.sh > /etc/kubernetes/ansible/ansible-kubernetes-latest.sh && \
+bash /etc/kubernetes/ansible/ansible-kubernetes-latest.sh
+
+# v1.24.17
+export K8S_VERSION=v1.24.17
+curl -sL https://cache.wodcloud.com/kubernetes/k8s/ansible/ansible-kubernetes-latest.sh > /etc/kubernetes/ansible/ansible-kubernetes-latest.sh && \
+bash /etc/kubernetes/ansible/ansible-kubernetes-latest.sh
 ```
 
 ## cache
