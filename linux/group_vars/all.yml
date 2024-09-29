@@ -22,7 +22,7 @@ K8S_DATA_PATH: "/var/lib"
 DOCKER_VERSION: "27.3.1"
 
 ## K8S_ARCH, 服务器的CPU架构
-## 可选值：amd64，arm64，ppc64le，mips64le
+## 可选值：amd64，arm64
 K8S_ARCH: amd64
 
 # K8S_VERSION , k8s版本

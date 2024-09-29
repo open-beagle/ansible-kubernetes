@@ -25,7 +25,7 @@
 ```bash
 mkdir -p /etc/kubernetes/ansible && \
 rm -rf /etc/kubernetes/ansible/hosts.ini && \
-cat > /etc/kubernetes/ansible/hosts.ini <<\EOF
+cat > /etc/kubernetes/ansible/hosts.ini <<-EOF
 [master]
 beagle-01 ansible_ssh_host=192.168.1.201 ansible_ssh_port=22 ansible_ssh_user=root
 
@@ -35,40 +35,46 @@ beagle-03 ansible_ssh_host=192.168.1.203 ansible_ssh_port=22 ansible_ssh_user=ro
 EOF
 ```
 
+配置说明：
+
+- [master] , k8s 控制平面-管理节点配置；
+- [node] , k8s 计算节点配置；
+
 ## 在线一键安装 kubernetes 集群
 
 配置文件请参考[all.yml](./linux/group_vars/all.yml)
 
 ```bash
-# 准备 yaml 配置文件
-mkdir -p /etc/kubernetes/ansible && \
-  rm -rf /etc/kubernetes/ansible/beagle.yaml && \
-  cat > /etc/kubernetes/ansible/beagle.yaml <<\EOF
-REGISTRY_LOCAL: 'registry.cn-qingdao.aliyuncs.com/wod'
-EOF
+# 安装docker
+mkdir -p /opt/docker && \
+curl -sL https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > /opt/docker/install.sh && \
+bash /opt/docker/install.sh
 
+# 安装k8s
 curl -sL https://cache.wodcloud.com/kubernetes/install.sh > /etc/kubernetes/ansible/install.sh && \
-bash install.sh
-```
-
-### 开始安装
-
-```bash
-
+bash /etc/kubernetes/ansible/install.sh
 ```
 
 ## 离线一键安装 kubernetes 集群
 
 ```bash
-# 准备 yaml 配置文件
-mkdir -p /etc/kubernetes/ansible && \
-  rm -rf /etc/kubernetes/ansible/beagle.yaml && \
-  cat > /etc/kubernetes/ansible/beagle.yaml <<\EOF
-REGISTRY_LOCAL: 'registry.beagle.default:6444/k8s'
-EOF
+# 安装docker
+# HTTP_SERVER=https://cache.wodcloud.com
+# TARGET_ARCH=amd64;arm64;
+# DOCKER_VERSION=27.3.1
+mkdir -p /opt/docker && \
+curl -sL https://cache.wodcloud.com/kubernetes/k8s/docker/amd64/docker-27.3.1.tgz >/opt/docker/docker-27.3.1.tgz && \
+tar -xzvf /opt/docker/docker-27.3.1.tgz -C /opt/docker/27.3.1 && \
+bash /opt/docker/27.3.1/scripts/install.sh
 
-curl -sL https://cache.wodcloud.com/kubernetes/install.sh > /etc/kubernetes/ansible/install-offline.sh && \
-bash install-offline.s
+# 开始安装k8s
+# K8S_VERSION=v1.30.5
+# K8S_RELEASE=v1.30
+mkdir -p /etc/kubernetes/ansible && \
+curl -sL https://cache.wodcloud.com/kubernetes/k8s/ansible/v1.30/ansible-kubernetes-images-v1.30.5-amd64.tgz >/etc/kubernetes/ansible/ansible-kubernetes-images-v1.30.5-amd64.tgz && \
+curl -sL https://cache.wodcloud.com/kubernetes/k8s/ansible/v1.30/ansible-kubernetes-v1.30.5-amd64.tgz >/etc/kubernetes/ansible/ansible-kubernetes-v1.30.5-amd64.tgz && \
+curl -sL https://cache.wodcloud.com/kubernetes/k8s/ansible/v1.30/ansible-kubernetes-v1.30.5.sh > /etc/kubernetes/ansible/ansible-kubernetes-v1.30.5.sh && \
+bash /etc/kubernetes/ansible/ansible-kubernetes-v1.30.5.sh
 ```
 
 ### 完成安装
@@ -121,3 +127,14 @@ kube-system   kube-scheduler-beagle-01            1/1     Running   0          9
 - 检查 python ， 确保服务器安装了 python2 或 python3
 - 检查 iptable ， 确保服务器安装了 iptable
 - 关闭防火墙 ， 确保服务器关闭了默认防火墙
+
+### 安装历史版本 k8s
+
+请参考[InstallHistoryVersion.md](./docs/InstallHistoryVersion.md)
+
+- 1.28
+- 1.26
+- 1.24
+- 1.22
+- 1.20
+- 1.18
