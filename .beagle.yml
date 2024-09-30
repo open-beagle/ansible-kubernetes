@@ -45,11 +45,11 @@ steps:
       DOCKER_VERSION: 27.3.1
       K8S_ARCH: amd64
     commands:
-      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
-      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/files/install.sh
-      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/files/uninstall.sh
+      - curl https://cache.wodcloud.com/kubernetes/k8s/ansible/ansible-docker-$DOCKER_VERSION-$K8S_ARCH.tgz > ./linux/roles/wod.docker/files/ansible-docker-$DOCKER_VERSION-$K8S_ARCH.tgz
+      - curl https://cache.wodcloud.com/kubernetes/k8s/ansible/ansible-docker.sh >./linux/roles/wod.docker/files/ansible-docker.sh
+      - curl https://cache.wodcloud.com/kubernetes/k8s/ansible/ansible-docker-uninstall.sh >./linux/roles/wod.docker/files/ansible-docker-uninstall.sh
       - |
-        sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/files/install.sh
+        sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/files/ansible-docker.sh
 
   - name: install-registry-amd64
     image: registry.cn-qingdao.aliyuncs.com/wod/registry:v2.8.1-amd64
@@ -93,11 +93,11 @@ steps:
       DOCKER_VERSION: 27.3.1
       K8S_ARCH: arm64
     commands:
-      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/$K8S_ARCH/docker-$DOCKER_VERSION.tgz > ./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
-      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh > ./linux/roles/wod.docker/files/install.sh
-      - curl https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh > ./linux/roles/wod.docker/files/uninstall.sh
+      - curl https://cache.wodcloud.com/kubernetes/k8s/ansible/ansible-docker-$DOCKER_VERSION-$K8S_ARCH.tgz > ./linux/roles/wod.docker/files/ansible-docker-$DOCKER_VERSION-$K8S_ARCH.tgz
+      - curl https://cache.wodcloud.com/kubernetes/k8s/ansible/ansible-docker.sh >./linux/roles/wod.docker/files/ansible-docker.sh
+      - curl https://cache.wodcloud.com/kubernetes/k8s/ansible/ansible-docker-uninstall.sh >./linux/roles/wod.docker/files/ansible-docker-uninstall.sh
       - |
-        sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/files/install.sh
+        sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/files/ansible-docker.sh
 
   - name: install-registry-arm64
     image: registry.cn-qingdao.aliyuncs.com/wod/registry:v2.8.1-arm64
