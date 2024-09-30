@@ -30,6 +30,26 @@ spec:
         cpu: 100m
         ephemeral-storage: 100Mi
         memory: 100Mi
+    livenessProbe:
+      failureThreshold: 8
+      httpGet:
+        host: 127.0.0.1
+        path: /health
+        port: 2381
+        scheme: HTTP
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      timeoutSeconds: 15
+    startupProbe:
+      failureThreshold: 24
+      httpGet:
+        host: 127.0.0.1
+        path: /health
+        port: 2381
+        scheme: HTTP
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      timeoutSeconds: 15
     volumeMounts:
     - mountPath: /etc/kubernetes/data/etcd
       name: etcd-data

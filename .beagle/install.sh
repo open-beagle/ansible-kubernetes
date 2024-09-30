@@ -10,11 +10,11 @@ curl -sL https://cache.wodcloud.com/kubernetes/k8s/charts/beagle-cilium-$CILIUM_
 
 find ./linux/roles/wod.docker/files -mindepth 1 -not -name '.gitkeep' -delete
 DOCKER_VERSION=27.3.1
-curl -sL https://cache.wodcloud.com/kubernetes/k8s/docker/$TARGETARCH/docker-$DOCKER_VERSION.tgz >./linux/roles/wod.docker/files/docker-$DOCKER_VERSION.tgz
-curl -sL https://cache.wodcloud.com/kubernetes/k8s/docker/install.sh >./linux/roles/wod.docker/files/install.sh
-curl -sL https://cache.wodcloud.com/kubernetes/k8s/docker/uninstall.sh >./linux/roles/wod.docker/files/uninstall.sh
+curl -sL https://cache.wodcloud.com/kubernetes/k8s/ansible/ansible-docker-$DOCKER_VERSION-$TARGETARCH.tgz >./linux/roles/wod.docker/files/ansible-docker-$DOCKER_VERSION-$TARGETARCH.tgz
+curl -sL https://cache.wodcloud.com/kubernetes/k8s/ansible/ansible-docker.sh >./linux/roles/wod.docker/files/ansible-docker.sh
+curl -sL https://cache.wodcloud.com/kubernetes/k8s/ansible/ansible-docker-uninstall.sh >./linux/roles/wod.docker/files/ansible-docker-uninstall.sh
 
-sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/files/install.sh
+sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/files/ansible-docker.sh
 
 find ./linux/roles/wod.registry/files/bin -mindepth 1 -not -name '.gitkeep' -delete
 REGISTRY_VERSION=v2.8.1

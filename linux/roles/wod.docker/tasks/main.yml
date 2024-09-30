@@ -12,6 +12,6 @@
     dest: /opt/docker
   when: need_copy_files is failed
 
-- name: /opt/docker/install.sh
-  raw: bash /opt/docker/install.sh
+- name: /opt/docker/ansible-docker.sh
+  raw: bash /opt/docker/ansible-docker.sh
   when: need_copy_files is failed

@@ -13,11 +13,9 @@ if [ -e /etc/kubernetes/ansible/ansible-kubernetes-images-{{ K8S_VERSION }}-{{ K
 fi
 
 if [ -e /etc/kubernetes/downloads/registry-{{ BEAGLE_REGISTRY_VERSION }} ]; then
-  if ! (readlink /opt/bin/registry | grep -q "{{ BEAGLE_REGISTRY_VERSION }}"); then
-    rm -rf /opt/bin/registry
-    chmod +x /etc/kubernetes/downloads/$filename
-    ln -s /etc/kubernetes/downloads/$filename /opt/bin/registry
-  fi
+  rm -rf /opt/bin/registry
+  chmod +x /etc/kubernetes/downloads/registry-{{ BEAGLE_REGISTRY_VERSION }}
+  ln -s /etc/kubernetes/downloads/registry-{{ BEAGLE_REGISTRY_VERSION }} /opt/bin/registry
 fi
 
 if ! (grep -q "kubernetes.beagle.default" /etc/hosts); then

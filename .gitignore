@@ -1,14 +1,12 @@
-*/*.retry
-aliyun*
-.vscode
-*.tgz
-registry-*
-gateway-*
-envoy-*
-
-.registry/
-linux/roles/wod.docker/files/
-
 # kernel
 *.deb
 *.rpm
+
+# projects
+linux/roles/wod.cilium/files/
+linux/roles/wod.docker/files/
+linux/roles/wod.registry/files/
+linux/roles/wod.gateway/files/
+
+# vscode
+.vscode/
