@@ -1,7 +1,7 @@
 - name: mkdir -p /etc/kubernetes/services/k8s-gateway/config
   raw: mkdir -p /etc/kubernetes/services/k8s-gateway/config
 
-- name: check need copy fles
+- name: check need copy files
   raw: stat /opt/bin/gateway
   register: need_copy_files
   ignore_errors: True

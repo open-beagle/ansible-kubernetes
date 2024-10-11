@@ -1,4 +1,4 @@
-- name: check need copy fles
+- name: check need copy files
   raw: stat /opt/docker/{{ DOCKER_VERSION }}/bin/docker
   register: need_copy_files
   ignore_errors: True
