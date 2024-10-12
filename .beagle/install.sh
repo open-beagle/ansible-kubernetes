@@ -6,13 +6,13 @@ TARGETARCH=amd64
 
 find ./linux/roles/wod.cilium/files -mindepth 1 -not -name '.gitkeep' -delete
 CILIUM_VERSION=1.14.14
-curl -sL https://cache.wodcloud.com/kubernetes/k8s/charts/beagle-cilium-$CILIUM_VERSION.tgz >./linux/roles/wod.cilium/files/beagle-cilium-$CILIUM_VERSION.tgz
+curl -sL https://cache.ali.wodcloud.com/kubernetes/charts/beagle-cilium-$CILIUM_VERSION.tgz >./linux/roles/wod.cilium/files/beagle-cilium-$CILIUM_VERSION.tgz
 
 find ./linux/roles/wod.docker/files -mindepth 1 -not -name '.gitkeep' -delete
 DOCKER_VERSION=27.3.1
-curl -sL https://cache.wodcloud.com/kubernetes/k8s/ansible/ansible-docker-$DOCKER_VERSION-$TARGETARCH.tgz >./linux/roles/wod.docker/files/ansible-docker-$DOCKER_VERSION-$TARGETARCH.tgz
-curl -sL https://cache.wodcloud.com/kubernetes/k8s/ansible/ansible-docker.sh >./linux/roles/wod.docker/files/ansible-docker.sh
-curl -sL https://cache.wodcloud.com/kubernetes/k8s/ansible/ansible-docker-uninstall.sh >./linux/roles/wod.docker/files/ansible-docker-uninstall.sh
+curl -sL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-docker-$DOCKER_VERSION-$TARGETARCH.tgz >./linux/roles/wod.docker/files/ansible-docker-$DOCKER_VERSION-$TARGETARCH.tgz
+curl -sL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-docker.sh >./linux/roles/wod.docker/files/ansible-docker.sh
+curl -sL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-docker-uninstall.sh >./linux/roles/wod.docker/files/ansible-docker-uninstall.sh
 
 sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/files/ansible-docker.sh
 

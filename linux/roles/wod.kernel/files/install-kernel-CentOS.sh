@@ -2,7 +2,7 @@
 
 set -e  
 
-HTTP_SERVER="${HTTP_SERVER:-https://cache.wodcloud.com}" 
+HTTP_SERVER="${HTTP_SERVER:-https://cache.ali.wodcloud.com}" 
 
 LOCAL_KERNEL=$(uname -r | head -c 3)
 LOCAL_ARCH=$(uname -m)

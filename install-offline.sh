@@ -5,7 +5,7 @@ export PATH=/opt/bin:$PATH
 set -ex
 
 # HTTPS服务器
-HTTP_SERVER="${HTTP_SERVER:-https://cache.wodcloud.com}"
+HTTP_SERVER="${HTTP_SERVER:-https://cache.ali.wodcloud.com}"
 # 平台架构
 TARGET_ARCH="${TARGET_ARCH:-amd64}"
 # K8S版本
@@ -38,14 +38,14 @@ if ! [ -e /etc/kubernetes/ansible/ansible-kubernetes-images-${K8S_VERSION}-${TAR
   mkdir -p /etc/kubernetes/ansible
   # 下载文件
   # 依赖镜像 ansible-kubernetes-images-$K8S_VERSION-amd64.tgz 1526MB
-  curl -sL $HTTP_SERVER/kubernetes/k8s/ansible/ansible-kubernetes-images-${K8S_VERSION}-${TARGET_ARCH}.tgz >/etc/kubernetes/ansible/ansible-kubernetes-images-${K8S_VERSION}-${TARGET_ARCH}.tgz
+  curl -sL $HTTP_SERVER/kubernetes/ansible/ansible-kubernetes-images-${K8S_VERSION}-${TARGET_ARCH}.tgz >/etc/kubernetes/ansible/ansible-kubernetes-images-${K8S_VERSION}-${TARGET_ARCH}.tgz
 fi
 
 if ! [ -e /etc/kubernetes/ansible/ansible-kubernetes-${ANSIBLE_K8S_VERSION}-${TARGET_ARCH}.tgz ]; then
   mkdir -p /etc/kubernetes/ansible
   # 下载文件
   # 安装脚本 ansible-kubernetes-${ANSIBLE_K8S_VERSION}-amd64.tgz 276MB
-  curl -sL $HTTP_SERVER/kubernetes/k8s/ansible/ansible-kubernetes-${ANSIBLE_K8S_VERSION}-${TARGET_ARCH}.tgz >/etc/kubernetes/ansible/ansible-kubernetes-${ANSIBLE_K8S_VERSION}-${TARGET_ARCH}.tgz
+  curl -sL $HTTP_SERVER/kubernetes/ansible/ansible-kubernetes-${ANSIBLE_K8S_VERSION}-${TARGET_ARCH}.tgz >/etc/kubernetes/ansible/ansible-kubernetes-${ANSIBLE_K8S_VERSION}-${TARGET_ARCH}.tgz
 fi
 
 # 加载ansible-kubernetes镜像

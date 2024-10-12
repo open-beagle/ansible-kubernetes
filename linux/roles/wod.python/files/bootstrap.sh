@@ -2,7 +2,7 @@
 
 set -e 
   
-HTTP_SERVER="${HTTP_SERVER:-https://cache.wodcloud.com}" 
+HTTP_SERVER="${HTTP_SERVER:-https://cache.ali.wodcloud.com}" 
 PYPY_VERSION=5.1.0
 ActivePython="ActivePython-2.7.14.2717-linux-x86_64-glibc-2.12-404899"
 ENV_OPT="$PATH:/opt/bin"

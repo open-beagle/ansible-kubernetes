@@ -90,6 +90,6 @@ rm -rf \
 /etc/kubernetes/ansible/ansible-kubernetes-v1.24.12.sh
 
 # 重新跑离线安装脚本即可
-curl -sfL https://cache.wodcloud.com/kubernetes/k8s/ansible/v1.24/amd64/ansible-kubernetes-v1.24.12.sh > /etc/kubernetes/ansible/ansible-kubernetes-v1.24.12.sh && \
+curl -sfL https://cache.ali.wodcloud.com/kubernetes/ansible/v1.24/amd64/ansible-kubernetes-v1.24.12.sh > /etc/kubernetes/ansible/ansible-kubernetes-v1.24.12.sh && \
 bash /etc/kubernetes/ansible/ansible-kubernetes-v1.24.12.sh
 ```

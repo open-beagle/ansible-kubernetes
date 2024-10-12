@@ -15,54 +15,54 @@ clone:
 
 steps:
   - name: s3-cache
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-s3-cache:1.0
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-s3-cache:1.0
     settings:
       restore: true
       mount:
         - ./.git
-      endpoint: https://cache.wodcloud.com
+      endpoint: https://cache.ali.wodcloud.com
       access_key:
         from_secret: ACCESS_KEY_MINIO
       secret_key:
         from_secret: SECRET_KEY_MINIO
 
   - name: fetch
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-git:1.0
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-git:1.0
     settings:
       proxy:
         from_secret: SOCKS5_PROXY
 
   - name: curl
-    image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
       CILIUM_VERSION: 1.14.14
     commands:
-      - curl https://cache.wodcloud.com/kubernetes/k8s/charts/beagle-cilium-$CILIUM_VERSION.tgz > ./linux/roles/wod.cilium/files/beagle-cilium-$CILIUM_VERSION.tgz
+      - curl https://cache.ali.wodcloud.com/kubernetes/k8s/charts/beagle-cilium-$CILIUM_VERSION.tgz > ./linux/roles/wod.cilium/files/beagle-cilium-$CILIUM_VERSION.tgz
 
   - name: install-docker-amd64
-    image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
       DOCKER_VERSION: 27.3.1
       K8S_ARCH: amd64
     commands:
-      - curl https://cache.wodcloud.com/kubernetes/k8s/ansible/ansible-docker-$DOCKER_VERSION-$K8S_ARCH.tgz > ./linux/roles/wod.docker/files/ansible-docker-$DOCKER_VERSION-$K8S_ARCH.tgz
-      - curl https://cache.wodcloud.com/kubernetes/k8s/ansible/ansible-docker.sh >./linux/roles/wod.docker/files/ansible-docker.sh
-      - curl https://cache.wodcloud.com/kubernetes/k8s/ansible/ansible-docker-uninstall.sh >./linux/roles/wod.docker/files/ansible-docker-uninstall.sh
+      - curl https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-docker-$DOCKER_VERSION-$K8S_ARCH.tgz > ./linux/roles/wod.docker/files/ansible-docker-$DOCKER_VERSION-$K8S_ARCH.tgz
+      - curl https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-docker.sh >./linux/roles/wod.docker/files/ansible-docker.sh
+      - curl https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-docker-uninstall.sh >./linux/roles/wod.docker/files/ansible-docker-uninstall.sh
       - |
         sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/files/ansible-docker.sh
 
   - name: install-registry-amd64
-    image: registry.cn-qingdao.aliyuncs.com/wod/registry:v2.8.1-amd64
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/registry:v2.8.1-amd64
     commands:
       - cp /usr/local/bin/registry linux/roles/wod.registry/files/bin/registry-v2.8.1
 
   - name: install-gateway-amd64
-    image: registry.cn-qingdao.aliyuncs.com/wod/awecloud-gateway:v6.1.1-amd64
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/awecloud-gateway:v6.1.1-amd64
     commands:
       - cp /usr/local/bin/gateway linux/roles/wod.gateway/files/gateway-v6.1.1
 
   - name: group-vars-amd64
-    image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
       K8S_ARCH: amd64
     commands:
@@ -70,48 +70,48 @@ steps:
         sed -i --expression "s?K8S_ARCH:.*?K8S_ARCH: $K8S_ARCH?" ./linux/group_vars/all.yml
 
   - name: docker-amd64
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     volumes:
       - name: docker
         path: /var/run/docker.sock
     settings:
       dockerfile: .beagle/dockerfile
-      base: registry.cn-qingdao.aliyuncs.com/wod/ansible:2-amd64
+      base: registry-vpc.cn-qingdao.aliyuncs.com/wod/ansible:2-amd64
       repo: wod/ansible-kubernetes
       version: v1.30.5
       channel: amd64
       args: "TARGETOS=linux,TARGETARCH=amd64"
-      registry: registry.cn-qingdao.aliyuncs.com
+      registry: registry-vpc.cn-qingdao.aliyuncs.com
       registry_user:
         from_secret: REGISTRY_USER_ALIYUN
       registry_password:
         from_secret: REGISTRY_PASSWORD_ALIYUN
 
   - name: install-docker-arm64
-    image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
       DOCKER_VERSION: 27.3.1
       K8S_ARCH: arm64
     commands:
-      - curl https://cache.wodcloud.com/kubernetes/k8s/ansible/ansible-docker-$DOCKER_VERSION-$K8S_ARCH.tgz > ./linux/roles/wod.docker/files/ansible-docker-$DOCKER_VERSION-$K8S_ARCH.tgz
-      - curl https://cache.wodcloud.com/kubernetes/k8s/ansible/ansible-docker.sh >./linux/roles/wod.docker/files/ansible-docker.sh
-      - curl https://cache.wodcloud.com/kubernetes/k8s/ansible/ansible-docker-uninstall.sh >./linux/roles/wod.docker/files/ansible-docker-uninstall.sh
+      - curl https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-docker-$DOCKER_VERSION-$K8S_ARCH.tgz > ./linux/roles/wod.docker/files/ansible-docker-$DOCKER_VERSION-$K8S_ARCH.tgz
+      - curl https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-docker.sh >./linux/roles/wod.docker/files/ansible-docker.sh
+      - curl https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-docker-uninstall.sh >./linux/roles/wod.docker/files/ansible-docker-uninstall.sh
       - |
         sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-$DOCKER_VERSION\}\"?" ./linux/roles/wod.docker/files/ansible-docker.sh
 
   - name: install-registry-arm64
-    image: registry.cn-qingdao.aliyuncs.com/wod/registry:v2.8.1-arm64
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/registry:v2.8.1-arm64
     commands:
       - rm -rf ./linux/roles/wod.registry/files/bin/registry-*
       - cp /usr/local/bin/registry ./linux/roles/wod.registry/files/bin/registry-v2.8.1
 
   - name: install-gateway-arm64
-    image: registry.cn-qingdao.aliyuncs.com/wod/awecloud-gateway:v6.1.1-arm64
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/awecloud-gateway:v6.1.1-arm64
     commands:
       - cp /usr/local/bin/gateway linux/roles/wod.gateway/files/gateway-v6.1.1
 
   - name: group-vars-arm64
-    image: registry.cn-qingdao.aliyuncs.com/wod/curl:alpine
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
       K8S_ARCH: arm64
     commands:
@@ -119,36 +119,36 @@ steps:
         sed -i --expression "s?K8S_ARCH:.*?K8S_ARCH: $K8S_ARCH?" ./linux/group_vars/all.yml
 
   - name: docker-arm64
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     volumes:
       - name: docker
         path: /var/run/docker.sock
     settings:
       dockerfile: .beagle/dockerfile
-      base: registry.cn-qingdao.aliyuncs.com/wod/ansible:2-arm64
+      base: registry-vpc.cn-qingdao.aliyuncs.com/wod/ansible:2-arm64
       repo: wod/ansible-kubernetes
       version: v1.30.5
       channel: arm64
       args: "TARGETOS=linux,TARGETARCH=arm64"
-      registry: registry.cn-qingdao.aliyuncs.com
+      registry: registry-vpc.cn-qingdao.aliyuncs.com
       registry_user:
         from_secret: REGISTRY_USER_ALIYUN
       registry_password:
         from_secret: REGISTRY_PASSWORD_ALIYUN
 
   - name: docker-arch
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-manifest:1.0
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-docker-manifest:1.0
     settings:
       platforms: linux/amd64,linux/arm64
-      template: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.30.5-ARCH
-      target: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.30.5
+      template: registry-vpc.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.30.5-ARCH
+      target: registry-vpc.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.30.5
       username:
         from_secret: REGISTRY_USER_ALIYUN
       password:
         from_secret: REGISTRY_PASSWORD_ALIYUN
 
   - name: ansible-kubernetes-amd64
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     volumes:
       - name: docker
         path: /var/run/docker.sock
@@ -163,7 +163,7 @@ steps:
       - docker save $REGISTRY_REMOTE/$K8S_REPO:$K8S_VERSION-$K8S_ARCH | gzip > .tmp/$K8S_REPO-$K8S_VERSION-$K8S_ARCH.tgz
 
   - name: ansible-kubernetes-arm64
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-docker:1.0
     volumes:
       - name: docker
         path: /var/run/docker.sock
@@ -178,16 +178,16 @@ steps:
       - docker save $REGISTRY_REMOTE/$K8S_REPO:$K8S_VERSION-$K8S_ARCH | gzip > .tmp/$K8S_REPO-$K8S_VERSION-$K8S_ARCH.tgz
 
   - name: minio
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-minio:1.0
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-minio:1.0
     environment:
       S3_ACCESS_KEY:
-        from_secret: ACCESS_KEY_MINIO
+        from_secret: S3_ACCESS_KEY_ALIYUN
       S3_SECRET_KEY:
-        from_secret: SECRET_KEY_MINIO
+        from_secret: S3_SECRET_KEY_ALIYUN
     commands:
       - cp install-offline.sh .tmp/ansible-kubernetes-v1.30.5.sh
-      - mc alias set cache --api=S3v4 https://cache.wodcloud.com $S3_ACCESS_KEY $S3_SECRET_KEY
-      - mc cp --recursive .tmp/ cache/kubernetes/k8s/ansible
+      - mc alias set aliyun --api=S3v4 https://cache.ali.wodcloud.com $S3_ACCESS_KEY $S3_SECRET_KEY
+      - mc cp --recursive .tmp/ aliyun/kubernetes/ansible
 
 ---
 kind: pipeline
@@ -202,69 +202,69 @@ clone:
 
 steps:
   - name: s3-cache
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-s3-cache:1.0
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-s3-cache:1.0
     settings:
       restore: true
       mount:
         - ./.git
-      endpoint: https://cache.wodcloud.com
+      endpoint: https://cache.ali.wodcloud.com
       access_key:
         from_secret: ACCESS_KEY_MINIO
       secret_key:
         from_secret: SECRET_KEY_MINIO
 
   - name: fetch
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-git:1.0
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-git:1.0
     settings:
       proxy:
         from_secret: SOCKS5_PROXY
 
   - name: harbor-amd64
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-tag:1.0
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-docker-tag:1.0
     settings:
-      source: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.30.5-amd64
-      target: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:latest-amd64
-      registry: registry.cn-qingdao.aliyuncs.com
+      source: registry-vpc.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.30.5-amd64
+      target: registry-vpc.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:latest-amd64
+      registry: registry-vpc.cn-qingdao.aliyuncs.com
       registry_user:
         from_secret: REGISTRY_USER_ALIYUN
       registry_password:
         from_secret: REGISTRY_PASSWORD_ALIYUN
 
   - name: harbor-arm64
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-tag:1.0
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-docker-tag:1.0
     settings:
-      source: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.30.5-arm64
-      target: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:latest-arm64
-      registry: registry.cn-qingdao.aliyuncs.com
+      source: registry-vpc.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.30.5-arm64
+      target: registry-vpc.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:latest-arm64
+      registry: registry-vpc.cn-qingdao.aliyuncs.com
       registry_user:
         from_secret: REGISTRY_USER_ALIYUN
       registry_password:
         from_secret: REGISTRY_PASSWORD_ALIYUN
 
   - name: harbor-arch
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-manifest:1.0
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-docker-manifest:1.0
     settings:
       platforms: linux/amd64,linux/arm64
-      template: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:latest-ARCH
-      target: registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:latest
+      template: registry-vpc.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:latest-ARCH
+      target: registry-vpc.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:latest
       username:
         from_secret: REGISTRY_USER_ALIYUN
       password:
         from_secret: REGISTRY_PASSWORD_ALIYUN
 
   - name: minio
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-minio:1.0
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-minio:1.0
     environment:
       S3_ACCESS_KEY:
-        from_secret: ACCESS_KEY_MINIO
+        from_secret: S3_ACCESS_KEY_ALIYUN
       S3_SECRET_KEY:
-        from_secret: SECRET_KEY_MINIO
+        from_secret: S3_SECRET_KEY_ALIYUN
     commands:
-      - mc alias set cache --api=S3v4 https://cache.wodcloud.com $S3_ACCESS_KEY $S3_SECRET_KEY
-      - mc cp install.sh cache/kubernetes/k8s/ansible/ansible-kubernetes.sh
-      - mc cp install-offline.sh cache/kubernetes/k8s/ansible/ansible-kubernetes-latest.sh
-      - mc cp cache/kubernetes/k8s/ansible/ansible-kubernetes-v1.30.5-amd64.tgz cache/kubernetes/k8s/ansible/ansible-kubernetes-latest-amd64.tgz
-      - mc cp cache/kubernetes/k8s/ansible/ansible-kubernetes-v1.30.5-arm64.tgz cache/kubernetes/k8s/ansible/ansible-kubernetes-latest-arm64.tgz
+      - mc alias set aliyun --api=S3v4 https://cache.ali.wodcloud.com $S3_ACCESS_KEY $S3_SECRET_KEY
+      - mc cp install.sh aliyun/kubernetes/ansible/ansible-kubernetes.sh
+      - mc cp install-offline.sh aliyun/kubernetes/ansible/ansible-kubernetes-latest.sh
+      - mc cp aliyun/kubernetes/ansible/ansible-kubernetes-v1.30.5-amd64.tgz aliyun/kubernetes/ansible/ansible-kubernetes-latest-amd64.tgz
+      - mc cp aliyun/kubernetes/ansible/ansible-kubernetes-v1.30.5-arm64.tgz aliyun/kubernetes/ansible/ansible-kubernetes-latest-arm64.tgz
 
 ---
 kind: pipeline
@@ -279,27 +279,27 @@ clone:
 
 steps:
   - name: s3-cache
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-s3-cache:1.0
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-s3-cache:1.0
     settings:
       restore: true
       mount:
         - ./.git
-      endpoint: https://cache.wodcloud.com
+      endpoint: https://cache.ali.wodcloud.com
       access_key:
         from_secret: ACCESS_KEY_MINIO
       secret_key:
         from_secret: SECRET_KEY_MINIO
 
   - name: fetch
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-git:1.0
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-git:1.0
     settings:
       proxy:
         from_secret: SOCKS5_PROXY
 
   - name: ansible-kubernetes-images-amd64
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0
     settings:
-      source: registry.cn-qingdao.aliyuncs.com/wod
+      source: registry-vpc.cn-qingdao.aliyuncs.com/wod
       yaml: linux/vars/1.30.yml
       image: K8S_IMAGES
       arch: amd64
@@ -307,9 +307,9 @@ steps:
       release: .tmp/ansible-kubernetes-images-v1.30.5-amd64.tgz
 
   - name: ansible-kubernetes-images-arm64
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0
     settings:
-      source: registry.cn-qingdao.aliyuncs.com/wod
+      source: registry-vpc.cn-qingdao.aliyuncs.com/wod
       yaml: linux/vars/1.30.yml
       image: K8S_IMAGES
       arch: arm64
@@ -317,15 +317,15 @@ steps:
       release: .tmp/ansible-kubernetes-images-v1.30.5-arm64.tgz
 
   - name: minio
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-minio:1.0
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-minio:1.0
     environment:
       S3_ACCESS_KEY:
-        from_secret: ACCESS_KEY_MINIO
+        from_secret: S3_ACCESS_KEY_ALIYUN
       S3_SECRET_KEY:
-        from_secret: SECRET_KEY_MINIO
+        from_secret: S3_SECRET_KEY_ALIYUN
     commands:
-      - mc alias set cache --api=S3v4 https://cache.wodcloud.com $S3_ACCESS_KEY $S3_SECRET_KEY
-      - mc cp --recursive .tmp/ cache/kubernetes/k8s/ansible
+      - mc alias set aliyun --api=S3v4 https://cache.ali.wodcloud.com $S3_ACCESS_KEY $S3_SECRET_KEY
+      - mc cp --recursive .tmp/ aliyun/kubernetes/ansible
 
 ---
 kind: pipeline
@@ -340,27 +340,27 @@ clone:
 
 steps:
   - name: s3-cache
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-s3-cache:1.0
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-s3-cache:1.0
     settings:
       restore: true
       mount:
         - ./.git
-      endpoint: https://cache.wodcloud.com
+      endpoint: https://cache.ali.wodcloud.com
       access_key:
         from_secret: ACCESS_KEY_MINIO
       secret_key:
         from_secret: SECRET_KEY_MINIO
 
   - name: fetch
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-git:1.0
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-git:1.0
     settings:
       proxy:
         from_secret: SOCKS5_PROXY
 
   - name: ansible-kubernetes-images-amd64
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0
     settings:
-      source: registry.cn-qingdao.aliyuncs.com/wod
+      source: registry-vpc.cn-qingdao.aliyuncs.com/wod
       yaml: linux/vars/1.28.yml
       image: K8S_IMAGES
       arch: amd64
@@ -368,9 +368,9 @@ steps:
       release: .tmp/ansible-kubernetes-images-v1.28.13-amd64.tgz
 
   - name: ansible-kubernetes-images-arm64
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0
     settings:
-      source: registry.cn-qingdao.aliyuncs.com/wod
+      source: registry-vpc.cn-qingdao.aliyuncs.com/wod
       yaml: linux/vars/1.28.yml
       image: K8S_IMAGES
       arch: arm64
@@ -378,15 +378,15 @@ steps:
       release: .tmp/ansible-kubernetes-images-v1.28.13-arm64.tgz
 
   - name: minio
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-minio:1.0
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-minio:1.0
     environment:
       S3_ACCESS_KEY:
-        from_secret: ACCESS_KEY_MINIO
+        from_secret: S3_ACCESS_KEY_ALIYUN
       S3_SECRET_KEY:
-        from_secret: SECRET_KEY_MINIO
+        from_secret: S3_SECRET_KEY_ALIYUN
     commands:
-      - mc alias set cache --api=S3v4 https://cache.wodcloud.com $S3_ACCESS_KEY $S3_SECRET_KEY
-      - mc cp --recursive .tmp/ cache/kubernetes/k8s/ansible
+      - mc alias set aliyun --api=S3v4 https://cache.ali.wodcloud.com $S3_ACCESS_KEY $S3_SECRET_KEY
+      - mc cp --recursive .tmp/ aliyun/kubernetes/ansible
 
 ---
 kind: pipeline
@@ -401,27 +401,27 @@ clone:
 
 steps:
   - name: s3-cache
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-s3-cache:1.0
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-s3-cache:1.0
     settings:
       restore: true
       mount:
         - ./.git
-      endpoint: https://cache.wodcloud.com
+      endpoint: https://cache.ali.wodcloud.com
       access_key:
         from_secret: ACCESS_KEY_MINIO
       secret_key:
         from_secret: SECRET_KEY_MINIO
 
   - name: fetch
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-git:1.0
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-git:1.0
     settings:
       proxy:
         from_secret: SOCKS5_PROXY
 
   - name: ansible-kubernetes-images-amd64
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0
     settings:
-      source: registry.cn-qingdao.aliyuncs.com/wod
+      source: registry-vpc.cn-qingdao.aliyuncs.com/wod
       yaml: linux/vars/1.26.yml
       image: K8S_IMAGES
       arch: amd64
@@ -429,9 +429,9 @@ steps:
       release: .tmp/ansible-kubernetes-images-v1.26.15-amd64.tgz
 
   - name: ansible-kubernetes-images-arm64
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0
     settings:
-      source: registry.cn-qingdao.aliyuncs.com/wod
+      source: registry-vpc.cn-qingdao.aliyuncs.com/wod
       yaml: linux/vars/1.26.yml
       image: K8S_IMAGES
       arch: arm64
@@ -439,15 +439,15 @@ steps:
       release: .tmp/ansible-kubernetes-images-v1.26.15-arm64.tgz
 
   - name: minio
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-minio:1.0
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-minio:1.0
     environment:
       S3_ACCESS_KEY:
-        from_secret: ACCESS_KEY_MINIO
+        from_secret: S3_ACCESS_KEY_ALIYUN
       S3_SECRET_KEY:
-        from_secret: SECRET_KEY_MINIO
+        from_secret: S3_SECRET_KEY_ALIYUN
     commands:
-      - mc alias set cache --api=S3v4 https://cache.wodcloud.com $S3_ACCESS_KEY $S3_SECRET_KEY
-      - mc cp --recursive .tmp/ cache/kubernetes/k8s/ansible
+      - mc alias set aliyun --api=S3v4 https://cache.ali.wodcloud.com $S3_ACCESS_KEY $S3_SECRET_KEY
+      - mc cp --recursive .tmp/ aliyun/kubernetes/ansible
 
 ---
 kind: pipeline
@@ -462,27 +462,27 @@ clone:
 
 steps:
   - name: s3-cache
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-s3-cache:1.0
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-s3-cache:1.0
     settings:
       restore: true
       mount:
         - ./.git
-      endpoint: https://cache.wodcloud.com
+      endpoint: https://cache.ali.wodcloud.com
       access_key:
         from_secret: ACCESS_KEY_MINIO
       secret_key:
         from_secret: SECRET_KEY_MINIO
 
   - name: fetch
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-git:1.0
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-git:1.0
     settings:
       proxy:
         from_secret: SOCKS5_PROXY
 
   - name: ansible-kubernetes-images-amd64
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0
     settings:
-      source: registry.cn-qingdao.aliyuncs.com/wod
+      source: registry-vpc.cn-qingdao.aliyuncs.com/wod
       yaml: linux/vars/1.24.yml
       image: K8S_IMAGES
       arch: amd64
@@ -490,9 +490,9 @@ steps:
       release: .tmp/ansible-kubernetes-images-v1.24.17-amd64.tgz
 
   - name: ansible-kubernetes-images-arm64
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0
     settings:
-      source: registry.cn-qingdao.aliyuncs.com/wod
+      source: registry-vpc.cn-qingdao.aliyuncs.com/wod
       yaml: linux/vars/1.24.yml
       image: K8S_IMAGES
       arch: arm64
@@ -500,15 +500,15 @@ steps:
       release: .tmp/ansible-kubernetes-images-v1.24.17-arm64.tgz
 
   - name: minio
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-minio:1.0
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-minio:1.0
     environment:
       S3_ACCESS_KEY:
-        from_secret: ACCESS_KEY_MINIO
+        from_secret: S3_ACCESS_KEY_ALIYUN
       S3_SECRET_KEY:
-        from_secret: SECRET_KEY_MINIO
+        from_secret: S3_SECRET_KEY_ALIYUN
     commands:
-      - mc alias set cache --api=S3v4 https://cache.wodcloud.com $S3_ACCESS_KEY $S3_SECRET_KEY
-      - mc cp --recursive .tmp/ cache/kubernetes/k8s/ansible
+      - mc alias set aliyun --api=S3v4 https://cache.ali.wodcloud.com $S3_ACCESS_KEY $S3_SECRET_KEY
+      - mc cp --recursive .tmp/ aliyun/kubernetes/ansible
 
 ---
 kind: pipeline
@@ -523,27 +523,27 @@ clone:
 
 steps:
   - name: s3-cache
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-s3-cache:1.0
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-s3-cache:1.0
     settings:
       restore: true
       mount:
         - ./.git
-      endpoint: https://cache.wodcloud.com
+      endpoint: https://cache.ali.wodcloud.com
       access_key:
         from_secret: ACCESS_KEY_MINIO
       secret_key:
         from_secret: SECRET_KEY_MINIO
 
   - name: fetch
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-git:1.0
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-git:1.0
     settings:
       proxy:
         from_secret: SOCKS5_PROXY
 
   - name: ansible-kubernetes-images-amd64
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0
     settings:
-      source: registry.cn-qingdao.aliyuncs.com/wod
+      source: registry-vpc.cn-qingdao.aliyuncs.com/wod
       yaml: linux/vars/1.22.yml
       image: K8S_IMAGES
       arch: amd64
@@ -551,9 +551,9 @@ steps:
       release: .tmp/ansible-kubernetes-images-v1.22.17-amd64.tgz
 
   - name: ansible-kubernetes-images-arm64
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0
     settings:
-      source: registry.cn-qingdao.aliyuncs.com/wod
+      source: registry-vpc.cn-qingdao.aliyuncs.com/wod
       yaml: linux/vars/1.22.yml
       image: K8S_IMAGES
       arch: arm64
@@ -561,15 +561,15 @@ steps:
       release: .tmp/ansible-kubernetes-images-v1.22.17-arm64.tgz
 
   - name: minio
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-minio:1.0
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-minio:1.0
     environment:
       S3_ACCESS_KEY:
-        from_secret: ACCESS_KEY_MINIO
+        from_secret: S3_ACCESS_KEY_ALIYUN
       S3_SECRET_KEY:
-        from_secret: SECRET_KEY_MINIO
+        from_secret: S3_SECRET_KEY_ALIYUN
     commands:
-      - mc alias set cache --api=S3v4 https://cache.wodcloud.com $S3_ACCESS_KEY $S3_SECRET_KEY
-      - mc cp --recursive .tmp/ cache/kubernetes/k8s/ansible
+      - mc alias set aliyun --api=S3v4 https://cache.ali.wodcloud.com $S3_ACCESS_KEY $S3_SECRET_KEY
+      - mc cp --recursive .tmp/ aliyun/kubernetes/ansible
 
 ---
 kind: pipeline
@@ -584,27 +584,27 @@ clone:
 
 steps:
   - name: s3-cache
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-s3-cache:1.0
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-s3-cache:1.0
     settings:
       restore: true
       mount:
         - ./.git
-      endpoint: https://cache.wodcloud.com
+      endpoint: https://cache.ali.wodcloud.com
       access_key:
         from_secret: ACCESS_KEY_MINIO
       secret_key:
         from_secret: SECRET_KEY_MINIO
 
   - name: fetch
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-git:1.0
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-git:1.0
     settings:
       proxy:
         from_secret: SOCKS5_PROXY
 
   - name: ansible-kubernetes-images-amd64
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0
     settings:
-      source: registry.cn-qingdao.aliyuncs.com/wod
+      source: registry-vpc.cn-qingdao.aliyuncs.com/wod
       yaml: linux/vars/1.20.yml
       image: K8S_IMAGES
       arch: amd64
@@ -612,9 +612,9 @@ steps:
       release: .tmp/ansible-kubernetes-images-v1.20.15-amd64.tgz
 
   - name: ansible-kubernetes-images-arm64
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0
     settings:
-      source: registry.cn-qingdao.aliyuncs.com/wod
+      source: registry-vpc.cn-qingdao.aliyuncs.com/wod
       yaml: linux/vars/1.20.yml
       image: K8S_IMAGES
       arch: arm64
@@ -622,15 +622,15 @@ steps:
       release: .tmp/ansible-kubernetes-images-v1.20.15-arm64.tgz
 
   - name: minio
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-minio:1.0
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-minio:1.0
     environment:
       S3_ACCESS_KEY:
-        from_secret: ACCESS_KEY_MINIO
+        from_secret: S3_ACCESS_KEY_ALIYUN
       S3_SECRET_KEY:
-        from_secret: SECRET_KEY_MINIO
+        from_secret: S3_SECRET_KEY_ALIYUN
     commands:
-      - mc alias set cache --api=S3v4 https://cache.wodcloud.com $S3_ACCESS_KEY $S3_SECRET_KEY
-      - mc cp --recursive .tmp/ cache/kubernetes/k8s/ansible
+      - mc alias set aliyun --api=S3v4 https://cache.ali.wodcloud.com $S3_ACCESS_KEY $S3_SECRET_KEY
+      - mc cp --recursive .tmp/ aliyun/kubernetes/ansible
 
 ---
 kind: pipeline
@@ -645,27 +645,27 @@ clone:
 
 steps:
   - name: s3-cache
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-s3-cache:1.0
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-s3-cache:1.0
     settings:
       restore: true
       mount:
         - ./.git
-      endpoint: https://cache.wodcloud.com
+      endpoint: https://cache.ali.wodcloud.com
       access_key:
         from_secret: ACCESS_KEY_MINIO
       secret_key:
         from_secret: SECRET_KEY_MINIO
 
   - name: fetch
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-git:1.0
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-git:1.0
     settings:
       proxy:
         from_secret: SOCKS5_PROXY
 
   - name: ansible-kubernetes-images-amd64
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0
     settings:
-      source: registry.cn-qingdao.aliyuncs.com/wod
+      source: registry-vpc.cn-qingdao.aliyuncs.com/wod
       yaml: linux/vars/1.18.yml
       image: K8S_IMAGES
       arch: amd64
@@ -673,9 +673,9 @@ steps:
       release: .tmp/ansible-kubernetes-images-v1.18.20-amd64.tgz
 
   - name: ansible-kubernetes-images-arm64
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0
     settings:
-      source: registry.cn-qingdao.aliyuncs.com/wod
+      source: registry-vpc.cn-qingdao.aliyuncs.com/wod
       yaml: linux/vars/1.18.yml
       image: K8S_IMAGES
       arch: arm64
@@ -683,15 +683,15 @@ steps:
       release: .tmp/ansible-kubernetes-images-v1.18.20-arm64.tgz
 
   - name: minio
-    image: registry.cn-qingdao.aliyuncs.com/wod/devops-minio:1.0
+    image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-minio:1.0
     environment:
       S3_ACCESS_KEY:
-        from_secret: ACCESS_KEY_MINIO
+        from_secret: S3_ACCESS_KEY_ALIYUN
       S3_SECRET_KEY:
-        from_secret: SECRET_KEY_MINIO
+        from_secret: S3_SECRET_KEY_ALIYUN
     commands:
-      - mc alias set cache --api=S3v4 https://cache.wodcloud.com $S3_ACCESS_KEY $S3_SECRET_KEY
-      - mc cp --recursive .tmp/ cache/kubernetes/k8s/ansible
+      - mc alias set aliyun --api=S3v4 https://cache.ali.wodcloud.com $S3_ACCESS_KEY $S3_SECRET_KEY
+      - mc cp --recursive .tmp/ aliyun/kubernetes/ansible
 
 ---
 kind: secret
@@ -716,14 +716,14 @@ get:
 
 ---
 kind: secret
-name: ACCESS_KEY_MINIO
+name: S3_ACCESS_KEY_ALIYUN
 get:
-  name: ACCESS_KEY_MINIO
+  name: S3_ACCESS_KEY_ALIYUN
   path: devops-secrets
 
 ---
 kind: secret
-name: SECRET_KEY_MINIO
+name: S3_SECRET_KEY_ALIYUN
 get:
-  name: SECRET_KEY_MINIO
+  name: S3_SECRET_KEY_ALIYUN
   path: devops-secrets

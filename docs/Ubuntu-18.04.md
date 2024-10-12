@@ -10,7 +10,7 @@
 ### 在线安装内核
 
 ```bash
-sudo curl -sfL https://cache.wodcloud.com/kubernetes/kernel/install-kernel-Ubuntu.sh | sh -
+sudo curl -sfL https://cache.ali.wodcloud.com/kubernetes/kernel/install-kernel-Ubuntu.sh | sh -
 ```
 
 ### 离线安装内核
@@ -18,7 +18,7 @@ sudo curl -sfL https://cache.wodcloud.com/kubernetes/kernel/install-kernel-Ubunt
 ```bash
 # 准备内核文件
 mkdir -p /etc/kubernetes/ansible
-HTTP_SERVER=https://cache.wodcloud.com
+HTTP_SERVER=https://cache.ali.wodcloud.com
 TARGET_ARCH="amd64"
 KERNEL_VERSION="5.4.219-0504219"
 KERNEL_RELEASE="202210171633"

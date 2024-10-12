@@ -14,10 +14,10 @@ k8s 在 1.24 首次取消了对 docker 的支持。
 mkdir -p /etc/kubernetes/ansible
 
 # 准备ansible-kubernetes镜像
-curl -sL https://cache.wodcloud.com/kubernetes/k8s/ansible/ansible-kubernetes-latest-amd64.tgz >/etc/kubernetes/ansible/ansible-kubernetes-latest-amd64.tgz && \
+curl -sL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-kubernetes-latest-amd64.tgz >/etc/kubernetes/ansible/ansible-kubernetes-latest-amd64.tgz && \
 
 # 准备k8s-1.24离线镜像
-curl -sL https://cache.wodcloud.com/kubernetes/k8s/ansible/ansible-kubernetes-images-v1.24.17-amd64.tgz >/etc/kubernetes/ansible/ansible-kubernetes-images-v1.24.17-amd64.tgz && \
+curl -sL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-kubernetes-images-v1.24.17-amd64.tgz >/etc/kubernetes/ansible/ansible-kubernetes-images-v1.24.17-amd64.tgz && \
 
 # 准备hosts文件
 cat > /etc/kubernetes/ansible/ansible-kubernetes.ini <<-EOF
