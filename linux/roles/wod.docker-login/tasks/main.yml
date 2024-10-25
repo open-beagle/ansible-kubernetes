@@ -1,6 +1,19 @@
+- name: check need copy files
+  raw: stat /etc/containerd/config.toml
+  register: need_copy_files
+  ignore_errors: True
+
+- name: mkdir -p /etc/containerd
+  raw: mkdir -p /etc/containerd
+
+- name: copy files to /etc/containerd
+  copy:
+    src: ./config.toml
+    dest: /etc/containerd/config.toml
+  when: need_copy_files is failed
+
 - name: login.sh
   script: login.sh
   environment:
     PAUSE_IMAGE: "{{ PAUSE_IMAGE }}"
     K8S_DATA_PATH: "{{ K8S_DATA_PATH }}"
-
