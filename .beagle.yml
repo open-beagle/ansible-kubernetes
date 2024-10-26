@@ -37,7 +37,7 @@ steps:
     environment:
       CILIUM_VERSION: 1.14.14
     commands:
-      - curl https://cache.ali.wodcloud.com/kubernetes/k8s/charts/beagle-cilium-$CILIUM_VERSION.tgz > ./linux/roles/wod.cilium/files/beagle-cilium-$CILIUM_VERSION.tgz
+      - curl https://cache.ali.wodcloud.com/kubernetes/charts/beagle-cilium-$CILIUM_VERSION.tgz > ./linux/roles/wod.cilium/files/beagle-cilium-$CILIUM_VERSION.tgz
 
   - name: install-docker-amd64
     image: registry-vpc.cn-qingdao.aliyuncs.com/wod/curl:alpine
