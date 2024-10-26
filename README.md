@@ -84,10 +84,10 @@ bash /opt/docker/ansible-docker.sh
 
 # 开始安装k8s
 mkdir -p /etc/kubernetes/ansible && \
-curl -sfL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-kubernetes-images-v1.30.5-amd64.tgz >/etc/kubernetes/ansible/ansible-kubernetes-images-v1.30.5-amd64.tgz && \
+curl -sfL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-kubernetes-images-v1.30.6-amd64.tgz >/etc/kubernetes/ansible/ansible-kubernetes-images-v1.30.6-amd64.tgz && \
 curl -sfL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-kubernetes-latest-amd64.tgz >/etc/kubernetes/ansible/ansible-kubernetes-latest-amd64.tgz && \
 curl -sfL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-kubernetes-latest.sh > /etc/kubernetes/ansible/ansible-kubernetes-latest.sh && \
-export K8S_VERSION=v1.30.5 && \
+export K8S_VERSION=v1.30.6 && \
 bash /etc/kubernetes/ansible/ansible-kubernetes-latest.sh
 ```
 
@@ -107,9 +107,9 @@ beagle-03                  : ok=37   changed=32   unreachable=0    failed=0    s
 ```bash
 root@beagle-01:~# kubectl get node
 NAME        STATUS   ROLES    AGE   VERSION
-beagle-01   Ready    master   93s   v1.30.5-beagle
-beagle-02   Ready    <none>   79s   v1.30.5-beagle
-beagle-03   Ready    <none>   79s   v1.30.5-beagle
+beagle-01   Ready    master   93s   v1.30.6-beagle
+beagle-02   Ready    <none>   79s   v1.30.6-beagle
+beagle-03   Ready    <none>   79s   v1.30.6-beagle
 
 root@beagle-01:~# kubectl get pod -A -o wide
 NAMESPACE     NAME                                READY   STATUS    RESTARTS   AGE   IP              NODE        NOMINATED NODE   READINESS GATES
