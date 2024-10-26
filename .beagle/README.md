@@ -34,7 +34,7 @@ ap linux/1.install.yml \
 ansible all -m shell -a 'uname -r'
 
 # 安装内核
-ansible all -m shell -a 'curl -sfL https://cache.ali.wodcloud.com/kubernetes/kernel/install-Ubuntu.sh | sh -'
+ansible all -m shell -a 'curl -fL https://cache.ali.wodcloud.com/kubernetes/kernel/install-Ubuntu.sh | sh -'
 
 # 重新安装docker
 ansible all -m shell -a 'rm -rf /opt/docker'
@@ -177,37 +177,35 @@ systemctl restart containerd
 ### 安装测试
 
 ```bash
+# 在线安装k8s
 # 安装docker
 mkdir -p /opt/docker && \
-curl -sL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-docker.sh > /opt/docker/ansible-docker.sh && \
+curl -fL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-docker.sh > /opt/docker/ansible-docker.sh && \
 bash /opt/docker/ansible-docker.sh
 
-# 在线安装k8s
-export ANSIBLE_K8S_VERSION=v1.30.5
-export K8S_VERSION=v1.30.5
+# 安装k8s
 mkdir -p /etc/kubernetes/ansible && \
-curl -sL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-kubernetes.sh > /etc/kubernetes/ansible/ansible-kubernetes.sh && \
-bash /etc/kubernetes/ansible/ansible-kubernetes.sh
-
-# 在线安装k8s
-export ANSIBLE_K8S_VERSION=v1.30.5
-export K8S_VERSION=v1.24.17
-mkdir -p /etc/kubernetes/ansible && \
-curl -sL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-kubernetes.sh > /etc/kubernetes/ansible/ansible-kubernetes.sh && \
+curl -fL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-kubernetes.sh > /etc/kubernetes/ansible/ansible-kubernetes.sh && \
 bash /etc/kubernetes/ansible/ansible-kubernetes.sh
 
 # 离线安装k8s
-export ANSIBLE_K8S_VERSION=v1.30.5
-export K8S_VERSION=v1.30.5
-mkdir -p /etc/kubernetes/ansible && \
-curl -sL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-kubernetes-$ANSIBLE_K8S_VERSION.sh > /etc/kubernetes/ansible/ansible-kubernetes-$ANSIBLE_K8S_VERSION.sh && \
-bash /etc/kubernetes/ansible/ansible-kubernetes-$ANSIBLE_K8S_VERSION.sh
+# 安装docker
+# HTTP_SERVER=https://cache.ali.wodcloud.com
+# TARGET_ARCH=amd64;arm64;
+mkdir -p /opt/docker && \
+curl -fL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-docker-27.3.1-amd64.tgz > /opt/docker/ansible-docker-27.3.1-amd64.tgz && \
+curl -fL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-docker.sh > /opt/docker/ansible-docker.sh && \
+export DOCKER_VERSION=27.3.1 && \
+bash /opt/docker/ansible-docker.sh
 
-export ANSIBLE_K8S_VERSION=v1.30.5
-export K8S_VERSION=v1.24.17
+# 开始安装k8s
 mkdir -p /etc/kubernetes/ansible && \
-curl -sL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-kubernetes-$ANSIBLE_K8S_VERSION.sh > /etc/kubernetes/ansible/ansible-kubernetes-$ANSIBLE_K8S_VERSION.sh && \
-bash /etc/kubernetes/ansible/ansible-kubernetes-$ANSIBLE_K8S_VERSION.sh
+curl -fL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-kubernetes-images-v1.30.5-amd64.tgz >/etc/kubernetes/ansible/ansible-kubernetes-images-v1.30.5-amd64.tgz && \
+curl -fL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-kubernetes-v1.30.5-amd64.tgz >/etc/kubernetes/ansible/ansible-kubernetes-v1.30.5-amd64.tgz && \
+curl -fL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-kubernetes-v1.30.5.sh > /etc/kubernetes/ansible/ansible-kubernetes-v1.30.5.sh && \
+export K8S_VERSION=v1.30.5 && \
+export ANSIBLE_K8S_VERSION=v1.30.5 && \
+bash /etc/kubernetes/ansible/ansible-kubernetes-v1.30.5.sh
 ```
 
 ## cache
