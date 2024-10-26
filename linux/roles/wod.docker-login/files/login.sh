@@ -43,15 +43,15 @@ if ! [ -e /etc/containerd/config.yaml ]; then
 fi
 if ! (grep -q $PAUSE_IMAGE /etc/containerd/config.toml); then
   RESTART_CONTAINERD=true
-  yq eval ".plugins.\"io.containerd.cri.v1.images\".pinned_images.sandbox = \"$PAUSE_IMAGE\"" /etc/containerd/config.yaml -i
+  yq eval ".plugins.\"io.containerd.grpc.v1.cri\".sandbox = \"$PAUSE_IMAGE\"" /etc/containerd/config.yaml -i
 fi
 if ! (grep -q "/etc/containerd/certs.d" /etc/containerd/config.toml); then
   RESTART_CONTAINERD=true
-  yq eval ".plugins.\"io.containerd.cri.v1.images\".registry.config_path = \"/etc/containerd/certs.d\"" /etc/containerd/config.yaml -i
+  yq eval ".plugins.\"io.containerd.grpc.v1.cri\".registry.config_path = \"/etc/containerd/certs.d\"" /etc/containerd/config.yaml -i
 fi
 if ! (grep -q "SystemdCgroup = true" /etc/containerd/config.toml); then
   RESTART_CONTAINERD=true
-  yq eval ".plugins.\"io.containerd.cri.v1.runtime\".containerd.runtimes.runc.options.SystemdCgroup = true" /etc/containerd/config.yaml -i
+  yq eval ".plugins.\"io.containerd.grpc.v1.cri\".containerd.runtimes.runc.options.SystemdCgroup = true" /etc/containerd/config.yaml -i
 fi
 if ! (grep -q "root = \"$K8S_DATA_PATH/containerd\"" /etc/containerd/config.toml); then
   RESTART_CONTAINERD=true
