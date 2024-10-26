@@ -15,3 +15,7 @@ SystemdCgroup = true
 
 [plugins."io.containerd.grpc.v1.cri".registry]
 config_path = "/etc/containerd/certs.d"
+[plugins."io.containerd.grpc.v1.cri".registry.auths]
+[plugins."io.containerd.grpc.v1.cri".registry.auths."registry.beagle.default:6444"]
+identitytoken = "YmVhZ2xlOmJlYWdsZQ=="
+registrytoken = "YmVhZ2xlOmJlYWdsZQ=="
