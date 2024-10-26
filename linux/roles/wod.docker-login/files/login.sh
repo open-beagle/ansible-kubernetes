@@ -43,7 +43,7 @@ if ! [ -e /etc/containerd/config.yaml ]; then
 fi
 if ! (grep -q $PAUSE_IMAGE /etc/containerd/config.toml); then
   RESTART_CONTAINERD=true
-  yq eval ".plugins.\"io.containerd.grpc.v1.cri\".sandbox = \"$PAUSE_IMAGE\"" /etc/containerd/config.yaml -i
+  yq eval ".plugins.\"io.containerd.grpc.v1.cri\".sandbox_image = \"$PAUSE_IMAGE\"" /etc/containerd/config.yaml -i
 fi
 if ! (grep -q "/etc/containerd/certs.d" /etc/containerd/config.toml); then
   RESTART_CONTAINERD=true
