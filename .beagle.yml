@@ -42,7 +42,7 @@ steps:
   - name: install-docker-amd64
     image: registry-vpc.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      DOCKER_VERSION: 27.4.0
+      DOCKER_VERSION: 27.5.1
       K8S_ARCH: amd64
     commands:
       - curl https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-docker-$DOCKER_VERSION-$K8S_ARCH.tgz > ./linux/roles/wod.docker/files/ansible-docker-$DOCKER_VERSION-$K8S_ARCH.tgz
@@ -90,7 +90,7 @@ steps:
   - name: install-docker-arm64
     image: registry-vpc.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      DOCKER_VERSION: 27.4.0
+      DOCKER_VERSION: 27.5.1
       K8S_ARCH: arm64
     commands:
       - curl https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-docker-$DOCKER_VERSION-$K8S_ARCH.tgz > ./linux/roles/wod.docker/files/ansible-docker-$DOCKER_VERSION-$K8S_ARCH.tgz
