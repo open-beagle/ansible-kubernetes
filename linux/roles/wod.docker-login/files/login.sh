@@ -41,17 +41,37 @@ fi
 if ! [ -e /etc/containerd/config.yaml ]; then
   dasel -f /etc/containerd/config.toml -r toml -w yaml >/etc/containerd/config.yaml
 fi
+
+# 使用 yq 检查配置文件版本
+CONFIG_VERSION=$(yq eval '.version' /etc/containerd/config.yaml)
+
 if ! (grep -q $PAUSE_IMAGE /etc/containerd/config.toml); then
   RESTART_CONTAINERD=true
-  yq eval ".plugins.\"io.containerd.grpc.v1.cri\".sandbox_image = \"$PAUSE_IMAGE\"" /etc/containerd/config.yaml -i
+  if [ "$CONFIG_VERSION" = "2" ]; then
+    yq eval ".plugins.\"io.containerd.grpc.v1.cri\".sandbox_image = \"$PAUSE_IMAGE\"" /etc/containerd/config.yaml -i
+  else
+    yq eval ".plugins.\"io.containerd.cri.v1.images\".pinned_images.sandbox = \"$PAUSE_IMAGE\"" /etc/containerd/config.yaml -i
+  fi
 fi
 if ! (grep -q "/etc/containerd/certs.d" /etc/containerd/config.toml); then
   RESTART_CONTAINERD=true
-  yq eval ".plugins.\"io.containerd.grpc.v1.cri\".registry.config_path = \"/etc/containerd/certs.d\"" /etc/containerd/config.yaml -i
+  if [ "$CONFIG_VERSION" = "2" ]; then
+    yq eval ".plugins.\"io.containerd.grpc.v1.cri\".registry.config_path = \"/etc/containerd/certs.d\"" /etc/containerd/config.yaml -i
+    yq eval ".plugins.\"io.containerd.grpc.v1.cri\".registry.configs.\"registry.beagle.default:6444\".auth.username = \"beagle\"" /etc/containerd/config.yaml -i
+    yq eval ".plugins.\"io.containerd.grpc.v1.cri\".registry.configs.\"registry.beagle.default:6444\".auth.password = \"beagle\"" /etc/containerd/config.yaml -i
+  else
+    yq eval ".plugins.\"io.containerd.cri.v1.images\".registry.config_path = \"/etc/containerd/certs.d\"" /etc/containerd/config.yaml -i
+    yq eval ".plugins.\"io.containerd.cri.v1.images\".registry.configs.\"registry.beagle.default:6444\".auth.username = \"beagle\"" /etc/containerd/config.yaml -i
+    yq eval ".plugins.\"io.containerd.cri.v1.images\".registry.configs.\"registry.beagle.default:6444\".auth.password = \"beagle\"" /etc/containerd/config.yaml -i
+  fi
 fi
 if ! (grep -q "SystemdCgroup = true" /etc/containerd/config.toml); then
   RESTART_CONTAINERD=true
-  yq eval ".plugins.\"io.containerd.grpc.v1.cri\".containerd.runtimes.runc.options.SystemdCgroup = true" /etc/containerd/config.yaml -i
+  if [ "$CONFIG_VERSION" = "2" ]; then
+    yq eval ".plugins.\"io.containerd.grpc.v1.cri\".containerd.runtimes.runc.options.SystemdCgroup = true" /etc/containerd/config.yaml -i
+  else
+    yq eval ".plugins.\"io.containerd.cri.v1.runtime\".containerd.runtimes.runc.options.SystemdCgroup = true" /etc/containerd/config.yaml -i
+  fi
 fi
 if ! (grep -q "root = \"$K8S_DATA_PATH/containerd\"" /etc/containerd/config.toml); then
   RESTART_CONTAINERD=true
