@@ -77,9 +77,9 @@ bash /etc/kubernetes/ansible/ansible-kubernetes.sh
 # HTTP_SERVER=https://cache.ali.wodcloud.com
 # TARGET_ARCH=amd64;arm64;
 mkdir -p /opt/docker && \
-curl -fL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-docker-27.4.0-amd64.tgz > /opt/docker/ansible-docker-27.4.0-amd64.tgz && \
+curl -fL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-docker-27.5.1-amd64.tgz > /opt/docker/ansible-docker-27.5.1-amd64.tgz && \
 curl -sfL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-docker.sh > /opt/docker/ansible-docker.sh && \
-export DOCKER_VERSION=27.4.0 && \
+export DOCKER_VERSION=27.5.1 && \
 bash /opt/docker/ansible-docker.sh
 
 # 开始安装k8s
