@@ -85,9 +85,9 @@ EOF
 
 fi
 
-if ! [ -e /etc/sysctl.d/k8s.conf ] ; then 
+if ! [ -e /etc/sysctl.d/99-kubernetes.conf ] ; then 
   # sysctl params required by setup, params persist across reboots
-  cat <<EOF | tee /etc/sysctl.d/k8s.conf
+  cat <<EOF | tee /etc/sysctl.d/99-kubernetes.conf
 net.bridge.bridge-nf-call-iptables  = 1
 net.bridge.bridge-nf-call-ip6tables = 1
 net.ipv4.ip_forward                 = 1
@@ -95,6 +95,7 @@ net.ipv4.ip_unprivileged_port_start = 0
 net.ipv4.ip_local_port_range        = 1 65535
 net.ipv6.conf.all.forwarding        = 1
 net.core.bpf_jit_limit              = 264241152
+fs.inotify.max_user_watches         = 524288
 EOF
 
   # Apply sysctl params without reboot
