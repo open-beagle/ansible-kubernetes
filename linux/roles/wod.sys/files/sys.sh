@@ -96,7 +96,8 @@ net.ipv4.ip_local_port_range        = 1 65535
 net.ipv6.conf.all.forwarding        = 1
 net.core.bpf_jit_limit              = 264241152
 fs.inotify.max_user_watches         = 524288
-fs.inotify.max_user_instances       = 25600
+fs.inotify.max_queued_events        = 131072
+fs.file-max                         = 500000
 EOF
 
   # Apply sysctl params without reboot
