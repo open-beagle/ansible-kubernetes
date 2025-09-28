@@ -35,14 +35,14 @@ steps:
   - name: curl
     image: registry-vpc.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      CILIUM_VERSION: 1.14.14
+      CILIUM_VERSION: 1.14.19
     commands:
       - curl https://cache.ali.wodcloud.com/kubernetes/charts/beagle-cilium-$CILIUM_VERSION.tgz > ./linux/roles/wod.cilium/files/beagle-cilium-$CILIUM_VERSION.tgz
 
   - name: install-docker-amd64
     image: registry-vpc.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      DOCKER_VERSION: 27.5.1
+      DOCKER_VERSION: 28.3.2
       K8S_ARCH: amd64
     commands:
       - curl https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-docker-$DOCKER_VERSION-$K8S_ARCH.tgz > ./linux/roles/wod.docker/files/ansible-docker-$DOCKER_VERSION-$K8S_ARCH.tgz
@@ -78,7 +78,7 @@ steps:
       dockerfile: .beagle/dockerfile
       base: registry-vpc.cn-qingdao.aliyuncs.com/wod/ansible:2-amd64
       repo: wod/ansible-kubernetes
-      version: v1.30.8
+      version: v1.30.14
       channel: amd64
       args: "TARGETOS=linux,TARGETARCH=amd64"
       registry: registry-vpc.cn-qingdao.aliyuncs.com
@@ -90,7 +90,7 @@ steps:
   - name: install-docker-arm64
     image: registry-vpc.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      DOCKER_VERSION: 27.5.1
+      DOCKER_VERSION: 28.3.2
       K8S_ARCH: arm64
     commands:
       - curl https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-docker-$DOCKER_VERSION-$K8S_ARCH.tgz > ./linux/roles/wod.docker/files/ansible-docker-$DOCKER_VERSION-$K8S_ARCH.tgz
@@ -127,7 +127,7 @@ steps:
       dockerfile: .beagle/dockerfile
       base: registry-vpc.cn-qingdao.aliyuncs.com/wod/ansible:2-arm64
       repo: wod/ansible-kubernetes
-      version: v1.30.8
+      version: v1.30.14
       channel: arm64
       args: "TARGETOS=linux,TARGETARCH=arm64"
       registry: registry-vpc.cn-qingdao.aliyuncs.com
@@ -140,8 +140,8 @@ steps:
     image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-docker-manifest:1.0
     settings:
       platforms: linux/amd64,linux/arm64
-      template: registry-vpc.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.30.8-ARCH
-      target: registry-vpc.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.30.8
+      template: registry-vpc.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.30.14-ARCH
+      target: registry-vpc.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.30.14
       username:
         from_secret: REGISTRY_USER_ALIYUN
       password:
@@ -155,7 +155,7 @@ steps:
     environment:
       REGISTRY_REMOTE: registry.cn-qingdao.aliyuncs.com/wod
       K8S_REPO: ansible-kubernetes
-      K8S_VERSION: v1.30.8
+      K8S_VERSION: v1.30.14
       K8S_ARCH: amd64
     commands:
       - mkdir -p .tmp
@@ -170,7 +170,7 @@ steps:
     environment:
       REGISTRY_REMOTE: registry.cn-qingdao.aliyuncs.com/wod
       K8S_REPO: ansible-kubernetes
-      K8S_VERSION: v1.30.8
+      K8S_VERSION: v1.30.14
       K8S_ARCH: arm64
     commands:
       - mkdir -p .tmp
@@ -185,7 +185,7 @@ steps:
       S3_SECRET_KEY:
         from_secret: S3_SECRET_KEY_ALIYUN
     commands:
-      - cp install-offline.sh .tmp/ansible-kubernetes-v1.30.8.sh
+      - cp install-offline.sh .tmp/ansible-kubernetes-v1.30.14.sh
       - mc alias set aliyun --api=S3v4 https://cache.ali.wodcloud.com $S3_ACCESS_KEY $S3_SECRET_KEY
       - mc cp --recursive .tmp/ aliyun/kubernetes/ansible
 
@@ -222,7 +222,7 @@ steps:
   - name: harbor-amd64
     image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-docker-tag:1.0
     settings:
-      source: registry-vpc.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.30.8-amd64
+      source: registry-vpc.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.30.14-amd64
       target: registry-vpc.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:latest-amd64
       registry: registry-vpc.cn-qingdao.aliyuncs.com
       registry_user:
@@ -233,7 +233,7 @@ steps:
   - name: harbor-arm64
     image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-docker-tag:1.0
     settings:
-      source: registry-vpc.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.30.8-arm64
+      source: registry-vpc.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:v1.30.14-arm64
       target: registry-vpc.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:latest-arm64
       registry: registry-vpc.cn-qingdao.aliyuncs.com
       registry_user:
@@ -263,8 +263,8 @@ steps:
       - mc alias set aliyun --api=S3v4 https://cache.ali.wodcloud.com $S3_ACCESS_KEY $S3_SECRET_KEY
       - mc cp install.sh aliyun/kubernetes/ansible/ansible-kubernetes.sh
       - mc cp install-offline.sh aliyun/kubernetes/ansible/ansible-kubernetes-latest.sh
-      - mc cp aliyun/kubernetes/ansible/ansible-kubernetes-v1.30.8-amd64.tgz aliyun/kubernetes/ansible/ansible-kubernetes-latest-amd64.tgz
-      - mc cp aliyun/kubernetes/ansible/ansible-kubernetes-v1.30.8-arm64.tgz aliyun/kubernetes/ansible/ansible-kubernetes-latest-arm64.tgz
+      - mc cp aliyun/kubernetes/ansible/ansible-kubernetes-v1.30.14-amd64.tgz aliyun/kubernetes/ansible/ansible-kubernetes-latest-amd64.tgz
+      - mc cp aliyun/kubernetes/ansible/ansible-kubernetes-v1.30.14-arm64.tgz aliyun/kubernetes/ansible/ansible-kubernetes-latest-arm64.tgz
 
 ---
 kind: pipeline
@@ -304,7 +304,7 @@ steps:
       image: K8S_IMAGES
       arch: amd64
       group: k8s
-      release: .tmp/ansible-kubernetes-images-v1.30.8-amd64.tgz
+      release: .tmp/ansible-kubernetes-images-v1.30.14-amd64.tgz
 
   - name: ansible-kubernetes-images-arm64
     image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0
@@ -314,7 +314,7 @@ steps:
       image: K8S_IMAGES
       arch: arm64
       group: k8s
-      release: .tmp/ansible-kubernetes-images-v1.30.8-arm64.tgz
+      release: .tmp/ansible-kubernetes-images-v1.30.14-arm64.tgz
 
   - name: minio
     image: registry-vpc.cn-qingdao.aliyuncs.com/wod/devops-minio:1.0

@@ -2,22 +2,22 @@
 K8S_IMAGES:
   KUBELET:
     NAME: kubelet
-    VERSION: "v1.30.8-beagle"
+    VERSION: "v1.30.14-beagle"
   KUBE-APISERVER:
     NAME: kube-apiserver
-    VERSION: "v1.30.8-beagle"
+    VERSION: "v1.30.14-beagle"
   KUBE-CONTROLLER-MANAGER:
     NAME: kube-controller-manager
-    VERSION: "v1.30.8-beagle"
+    VERSION: "v1.30.14-beagle"
   KUBE-SCHEDULER:
     NAME: kube-scheduler
-    VERSION: "v1.30.8-beagle"
+    VERSION: "v1.30.14-beagle"
   KUBE-PROXY:
     NAME: kube-proxy
-    VERSION: "v1.30.8-beagle"
+    VERSION: "v1.30.14-beagle"
   KUBECTL:
     NAME: kubectl
-    VERSION: "v1.30.8-beagle"
+    VERSION: "v1.30.14-beagle"
   PAUSE:
     NAME: pause
     VERSION: "3.7"
@@ -35,19 +35,19 @@ K8S_IMAGES:
     VERSION: "v1.1.2"
   CILIUM:
     NAME: cilium
-    VERSION: "1.14.14"
+    VERSION: "1.14.19"
   CILIUM-OPERATOR:
     NAME: cilium-operator-generic
-    VERSION: "1.14.14"
+    VERSION: "1.14.19"
   CILIUM-HUBBLE-RELAY:
     NAME: cilium-hubble-relay
-    VERSION: "1.14.14"
+    VERSION: "1.14.19"
   CILIUM-ENVOY:
     NAME: cilium-envoy
-    VERSION: "1.29.7"
+    VERSION: "1.34.7"
   COREDNS:
     NAME: coredns
-    VERSION: "v1.11.3"
+    VERSION: "v1.11.4"
   HELM:
     NAME: helm
     VERSION: "v3.15.3"

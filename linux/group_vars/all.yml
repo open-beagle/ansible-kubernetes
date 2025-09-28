@@ -19,14 +19,14 @@ K8S_DATA_PATH: "/var/lib"
 ## DOCKER_DATA_PATH ， docker将数据存储至此目录，转移后docker将数据存储至额外的硬盘，避免系统盘被占满
 # DOCKER_DATA_PATH: "/data/kubernetes"
 ## DOCKER_VERSION , docker的安装版本
-DOCKER_VERSION: "27.5.1"
+DOCKER_VERSION: "28.3.2"
 
 ## K8S_ARCH, 服务器的CPU架构
 ## 可选值：amd64，arm64
 K8S_ARCH: amd64
 
 # K8S_VERSION , k8s版本
-K8S_VERSION: "v1.30.8"
+K8S_VERSION: "v1.30.14"
 
 # 镜像
 K8S_IMAGES:
@@ -65,19 +65,19 @@ K8S_IMAGES:
     VERSION: "v1.1.2"
   CILIUM:
     NAME: cilium
-    VERSION: "1.14.14"
+    VERSION: "1.14.19"
   CILIUM-OPERATOR:
     NAME: cilium-operator-generic
-    VERSION: "1.14.14"
+    VERSION: "1.14.19"
   CILIUM-HUBBLE-RELAY:
     NAME: cilium-hubble-relay
-    VERSION: "1.14.14"
+    VERSION: "1.14.19"
   CILIUM-ENVOY:
     NAME: cilium-envoy
-    VERSION: "1.29.7"
+    VERSION: "1.34.7"
   COREDNS:
     NAME: coredns
-    VERSION: "v1.11.3"
+    VERSION: "v1.11.4"
   HELM:
     NAME: helm
     VERSION: "v3.15.3"

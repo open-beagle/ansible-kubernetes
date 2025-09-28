@@ -4,16 +4,16 @@
 # 1. Install
 helm install \
 cilium \
-/etc/kubernetes/charts/beagle-cilium-1.14.14.tgz \
+/etc/kubernetes/charts/beagle-cilium-1.14.19.tgz \
 --namespace kube-system \
--f /etc/kubernetes/charts/beagle-cilium-1.14.14.yaml
+-f /etc/kubernetes/charts/beagle-cilium-1.14.19.yaml
 
 # 2. Upgrade
 helm upgrade \
 cilium \
-/etc/kubernetes/charts/beagle-cilium-1.14.14.tgz \
+/etc/kubernetes/charts/beagle-cilium-1.14.19.tgz \
 --namespace kube-system \
--f /etc/kubernetes/charts/beagle-cilium-1.14.14.yaml
+-f /etc/kubernetes/charts/beagle-cilium-1.14.19.yaml
 
 # 3. Uninstall
 helm uninstall \

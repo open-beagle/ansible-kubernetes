@@ -9,7 +9,7 @@ HTTP_SERVER="${HTTP_SERVER:-https://cache.ali.wodcloud.com}"
 # 平台架构
 TARGET_ARCH="${TARGET_ARCH:-amd64}"
 # K8S版本
-K8S_VERSION="${K8S_VERSION:-v1.30.8}"
+K8S_VERSION="${K8S_VERSION:-v1.30.14}"
 # K8S发布版本
 K8S_RELEASE="${K8S_VERSION#v}"
 K8S_RELEASE="${K8S_RELEASE%.*}"
