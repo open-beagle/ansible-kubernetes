@@ -13,11 +13,6 @@ mkdir -p /etc/docker/certs.d/registry.beagle.default:6444
 if ! [ -e /etc/docker/certs.d/registry.beagle.default:6444/ca.crt ]; then
   cp /etc/kubernetes/ssl/ca.crt /etc/docker/certs.d/registry.beagle.default:6444/ca.crt
 fi
-# containerd , 信任自签名证书和默认登录
-mkdir -p /etc/containerd/certs.d/registry.beagle.default:6444
-if ! [ -e /etc/containerd/certs.d/registry.beagle.default:6444/ca.crt ]; then
-  cp /etc/kubernetes/ssl/ca.crt /etc/containerd/certs.d/registry.beagle.default:6444/ca.crt
-fi
 if ! [ -e /root/.docker/config.json ]; then
   mkdir -p /root/.docker/
   cat >/root/.docker/config.json <<-EOF
@@ -30,6 +25,22 @@ if ! [ -e /root/.docker/config.json ]; then
 }
 EOF
   chmod 0600 /root/.docker/config.json
+fi
+
+# containerd , 信任自签名证书和默认登录
+mkdir -p /etc/containerd/certs.d/registry.beagle.default:6444
+if ! [ -e /etc/containerd/certs.d/registry.beagle.default:6444/ca.crt ]; then
+  cp /etc/kubernetes/ssl/ca.crt /etc/containerd/certs.d/registry.beagle.default:6444/ca.crt
+fi
+if ! [ -e /etc/containerd/certs.d/registry.beagle.default:6444/hosts.toml ]; then
+  cat >/etc/containerd/certs.d/registry.beagle.default:6444/hosts.toml <<-EOF
+server = "https://registry.beagle.default:6444"
+
+[host."https://registry.beagle.default:6444"]
+  skip_verify = true
+  [host."https://registry.beagle.default:6444".header]
+    Authorization = "Basic YmVhZ2xlOmJlYWdsZQ=="
+EOF
 fi
 
 # containerd , 信任自签名证书和默认登录
@@ -57,12 +68,8 @@ fi
 ## 修改registry配置
 if [ "$CONFIG_VERSION" = "2" ]; then
   yq eval ".plugins.\"io.containerd.grpc.v1.cri\".registry.config_path = \"/etc/containerd/certs.d\"" /etc/containerd/config.yaml -i
-  yq eval ".plugins.\"io.containerd.grpc.v1.cri\".registry.configs.\"registry.beagle.default:6444\".auth.username = \"beagle\"" /etc/containerd/config.yaml -i
-  yq eval ".plugins.\"io.containerd.grpc.v1.cri\".registry.configs.\"registry.beagle.default:6444\".auth.password = \"beagle\"" /etc/containerd/config.yaml -i
 else
   yq eval ".plugins.\"io.containerd.cri.v1.images\".registry.config_path = \"/etc/containerd/certs.d\"" /etc/containerd/config.yaml -i
-  yq eval ".plugins.\"io.containerd.cri.v1.images\".registry.configs.\"registry.beagle.default:6444\".auth.username = \"beagle\"" /etc/containerd/config.yaml -i
-  yq eval ".plugins.\"io.containerd.cri.v1.images\".registry.configs.\"registry.beagle.default:6444\".auth.password = \"beagle\"" /etc/containerd/config.yaml -i
 fi
 ## 修改cgroup配置
 if [ "$CONFIG_VERSION" = "2" ]; then
