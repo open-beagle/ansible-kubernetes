@@ -1,0 +1,59 @@
+name: Build Main Images
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  BUILD_VERSION: v1.30.14
+
+jobs:
+  build:
+    name: Build Images
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to Aliyun Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: registry.cn-qingdao.aliyuncs.com
+          username: ${{ secrets.REGISTRY_USER_ALIYUN }}
+          password: ${{ secrets.REGISTRY_PASSWORD_ALIYUN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Create and push multi-arch manifest
+        run: |
+          docker manifest create registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:latest \
+            registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:${{ env.BUILD_VERSION }}-amd64 \
+            registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:${{ env.BUILD_VERSION }}-arm64
+          docker manifest push registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:latest
+
+          docker manifest create registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:latest-amd64 \
+            registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:${{ env.BUILD_VERSION }}-amd64
+          docker manifest push registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:latest-amd64
+
+          docker manifest create registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:latest-arm64 \
+            registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:${{ env.BUILD_VERSION }}-arm64
+          docker manifest push registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:latest-arm64
+
+      - name: Setup MinIO Client
+        run: |
+          wget https://dl.min.io/client/mc/release/linux-amd64/mc
+          chmod +x mc
+          sudo mv mc /usr/local/bin/
+
+      - name: Upload to MinIO
+        env:
+          S3_ACCESS_KEY_ALIYUN: ${{ secrets.S3_ACCESS_KEY_ALIYUN }}
+          S3_SECRET_KEY_ALIYUN: ${{ secrets.S3_SECRET_KEY_ALIYUN }}
+        run: |
+          mc alias set aliyun --api=S3v4 https://cache.ali.wodcloud.com ${{ secrets.S3_ACCESS_KEY_ALIYUN }} ${{ secrets.S3_SECRET_KEY_ALIYUN }}
+          mc cp install.sh aliyun/kubernetes/ansible/ansible-kubernetes.sh
+          mc cp install-offline.sh aliyun/kubernetes/ansible/ansible-kubernetes-latest.sh
+          mc cp aliyun/kubernetes/ansible/ansible-kubernetes-v1.30.14-amd64.tgz aliyun/kubernetes/ansible/ansible-kubernetes-latest-amd64.tgz
+          mc cp aliyun/kubernetes/ansible/ansible-kubernetes-v1.30.14-arm64.tgz aliyun/kubernetes/ansible/ansible-kubernetes-latest-arm64.tgz
