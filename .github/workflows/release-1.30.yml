@@ -1,9 +1,9 @@
-name: Build Main Images
+name: Release Images 1.30
 
 on:
   push:
     branches:
-      - main
+      - release-1.30
 
 env:
   BUILD_VERSION: v1.30.14
@@ -28,7 +28,7 @@ jobs:
 
       - name: ansible-kubernetes-images-amd64
         run: |
-          docker run -it --rm \
+          docker run --rm \
           -v $PWD/:/go/src/github.com/open-beagle/ansible-kubernetes \
           -e CI_WORKSPACE=$PWD \
           -e PLUGIN_SOURCE=registry.cn-qingdao.aliyuncs.com/wod \
@@ -42,7 +42,7 @@ jobs:
 
       - name: ansible-kubernetes-images-arm64
         run: |
-          docker run -it --rm \
+          docker run --rm \
           -v $PWD/:/go/src/github.com/open-beagle/ansible-kubernetes \
           -e CI_WORKSPACE=$PWD \
           -e PLUGIN_SOURCE=registry.cn-qingdao.aliyuncs.com/wod \
