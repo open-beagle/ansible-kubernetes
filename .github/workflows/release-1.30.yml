@@ -29,30 +29,30 @@ jobs:
       - name: ansible-kubernetes-images-amd64
         run: |
           docker run --rm \
-          -v $PWD/:/go/src/github.com/open-beagle/ansible-kubernetes \
-          -e CI_WORKSPACE=$PWD \
-          -e PLUGIN_SOURCE=registry.cn-qingdao.aliyuncs.com/wod \
-          -e PLUGIN_YAML=linux/vars/1.30.yml \
-          -e PLUGIN_IMAGE=K8S_IMAGES \
-          -e PLUGIN_ARCH=amd64 \
-          -e PLUGIN_GROUP=k8s \
-          -e PLUGIN_RELEASE=.tmp/ansible-kubernetes-images-${{ env.BUILD_VERSION }}-amd64.tgz \
-          -w /go/src/github.com/open-beagle/ansible-kubernetes \
-          registry.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0.0
+            -v $PWD/:/go/src/github.com/open-beagle/ansible-kubernetes \
+            -w /go/src/github.com/open-beagle/ansible-kubernetes \
+            -e CI_WORKSPACE=/go/src/github.com/open-beagle/ansible-kubernetes \
+            -e PLUGIN_SOURCE=registry.cn-qingdao.aliyuncs.com/wod \
+            -e PLUGIN_YAML=linux/vars/1.30.yml \
+            -e PLUGIN_IMAGE=K8S_IMAGES \
+            -e PLUGIN_ARCH=amd64 \
+            -e PLUGIN_GROUP=k8s \
+            -e PLUGIN_RELEASE=.tmp/ansible-kubernetes-images-${{ env.BUILD_VERSION }}-amd64.tgz \
+            registry.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0.0
 
       - name: ansible-kubernetes-images-arm64
         run: |
           docker run --rm \
-          -v $PWD/:/go/src/github.com/open-beagle/ansible-kubernetes \
-          -e CI_WORKSPACE=$PWD \
-          -e PLUGIN_SOURCE=registry.cn-qingdao.aliyuncs.com/wod \
-          -e PLUGIN_YAML=linux/vars/1.30.yml \
-          -e PLUGIN_IMAGE=K8S_IMAGES \
-          -e PLUGIN_ARCH=arm64 \
-          -e PLUGIN_GROUP=k8s \
-          -e PLUGIN_RELEASE=.tmp/ansible-kubernetes-images-${{ env.BUILD_VERSION }}-arm64.tgz \
-          -w /go/src/github.com/open-beagle/ansible-kubernetes \
-          registry.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0.0
+            -v $PWD/:/go/src/github.com/open-beagle/ansible-kubernetes \
+            -w /go/src/github.com/open-beagle/ansible-kubernetes \
+            -e CI_WORKSPACE=/go/src/github.com/open-beagle/ansible-kubernetes \
+            -e PLUGIN_SOURCE=registry.cn-qingdao.aliyuncs.com/wod \
+            -e PLUGIN_YAML=linux/vars/1.30.yml \
+            -e PLUGIN_IMAGE=K8S_IMAGES \
+            -e PLUGIN_ARCH=arm64 \
+            -e PLUGIN_GROUP=k8s \
+            -e PLUGIN_RELEASE=.tmp/ansible-kubernetes-images-${{ env.BUILD_VERSION }}-arm64.tgz \
+            registry.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0.0
 
       - name: Setup MinIO Client
         run: |
