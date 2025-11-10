@@ -10,7 +10,7 @@ curl -sL https://cache.ali.wodcloud.com/kubernetes/charts/beagle-cilium-$CILIUM_
 
 find ./linux/roles/wod.docker/files -mindepth 1 -not -name '.gitkeep' -delete
 DOCKER_VERSION=28.3.2
-curl -sL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-docker-$DOCKER_VERSION-$TARGETARCH.tgz >./linux/roles/wod.docker/files/ansible-docker-$DOCKER_VERSION-$TARGETARCH.tgz
+curl -sL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-docker-$DOCKER_VERSION-$TARGETARCH.tgz >./linux/roles/wod.docker/files/ansible-docker-$DOCKER_VERSION.tgz
 curl -sL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-docker.sh >./linux/roles/wod.docker/files/ansible-docker.sh
 curl -sL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-docker-uninstall.sh >./linux/roles/wod.docker/files/ansible-docker-uninstall.sh
 

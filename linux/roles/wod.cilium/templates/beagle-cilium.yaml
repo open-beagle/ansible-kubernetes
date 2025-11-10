@@ -38,9 +38,13 @@ envoy:
     useDigest: false
 
 ipam:
+  mode: "multi-pool" 
   operator:
-    clusterPoolIPv4PodCIDRList: ["{{ K8S_POD_NETWORK }}"]
-    clusterPoolIPv4MaskSize: {{ K8S_NODE_PODCIDRMASK }}
+    autoCreateCiliumPodIPPools:
+      default:
+        ipv4:
+          cidrs: ["{{ K8S_POD_NETWORK }}"]
+          maskSize: {{ K8S_NODE_PODCIDRMASK }}
 
 kubeProxyReplacement: "true"
 

@@ -1,0 +1,141 @@
+name: Build Dev Images
+
+on:
+  push:
+    branches:
+      - dev
+
+env:
+  BUILD_VERSION: v1.30.14
+  CILIUM_VERSION: 1.14.19
+  DOCKER_VERSION: 28.3.2
+  REGISTRY_VERSION: v2.8.1
+  GATEWAY_VERSION: v6.1.1
+
+jobs:
+  build:
+    name: Build Images
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to Aliyun Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: registry.cn-qingdao.aliyuncs.com
+          username: ${{ secrets.REGISTRY_USER_ALIYUN }}
+          password: ${{ secrets.REGISTRY_PASSWORD_ALIYUN }}
+
+      - name: Cilium
+        run: |
+          curl https://cache.ali.wodcloud.com/kubernetes/charts/beagle-cilium-${{ env.CILIUM_VERSION }}.tgz > ./linux/roles/wod.cilium/files/beagle-cilium-${{ env.CILIUM_VERSION }}.tgz
+
+      - name: Docker amd64
+        run: |
+          curl https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-docker-${{ env.DOCKER_VERSION }}-amd64.tgz > ./linux/roles/wod.docker/files/ansible-docker-${{ env.DOCKER_VERSION }}.tgz
+          curl https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-docker.sh >./linux/roles/wod.docker/files/ansible-docker.sh
+          curl https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-docker-uninstall.sh >./linux/roles/wod.docker/files/ansible-docker-uninstall.sh
+          sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-${{ env.DOCKER_VERSION }}\}\"?" ./linux/roles/wod.docker/files/ansible-docker.sh
+
+      - name: Registry amd64
+        run: |
+          docker create --name temp-registry registry.cn-qingdao.aliyuncs.com/wod/registry:${{ env.GATEWAY_VERSION }}-amd64
+          docker cp temp-registry:/usr/local/bin/registry linux/roles/wod.registry/files/bin/registry-${{ env.REGISTRY_VERSION }}
+          docker rm temp-registry
+
+      - name: Gateway amd64
+        run: |
+          docker create --name temp-gateway registry.cn-qingdao.aliyuncs.com/wod/awecloud-gateway:${{ env.REGISTRY_VERSION }}-amd64
+          docker cp temp-gateway:/usr/local/bin/gateway linux/roles/wod.gateway/files/gateway--${{ env.REGISTRY_VERSION }}
+          docker rm temp-gateway
+
+      - name: Group vars amd64
+        run: |
+          sed -i --expression "s?K8S_ARCH:.*?K8S_ARCH: amd64?" ./linux/group_vars/all.yml
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build images for amd64
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: .beagle/dockerfile
+          push: true
+          platforms: linux/amd64
+          tags: |
+            registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:${{ env.BUILD_VERSION }}-amd64
+          build-args: |
+            BASE=registry.cn-qingdao.aliyuncs.com/wod/ansible:2-amd64
+            VERSION=${{ env.BUILD_VERSION }}
+          provenance: false
+          sbom: false
+
+      - name: Docker arm64
+        run: |
+          curl https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-docker-${{ env.DOCKER_VERSION }}-arm64.tgz > ./linux/roles/wod.docker/files/ansible-docker-${{ env.DOCKER_VERSION }}.tgz
+          curl https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-docker.sh >./linux/roles/wod.docker/files/ansible-docker.sh
+          curl https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-docker-uninstall.sh >./linux/roles/wod.docker/files/ansible-docker-uninstall.sh
+          sed -i --expression "s?DOCKER_VERSION=.*?DOCKER_VERSION=\"\$\{DOCKER_VERSION\:-${{ env.DOCKER_VERSION }}\}\"?" ./linux/roles/wod.docker/files/ansible-docker.sh
+
+      - name: Registry arm64
+        run: |
+          docker create --name temp-registry registry.cn-qingdao.aliyuncs.com/wod/registry:${{ env.GATEWAY_VERSION }}-arm64
+          docker cp temp-registry:/usr/local/bin/registry linux/roles/wod.registry/files/bin/registry-${{ env.REGISTRY_VERSION }}
+          docker rm temp-registry
+
+      - name: Gateway arm64
+        run: |
+          docker create --name temp-gateway registry.cn-qingdao.aliyuncs.com/wod/awecloud-gateway:${{ env.REGISTRY_VERSION }}-arm64
+          docker cp temp-gateway:/usr/local/bin/gateway linux/roles/wod.gateway/files/gateway--${{ env.REGISTRY_VERSION }}
+          docker rm temp-gateway
+
+      - name: Group vars arm64
+        run: |
+          sed -i --expression "s?K8S_ARCH:.*?K8S_ARCH: arm64?" ./linux/group_vars/all.yml
+
+      - name: Build images for arm64
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: .beagle/dockerfile
+          push: true
+          platforms: linux/arm64
+          tags: |
+            registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:${{ env.BUILD_VERSION }}-arm64
+          build-args: |
+            BASE=registry.cn-qingdao.aliyuncs.com/wod/ansible:2-arm64
+            VERSION=${{ env.BUILD_VERSION }}
+          provenance: false
+          sbom: false
+
+      - name: Create and push multi-arch manifest
+        run: |
+          docker manifest create registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:${{ env.BUILD_VERSION }} \
+            registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:${{ env.BUILD_VERSION }}-amd64 \
+            registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:${{ env.BUILD_VERSION }}-arm64
+          docker manifest push registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:${{ env.BUILD_VERSION }}
+
+      - name: Images tgz
+        run: |
+          mkdir -p .tmp
+          docker pull registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:${{ env.BUILD_VERSION }}-amd64
+          docker save registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:${{ env.BUILD_VERSION }}-amd64 | gzip > .tmp/ansible-kubernetes-${{ env.BUILD_VERSION }}-amd64.tgz
+          docker pull registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:${{ env.BUILD_VERSION }}-arm64
+          docker save registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:${{ env.BUILD_VERSION }}-arm64 | gzip > .tmp/ansible-kubernetes-${{ env.BUILD_VERSION }}-arm64.tgz
+
+      - name: Setup MinIO Client
+        run: |
+          wget https://dl.min.io/client/mc/release/linux-amd64/mc
+          chmod +x mc
+          sudo mv mc /usr/local/bin/
+
+      - name: Upload to MinIO
+        env:
+          S3_ACCESS_KEY_ALIYUN: ${{ secrets.S3_ACCESS_KEY_ALIYUN }}
+          S3_SECRET_KEY_ALIYUN: ${{ secrets.S3_SECRET_KEY_ALIYUN }}
+        run: |
+          cp install-offline.sh .tmp/ansible-kubernetes-v1.30.14.sh
+          mc alias set aliyun --api=S3v4 https://cache.ali.wodcloud.com ${{ secrets.S3_ACCESS_KEY_ALIYUN }} ${{ secrets.S3_SECRET_KEY_ALIYUN }}
+          mc cp --recursive .tmp/ aliyun/kubernetes/ansible

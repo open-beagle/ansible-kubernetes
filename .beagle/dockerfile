@@ -1,13 +1,12 @@
-ARG BASE
+ARG BASE=registry.cn-qingdao.aliyuncs.com/wod/ansible:2
 
 FROM ${BASE}
 
-ARG AUTHOR
-ARG VERSION
-LABEL maintainer=${AUTHOR} version=${VERSION}
-
+ARG AUTHOR=mengkzhaoyun@gmail.com
+ARG VERSION=v1.30.14
 ARG TARGETOS
 ARG TARGETARCH
+LABEL maintainer=${AUTHOR} version=${VERSION}
 
 ADD . /etc/ansible
 

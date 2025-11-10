@@ -12,6 +12,10 @@
     dest: /opt/docker
   when: need_copy_files is failed
 
+- name: template ansible-docker.sh
+  template: src=ansible-docker.sh dest=/opt/docker/ansible-docker.sh
+  when: need_copy_files is failed  
+
 - name: /opt/docker/ansible-docker.sh
   raw: bash /opt/docker/ansible-docker.sh
   when: need_copy_files is failed
