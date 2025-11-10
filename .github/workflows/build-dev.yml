@@ -40,14 +40,14 @@ jobs:
 
       - name: Registry amd64
         run: |
-          docker create --name temp-registry registry.cn-qingdao.aliyuncs.com/wod/registry:${{ env.GATEWAY_VERSION }}-amd64
+          docker create --name temp-registry registry.cn-qingdao.aliyuncs.com/wod/registry:${{ env.REGISTRY_VERSION}}-amd64
           docker cp temp-registry:/usr/local/bin/registry linux/roles/wod.registry/files/bin/registry-${{ env.REGISTRY_VERSION }}
           docker rm temp-registry
 
       - name: Gateway amd64
         run: |
           docker create --name temp-gateway registry.cn-qingdao.aliyuncs.com/wod/awecloud-gateway:${{ env.REGISTRY_VERSION }}-amd64
-          docker cp temp-gateway:/usr/local/bin/gateway linux/roles/wod.gateway/files/gateway--${{ env.REGISTRY_VERSION }}
+          docker cp temp-gateway:/usr/local/bin/gateway linux/roles/wod.gateway/files/gateway--${{ env.GATEWAY_VERSION }}
           docker rm temp-gateway
 
       - name: Group vars amd64
@@ -81,14 +81,14 @@ jobs:
 
       - name: Registry arm64
         run: |
-          docker create --name temp-registry registry.cn-qingdao.aliyuncs.com/wod/registry:${{ env.GATEWAY_VERSION }}-arm64
+          docker create --name temp-registry registry.cn-qingdao.aliyuncs.com/wod/registry:${{ env.REGISTRY_VERSION}}-arm64
           docker cp temp-registry:/usr/local/bin/registry linux/roles/wod.registry/files/bin/registry-${{ env.REGISTRY_VERSION }}
           docker rm temp-registry
 
       - name: Gateway arm64
         run: |
           docker create --name temp-gateway registry.cn-qingdao.aliyuncs.com/wod/awecloud-gateway:${{ env.REGISTRY_VERSION }}-arm64
-          docker cp temp-gateway:/usr/local/bin/gateway linux/roles/wod.gateway/files/gateway--${{ env.REGISTRY_VERSION }}
+          docker cp temp-gateway:/usr/local/bin/gateway linux/roles/wod.gateway/files/gateway--${{ env.GATEWAY_VERSION }}
           docker rm temp-gateway
 
       - name: Group vars arm64
