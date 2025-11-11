@@ -20,7 +20,6 @@ EOF
 fi
 
 docker run \
-  -t \
   --rm \
   -v /etc/kubernetes/ansible/ansible-kubernetes.ini:/etc/ansible/hosts \
   -v /etc/kubernetes/ansible/ansible-kubernetes.yml:/etc/ansible/linux/beagle_vars/ansible-kubernetes.yml \
