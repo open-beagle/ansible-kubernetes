@@ -14,7 +14,7 @@ ANSIBLE_K8S_VERSION="${ANSIBLE_K8S_VERSION:-latest}"
 
 if ! [ -e /etc/kubernetes/ansible/ansible-kubernetes.yml ]; then
   cat >/etc/kubernetes/ansible/ansible-kubernetes.yml <<-EOF
-REGISTRY_LOCAL: 'registry.cn-qingdao.aliyuncs.com/wod'
+REGISTRY_LOCAL: "registry.cn-qingdao.aliyuncs.com/wod"
 K8S_VERSION: "${K8S_VERSION}"
 EOF
 fi

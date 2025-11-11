@@ -71,9 +71,9 @@ data:
         # }
         prometheus :9153
         cache 30
-        loop
         reload
         loadbalance
+        loop
     } 
 ---
 apiVersion: apps/v1
