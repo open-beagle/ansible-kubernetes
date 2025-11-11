@@ -5,7 +5,7 @@ set -ex
 TARGETARCH=amd64
 
 find ./linux/roles/wod.cilium/files -mindepth 1 -not -name '.gitkeep' -delete
-CILIUM_VERSION=1.14.19
+CILIUM_VERSION=1.18.3
 curl -sL https://cache.ali.wodcloud.com/kubernetes/charts/beagle-cilium-$CILIUM_VERSION.tgz >./linux/roles/wod.cilium/files/beagle-cilium-$CILIUM_VERSION.tgz
 
 find ./linux/roles/wod.docker/files -mindepth 1 -not -name '.gitkeep' -delete

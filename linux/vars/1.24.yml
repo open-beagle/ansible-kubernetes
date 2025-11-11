@@ -35,13 +35,13 @@ K8S_IMAGES:
     VERSION: "v1.1.2"
   CILIUM:
     NAME: cilium
-    VERSION: "1.14.19"
+    VERSION: "1.18.3"
   CILIUM-OPERATOR:
     NAME: cilium-operator-generic
-    VERSION: "1.14.19"
+    VERSION: "1.18.3"
   CILIUM-HUBBLE-RELAY:
     NAME: cilium-hubble-relay
-    VERSION: "1.14.19"
+    VERSION: "1.18.3"
   CILIUM-ENVOY:
     NAME: cilium-envoy
     VERSION: "1.34.7"

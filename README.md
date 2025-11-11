@@ -12,10 +12,10 @@
 
 ### 核心组件
 
-- 容器引擎: containerd 2.0
+- 容器引擎: containerd 2.1
 - 容器平台: kubernetes v1.30
 - 数据库: etcd v3.5
-- 网络组件: cilium v1.14
+- 网络组件: cilium v1.18
 - 扩展组件: coredns 1.11
 
 ## 准备 hosts 文件
@@ -85,10 +85,10 @@ bash /opt/docker/ansible-docker.sh
 # 开始安装k8s
 mkdir -p /etc/kubernetes/ansible && \
 curl -fL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-kubernetes-images-v1.30.14-amd64.tgz >/etc/kubernetes/ansible/ansible-kubernetes-images-v1.30.14-amd64.tgz && \
-curl -fL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-kubernetes-latest-amd64.tgz >/etc/kubernetes/ansible/ansible-kubernetes-latest-amd64.tgz && \
-curl -sfL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-kubernetes-latest.sh > /etc/kubernetes/ansible/ansible-kubernetes-latest.sh && \
+curl -fL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-kubernetes-v1.30.14-amd64.tgz >/etc/kubernetes/ansible/ansible-kubernetes-v1.30.14-amd64.tgz && \
+curl -sfL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-kubernetes-v1.30.14.sh > /etc/kubernetes/ansible/ansible-kubernetes-v1.30.14.sh && \
 export K8S_VERSION=v1.30.14 && \
-bash /etc/kubernetes/ansible/ansible-kubernetes-latest.sh
+bash /etc/kubernetes/ansible/ansible-kubernetes-v1.30.14.sh
 ```
 
 ### 完成安装
@@ -149,6 +149,3 @@ kube-system   kube-scheduler-beagle-01            1/1     Running   0          9
 - 1.28
 - 1.26
 - 1.24
-- 1.22
-- 1.20
-- 1.18

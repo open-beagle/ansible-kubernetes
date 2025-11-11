@@ -35,7 +35,7 @@ steps:
   - name: curl
     image: registry-vpc.cn-qingdao.aliyuncs.com/wod/curl:alpine
     environment:
-      CILIUM_VERSION: 1.14.19
+      CILIUM_VERSION: 1.18.3
     commands:
       - curl https://cache.ali.wodcloud.com/kubernetes/charts/beagle-cilium-$CILIUM_VERSION.tgz > ./linux/roles/wod.cilium/files/beagle-cilium-$CILIUM_VERSION.tgz
 
@@ -262,9 +262,9 @@ steps:
     commands:
       - mc alias set aliyun --api=S3v4 https://cache.ali.wodcloud.com $S3_ACCESS_KEY $S3_SECRET_KEY
       - mc cp install.sh aliyun/kubernetes/ansible/ansible-kubernetes.sh
-      - mc cp install-offline.sh aliyun/kubernetes/ansible/ansible-kubernetes-latest.sh
-      - mc cp aliyun/kubernetes/ansible/ansible-kubernetes-v1.30.14-amd64.tgz aliyun/kubernetes/ansible/ansible-kubernetes-latest-amd64.tgz
-      - mc cp aliyun/kubernetes/ansible/ansible-kubernetes-v1.30.14-arm64.tgz aliyun/kubernetes/ansible/ansible-kubernetes-latest-arm64.tgz
+      - mc cp install-offline.sh aliyun/kubernetes/ansible/ansible-kubernetes-v1.30.14.sh
+      - mc cp aliyun/kubernetes/ansible/ansible-kubernetes-v1.30.14-amd64.tgz aliyun/kubernetes/ansible/ansible-kubernetes-v1.30.14-amd64.tgz
+      - mc cp aliyun/kubernetes/ansible/ansible-kubernetes-v1.30.14-arm64.tgz aliyun/kubernetes/ansible/ansible-kubernetes-v1.30.14-arm64.tgz
 
 ---
 kind: pipeline
