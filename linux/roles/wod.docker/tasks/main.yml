@@ -5,6 +5,7 @@
 
 - name: mkdir -p /opt/docker /etc/docker
   raw: mkdir -p /opt/docker /etc/docker
+  when: need_copy_files is failed
 
 - name: copy files to /opt/docker
   copy:

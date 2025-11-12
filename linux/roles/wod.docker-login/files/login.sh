@@ -74,8 +74,28 @@ fi
 ## 修改cgroup配置
 if [ "$CONFIG_VERSION" = "2" ]; then
   yq eval ".plugins.\"io.containerd.grpc.v1.cri\".containerd.runtimes.runc.options.SystemdCgroup = true" /etc/containerd/config.yaml -i
+  yq eval ".plugins.\"io.containerd.grpc.v1.cri\".containerd.runtimes.runc.options.rlimit_nofile = 65536" /etc/containerd/config.yaml -i
+  yq eval ".plugins.\"io.containerd.grpc.v1.cri\".containerd.runtimes.runc.options.rlimit_nproc = 4096" /etc/containerd/config.yaml -i
 else
   yq eval ".plugins.\"io.containerd.cri.v1.runtime\".containerd.runtimes.runc.options.SystemdCgroup = true" /etc/containerd/config.yaml -i
+  yq eval ".plugins.\"io.containerd.cri.v1.runtime\".containerd.runtimes.runc.options.rlimit_nofile = 65536" /etc/containerd/config.yaml -i
+  yq eval ".plugins.\"io.containerd.cri.v1.runtime\".containerd.runtimes.runc.options.rlimit_nproc = 4096" /etc/containerd/config.yaml -i
+fi
+## 检查并修改nvidia runtime的rlimit配置（如果存在）
+if [ "$CONFIG_VERSION" = "2" ]; then
+  # 检查是否存在 nvidia runtime
+  if yq eval ".plugins.\"io.containerd.grpc.v1.cri\".containerd.runtimes.nvidia" /etc/containerd/config.yaml | grep -q "BinaryName"; then
+    yq eval ".plugins.\"io.containerd.grpc.v1.cri\".containerd.runtimes.nvidia.options.SystemdCgroup = true" /etc/containerd/config.yaml -i
+    yq eval ".plugins.\"io.containerd.grpc.v1.cri\".containerd.runtimes.nvidia.options.rlimit_nofile = 65536" /etc/containerd/config.yaml -i
+    yq eval ".plugins.\"io.containerd.grpc.v1.cri\".containerd.runtimes.nvidia.options.rlimit_nproc = 4096" /etc/containerd/config.yaml -i
+  fi
+else
+  # 检查是否存在 nvidia runtime
+  if yq eval ".plugins.\"io.containerd.cri.v1.runtime\".containerd.runtimes.nvidia" /etc/containerd/config.yaml | grep -q "BinaryName"; then
+    yq eval ".plugins.\"io.containerd.cri.v1.runtime\".containerd.runtimes.nvidia.options.SystemdCgroup = true" /etc/containerd/config.yaml -i
+    yq eval ".plugins.\"io.containerd.cri.v1.runtime\".containerd.runtimes.nvidia.options.rlimit_nofile = 65536" /etc/containerd/config.yaml -i
+    yq eval ".plugins.\"io.containerd.cri.v1.runtime\".containerd.runtimes.nvidia.options.rlimit_nproc = 4096" /etc/containerd/config.yaml -i
+  fi
 fi
 ## 修改containerd根目录
 yq eval ".root = \"$K8S_DATA_PATH/containerd\"" /etc/containerd/config.yaml -i

@@ -1,0 +1,47 @@
+- hosts: all
+  gather_facts: False
+  roles:
+    - wod.python
+
+- hosts: all
+  roles:
+    - wod.sys
+    - wod.k8s-ssl
+    - wod.docker
+    - wod.k8s-dropcaches
+
+- hosts: master
+  vars:
+    K8S_VERSION_NUM: "{{ K8S_VERSION | replace('v', '') }}"
+  roles:
+    - role: wod.k8s-ssl-master
+    - role: wod.k8s-ssl-kubelet
+    - role: wod.k8s-ssl-etcd
+    - role: wod.registry
+    - role: wod.docker-login
+    - role: wod.k8s-etcd
+    - role: wod.k8s-master
+    - role: wod.k8s-kubelet-images-containerd
+    - role: wod.k8s-kubelet-containerd
+    - role: wod.k8s-kubectl
+    - role: wod.k8s-label
+    - role: wod.k8s-kubectl-creds
+      when:
+        - "inventory_hostname == groups['master'][0]"
+
+- hosts: node
+  vars:
+    K8S_VERSION_NUM: "{{ K8S_VERSION | replace('v', '') }}"
+  roles:
+    - role: wod.k8s-ssl-kubelet
+    - role: wod.envoy
+    - role: wod.gateway
+    - role: wod.docker-login
+    - role: wod.k8s-kubelet-images-pause-containerd
+    - role: wod.k8s-kubelet-containerd
+
+- hosts: master
+  roles:
+    - role: wod.k8s-helm
+      when:
+        - "inventory_hostname == groups['master'][0]"
