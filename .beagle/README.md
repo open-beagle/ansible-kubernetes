@@ -3,7 +3,11 @@
 ## Download Files
 
 ```bash
+# 在线安装
 bash .beagle/install.sh
+
+# 离线安装
+curl -fL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-kubernetes-images-v1.30.14-amd64.tgz >$PWD/linux/roles/wod.registry/files/images/ansible-kubernetes-images-v1.30.14-amd64.tgz
 ```
 
 ## Debug In Containers
@@ -21,6 +25,10 @@ registry.cn-qingdao.aliyuncs.com/wod/ansible:2
 
 # 使用自定义配置安装集群
 ap linux/1.install.yml \
+--extra-vars "@./.vscode/ansible-kubernetes.yml"
+
+# 使用自定义配置升级集群
+ap linux/4.update.yml \
 --extra-vars "@./.vscode/ansible-kubernetes.yml"
 
 # 离线安装kubernetes集群

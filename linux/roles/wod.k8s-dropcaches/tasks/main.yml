@@ -6,8 +6,8 @@
 - name: mkdir -p /etc/kubernetes/scripts
   raw: mkdir -p /etc/kubernetes/scripts
 
-- name: template k8s-dropcaches.sh
-  template: src=scripts/k8s-dropcaches.sh dest=/etc/kubernetes/scripts/k8s-dropcaches.sh mode=0755
+- name: copy k8s-dropcaches.sh
+  copy: src=scripts/k8s-dropcaches.sh dest=/etc/kubernetes/scripts/k8s-dropcaches.sh mode=0755
 
 - name: template services/k8s-dropcaches.service
   template: src=services/k8s-dropcaches.service dest=/etc/systemd/system/k8s-dropcaches.service
