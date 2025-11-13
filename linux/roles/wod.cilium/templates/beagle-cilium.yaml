@@ -46,8 +46,6 @@ ipam:
           cidrs: ["{{ K8S_POD_NETWORK }}"]
           maskSize: {{ K8S_NODE_PODCIDRMASK }}
 
-ipv4NativeRoutingCIDR: "0.0.0.0/0"
-
 kubeProxyReplacement: "true"
 
 nodePort:

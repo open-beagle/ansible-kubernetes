@@ -13,8 +13,33 @@ K8S_VERSION="${K8S_VERSION:-v1.30.14}"
 # K8S发布版本
 K8S_RELEASE="${K8S_VERSION#v}"
 K8S_RELEASE="${K8S_RELEASE%.*}"
-# ANSIBLE-K8S版本
-ANSIBLE_K8S_VERSION="${ANSIBLE_K8S_VERSION:-latest}"
+# ANSIBLE-K8S版本自动检测
+if [ -z "${ANSIBLE_K8S_VERSION}" ]; then
+  # 检查是否存在latest版本的文件
+  if [ -f "/etc/kubernetes/ansible/ansible-kubernetes-latest-${TARGET_ARCH}.tgz" ]; then
+    ANSIBLE_K8S_VERSION="latest"
+  else
+    # 搜索所有ansible-kubernetes-*-${TARGET_ARCH}.tgz文件
+    AVAILABLE_FILES=$(ls /etc/kubernetes/ansible/ansible-kubernetes-*-${TARGET_ARCH}.tgz 2>/dev/null | sed "s|/etc/kubernetes/ansible/ansible-kubernetes-||g" | sed "s|-${TARGET_ARCH}.tgz||g" | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | sort -V)
+    
+    # 找到最大的版本
+    BEST_VERSION=""
+    for version in $AVAILABLE_FILES; do
+      BEST_VERSION="$version"
+    done
+    
+    # 如果找到版本则使用，否则使用默认值latest
+    if [ -n "$BEST_VERSION" ]; then
+      ANSIBLE_K8S_VERSION="$BEST_VERSION"
+    else
+      ANSIBLE_K8S_VERSION="latest"
+    fi
+  fi
+else
+  ANSIBLE_K8S_VERSION="${K8S_VERSION}"
+fi
+
+echo "Using ANSIBLE_K8S_VERSION: $ANSIBLE_K8S_VERSION"
 
 LOCAL_KERNEL=$(uname -r | head -c 3)
 LOCAL_ARCH=$(uname -m)
