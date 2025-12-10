@@ -3,7 +3,7 @@ ARG BASE=registry.cn-qingdao.aliyuncs.com/wod/ansible:2
 FROM ${BASE}
 
 ARG AUTHOR=mengkzhaoyun@gmail.com
-ARG VERSION=v1.30.14
+ARG VERSION=v1.32.10
 ARG TARGETOS
 ARG TARGETARCH
 LABEL maintainer=${AUTHOR} version=${VERSION}

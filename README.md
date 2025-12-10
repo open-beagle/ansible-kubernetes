@@ -84,11 +84,11 @@ bash /opt/docker/ansible-docker.sh
 
 # 开始安装k8s
 mkdir -p /etc/kubernetes/ansible && \
-curl -fL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-kubernetes-images-v1.30.14-amd64.tgz >/etc/kubernetes/ansible/ansible-kubernetes-images-v1.30.14-amd64.tgz && \
-curl -fL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-kubernetes-v1.30.14-amd64.tgz >/etc/kubernetes/ansible/ansible-kubernetes-v1.30.14-amd64.tgz && \
-curl -sfL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-kubernetes-v1.30.14.sh > /etc/kubernetes/ansible/ansible-kubernetes-v1.30.14.sh && \
-export K8S_VERSION=v1.30.14 && \
-bash /etc/kubernetes/ansible/ansible-kubernetes-v1.30.14.sh
+curl -fL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-kubernetes-images-v1.32.10-amd64.tgz >/etc/kubernetes/ansible/ansible-kubernetes-images-v1.32.10-amd64.tgz && \
+curl -fL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-kubernetes-v1.32.10-amd64.tgz >/etc/kubernetes/ansible/ansible-kubernetes-v1.32.10-amd64.tgz && \
+curl -sfL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-kubernetes-v1.32.10.sh > /etc/kubernetes/ansible/ansible-kubernetes-v1.32.10.sh && \
+export K8S_VERSION=v1.32.10 && \
+bash /etc/kubernetes/ansible/ansible-kubernetes-v1.32.10.sh
 ```
 
 ### 完成安装
@@ -107,9 +107,9 @@ beagle-03                  : ok=37   changed=32   unreachable=0    failed=0    s
 ```bash
 root@beagle-01:~# kubectl get node
 NAME        STATUS   ROLES    AGE   VERSION
-beagle-01   Ready    master   93s   v1.30.14-beagle
-beagle-02   Ready    <none>   79s   v1.30.14-beagle
-beagle-03   Ready    <none>   79s   v1.30.14-beagle
+beagle-01   Ready    master   93s   v1.32.10-beagle
+beagle-02   Ready    <none>   79s   v1.32.10-beagle
+beagle-03   Ready    <none>   79s   v1.32.10-beagle
 
 root@beagle-01:~# kubectl get pod -A -o wide
 NAMESPACE     NAME                                READY   STATUS    RESTARTS   AGE   IP              NODE        NOMINATED NODE   READINESS GATES

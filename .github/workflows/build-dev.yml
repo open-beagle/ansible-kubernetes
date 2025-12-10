@@ -1,4 +1,4 @@
-name: Build Dev Images
+name: Build Images Dev
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - dev
 
 env:
-  BUILD_VERSION: v1.30.14
+  BUILD_VERSION: v1.32.10
   CILIUM_VERSION: 1.18.3
   DOCKER_VERSION: 28.3.2
   REGISTRY_VERSION: v2.8.1
@@ -136,6 +136,6 @@ jobs:
           S3_ACCESS_KEY_ALIYUN: ${{ secrets.S3_ACCESS_KEY_ALIYUN }}
           S3_SECRET_KEY_ALIYUN: ${{ secrets.S3_SECRET_KEY_ALIYUN }}
         run: |
-          cp install-offline.sh .tmp/ansible-kubernetes-v1.30.14.sh
+          cp install-offline.sh .tmp/ansible-kubernetes-v1.32.10.sh
           mc alias set aliyun --api=S3v4 https://cache.ali.wodcloud.com ${{ secrets.S3_ACCESS_KEY_ALIYUN }} ${{ secrets.S3_SECRET_KEY_ALIYUN }}
           mc cp --recursive .tmp/ aliyun/kubernetes/ansible

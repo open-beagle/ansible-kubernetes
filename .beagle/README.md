@@ -7,7 +7,7 @@
 bash .beagle/install.sh
 
 # 离线安装
-curl -fL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-kubernetes-images-v1.30.14-amd64.tgz >$PWD/linux/roles/wod.registry/files/images/ansible-kubernetes-images-v1.30.14-amd64.tgz
+curl -fL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-kubernetes-images-v1.32.10-amd64.tgz >$PWD/linux/roles/wod.registry/files/images/ansible-kubernetes-images-v1.32.10-amd64.tgz
 ```
 
 ## Debug In Containers
@@ -208,12 +208,12 @@ bash /opt/docker/ansible-docker.sh
 
 # 开始安装k8s
 mkdir -p /etc/kubernetes/ansible && \
-curl -fL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-kubernetes-images-v1.30.14-amd64.tgz >/etc/kubernetes/ansible/ansible-kubernetes-images-v1.30.14-amd64.tgz && \
-curl -fL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-kubernetes-v1.30.14-amd64.tgz >/etc/kubernetes/ansible/ansible-kubernetes-v1.30.14-amd64.tgz && \
-curl -fL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-kubernetes-v1.30.14.sh > /etc/kubernetes/ansible/ansible-kubernetes-v1.30.14.sh && \
-export K8S_VERSION=v1.30.14 && \
-export ANSIBLE_K8S_VERSION=v1.30.14 && \
-bash /etc/kubernetes/ansible/ansible-kubernetes-v1.30.14.sh
+curl -fL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-kubernetes-images-v1.32.10-amd64.tgz >/etc/kubernetes/ansible/ansible-kubernetes-images-v1.32.10-amd64.tgz && \
+curl -fL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-kubernetes-v1.32.10-amd64.tgz >/etc/kubernetes/ansible/ansible-kubernetes-v1.32.10-amd64.tgz && \
+curl -fL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-kubernetes-v1.32.10.sh > /etc/kubernetes/ansible/ansible-kubernetes-v1.32.10.sh && \
+export K8S_VERSION=v1.32.10 && \
+export ANSIBLE_K8S_VERSION=v1.32.10 && \
+bash /etc/kubernetes/ansible/ansible-kubernetes-v1.32.10.sh
 ```
 
 ## cache
