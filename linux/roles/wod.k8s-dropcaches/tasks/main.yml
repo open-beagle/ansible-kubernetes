@@ -16,8 +16,12 @@
   template: src=services/k8s-dropcaches.timer dest=/etc/systemd/system/k8s-dropcaches.timer
   when: check_need_files is failed
 
+- name: systemctl daemon-reload
+  raw: systemctl daemon-reload
+
 - name: systemctl start k8s-dropcaches.service
   raw: systemctl daemon-reload && systemctl start k8s-dropcaches.service
+  when: check_need_files is failed
 
 - name: systemctl start k8s-dropcaches.timer
   raw: systemctl enable k8s-dropcaches.timer && systemctl start k8s-dropcaches.timer
