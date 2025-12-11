@@ -51,61 +51,38 @@ ansible all -m shell -a 'rm -rf /opt/docker'
 ## Debug Multi Version
 
 ```bash
-# 1.26
+# 1.32
 docker run \
--it --rm \
--v $PWD/:/etc/ansible \
--v $PWD/.vscode/ansible-kubernetes.ini:/etc/ansible/hosts \
--w /etc/ansible/linux \
-registry.cn-qingdao.aliyuncs.com/wod/ansible:2 \
-ansible-playbook 1.install.yml \
---extra-vars "@./vars/1.26.yml" \
---extra-vars "REGISTRY_LOCAL=registry.cn-qingdao.aliyuncs.com/wod"
+  -it --rm \
+  -v $PWD/:/etc/ansible \
+  -v $PWD/.vscode/ansible-kubernetes.ini:/etc/ansible/hosts \
+  -w /etc/ansible/linux \
+  registry.cn-qingdao.aliyuncs.com/wod/ansible:2 \
+  ansible-playbook 1.install.yml \
+  --extra-vars "@./vars/1.32.yml" \
+  --extra-vars "REGISTRY_LOCAL=registry.cn-qingdao.aliyuncs.com/wod"
+
+# 1.30
+docker run \
+  -it --rm \
+  -v $PWD/:/etc/ansible \
+  -v $PWD/.vscode/ansible-kubernetes.ini:/etc/ansible/hosts \
+  -w /etc/ansible/linux \
+  registry.cn-qingdao.aliyuncs.com/wod/ansible:2 \
+  ansible-playbook 1.install.yml \
+  --extra-vars "@./vars/1.30.yml" \
+  --extra-vars "REGISTRY_LOCAL=registry.cn-qingdao.aliyuncs.com/wod"
 
 # 1.24
 docker run \
--it --rm \
--v $PWD/:/etc/ansible \
--v $PWD/.vscode/ansible-kubernetes.ini:/etc/ansible/hosts \
--w /etc/ansible/linux \
-registry.cn-qingdao.aliyuncs.com/wod/ansible:2 \
-ansible-playbook 1.install.yml \
---extra-vars "@./vars/1.24.yml" \
---extra-vars "REGISTRY_LOCAL=registry.cn-qingdao.aliyuncs.com/wod"
-
-# 1.22
-docker run \
--it --rm \
--v $PWD/:/etc/ansible \
--v $PWD/.vscode/ansible-kubernetes.ini:/etc/ansible/hosts \
--w /etc/ansible/linux \
-registry.cn-qingdao.aliyuncs.com/wod/ansible:2 \
-ansible-playbook 1.install.yml \
---extra-vars "@./vars/1.22.yml" \
---extra-vars "REGISTRY_LOCAL=registry.cn-qingdao.aliyuncs.com/wod"
-
-# 1.20
-docker run \
--it --rm \
--v $PWD/:/etc/ansible \
--v $PWD/.vscode/ansible-kubernetes.ini:/etc/ansible/hosts \
--w /etc/ansible/linux \
-registry.cn-qingdao.aliyuncs.com/wod/ansible:2 \
-ansible-playbook 1.install.yml \
---extra-vars "@./vars/1.20.yml" \
---extra-vars "REGISTRY_LOCAL=registry.cn-qingdao.aliyuncs.com/wod"
-
-# 1.18
-# 仅测试通过Ubuntu 18.04
-docker run \
--it --rm \
--v $PWD/:/etc/ansible \
--v $PWD/.vscode/ansible-kubernetes.ini:/etc/ansible/hosts \
--w /etc/ansible/linux \
-registry.cn-qingdao.aliyuncs.com/wod/ansible:2 \
-ansible-playbook 1.install.yml \
---extra-vars "@./vars/1.18.yml" \
---extra-vars "REGISTRY_LOCAL=registry.cn-qingdao.aliyuncs.com/wod"
+  -it --rm \
+  -v $PWD/:/etc/ansible \
+  -v $PWD/.vscode/ansible-kubernetes.ini:/etc/ansible/hosts \
+  -w /etc/ansible/linux \
+  registry.cn-qingdao.aliyuncs.com/wod/ansible:2 \
+  ansible-playbook 1.install.yml \
+  --extra-vars "@./vars/1.24.yml" \
+  --extra-vars "REGISTRY_LOCAL=registry.cn-qingdao.aliyuncs.com/wod"
 ```
 
 ## Components
