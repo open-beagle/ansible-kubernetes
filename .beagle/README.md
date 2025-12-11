@@ -109,38 +109,38 @@ docker run -it --rm \
   httpd:2 -Bbn beagle beagle > $PWD/linux/roles/wod.registry/files/auth
 ```
 
-### Release Images
+### Download Images
 
 ```bash
 rm -rf .registry && \
 rm -rf linux/roles/wod.registry/files/images/*.tgz && \
 docker pull registry.cn-qingdao.aliyuncs.com/wod/devops-docker-images:1.0 && \
 docker run -it --rm \
--v $PWD/:$PWD/ \
--e CI_WORKSPACE=$PWD \
--e PLUGIN_SOURCE=registry.cn-qingdao.aliyuncs.com/wod \
--e PLUGIN_YAML=linux/vars/1.26.yml \
--e PLUGIN_IMAGE=K8S_IMAGES \
--e PLUGIN_ARCH=amd64 \
--e PLUGIN_GROUP=k8s \
--e PLUGIN_RELEASE=linux/roles/wod.registry/files/images/ansible-kubernetes-images-v1.26.15-amd64.tgz \
--w $PWD \
-registry.beagle.default:6444/k8s/devops-docker-images:1.0
+  -v $PWD/:$PWD/ \
+  -e CI_WORKSPACE=$PWD \
+  -e PLUGIN_SOURCE=registry.cn-qingdao.aliyuncs.com/wod \
+  -e PLUGIN_YAML=linux/vars/1.32.yml \
+  -e PLUGIN_IMAGE=K8S_IMAGES \
+  -e PLUGIN_ARCH=amd64 \
+  -e PLUGIN_GROUP=k8s \
+  -e PLUGIN_RELEASE=linux/roles/wod.registry/files/images/ansible-kubernetes-images-v1.32.10-amd64.tgz \
+  -w $PWD \
+  registry.beagle.default:6444/k8s/devops-docker-images:1.0
 ```
 
-### Update Images
+### Upload Images
 
 ```bash
 docker run -it --rm \
--v $PWD/:$PWD/ \
--e CI_WORKSPACE=$PWD \
--e PLUGIN_TARGET=192.168.1.201:6444,192.168.1.202:6444,192.168.1.203:6444 \
--e PLUGIN_TLS=insecure \
--e PLUGIN_USER=beagle \
--e PLUGIN_PASS=beagle \
--e PLUGIN_RELEASE=$PWD/beagle-kubernetes-images-v1.26.15-amd64.tgz \
--w $PWD \
-registry.beagle.default:6444/k8s/devops-docker-images:1.0
+  -v $PWD/:$PWD/ \
+  -e CI_WORKSPACE=$PWD \
+  -e PLUGIN_TARGET=192.168.1.201:6444,192.168.1.202:6444,192.168.1.203:6444 \
+  -e PLUGIN_TLS=insecure \
+  -e PLUGIN_USER=beagle \
+  -e PLUGIN_PASS=beagle \
+  -e PLUGIN_RELEASE=$PWD/beagle-kubernetes-images-v1.32.10-amd64.tgz \
+  -w $PWD \
+  registry.beagle.default:6444/k8s/devops-docker-images:1.0
 ```
 
 ### Pause Image
