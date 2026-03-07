@@ -15,11 +15,11 @@ tcp:
       loadBalancer:
         servers:
 {% for host in groups['master'] %}
-          - address: "{{ hostvars[host]['ansible_facts'][IFACE]['ipv4']['address'] }}:6443"
+          - address: "{{ hostvars[host]['HOST_IP'] }}:6443"
 {% endfor %}
     registry:
       loadBalancer:
         servers:
 {% for host in groups['master'] %}
-          - address: "{{ hostvars[host]['ansible_facts'][IFACE]['ipv4']['address'] }}:6444"
+          - address: "{{ hostvars[host]['HOST_IP'] }}:6444"
 {% endfor %}
