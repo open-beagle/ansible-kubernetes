@@ -60,31 +60,41 @@ overlay
 br_netfilter
 xt_bpf
 EOF
-
-  modprobe overlay
-  modprobe br_netfilter
-  modprobe xt_bpf
-
 fi
 
-if ! [ -e /etc/sysctl.d/99-kubernetes.conf ] ; then 
-  # sysctl params required by setup, params persist across reboots
-  cat <<EOF | tee /etc/sysctl.d/99-kubernetes.conf
-net.bridge.bridge-nf-call-iptables  = 1
-net.bridge.bridge-nf-call-ip6tables = 1
-net.ipv4.ip_forward                 = 1
-net.ipv4.ip_unprivileged_port_start = 0
-net.ipv4.ip_local_port_range        = 1 65535
-net.ipv6.conf.all.forwarding        = 1
-net.core.bpf_jit_limit              = 264241152
-net.core.somaxconn                  = 4096
-fs.inotify.max_user_watches         = 524288
-fs.inotify.max_queued_events        = 131072
-fs.inotify.max_user_instances       = 25600
-fs.file-max                         = 500000
-vm.max_map_count                    = 262144
-EOF
+modprobe overlay
+modprobe br_netfilter
+modprobe xt_bpf
 
-  # Apply sysctl params without reboot
-  sysctl --system
-fi
+SYSCTL_CONF="/etc/sysctl.d/99-kubernetes.conf"
+touch "${SYSCTL_CONF}"
+
+set_sysctl_param() {
+  local key="$1"
+  local value="$2"
+  local key_regex="${key//./\\.}"
+
+  if grep -Eq "^[[:space:]]*#?[[:space:]]*${key_regex}[[:space:]]*=" "${SYSCTL_CONF}" ; then
+    sed -ri "s|^[[:space:]]*#?[[:space:]]*${key_regex}[[:space:]]*=.*|${key} = ${value}|" "${SYSCTL_CONF}"
+  else
+    echo "${key} = ${value}" >> "${SYSCTL_CONF}"
+  fi
+}
+
+# sysctl params required by setup, params persist across reboots
+set_sysctl_param "net.bridge.bridge-nf-call-iptables" "1"
+set_sysctl_param "net.bridge.bridge-nf-call-ip6tables" "1"
+set_sysctl_param "net.ipv4.ip_forward" "1"
+set_sysctl_param "net.ipv4.ip_unprivileged_port_start" "0"
+set_sysctl_param "net.ipv4.ip_local_port_range" "1 65535"
+set_sysctl_param "net.ipv6.conf.all.forwarding" "1"
+set_sysctl_param "net.core.bpf_jit_limit" "264241152"
+set_sysctl_param "net.core.somaxconn" "4096"
+set_sysctl_param "fs.inotify.max_user_watches" "524288"
+set_sysctl_param "fs.inotify.max_queued_events" "131072"
+set_sysctl_param "fs.inotify.max_user_instances" "25600"
+set_sysctl_param "fs.file-max" "500000"
+set_sysctl_param "vm.max_map_count" "262144"
+
+# Apply sysctl params without reboot
+sysctl --system
