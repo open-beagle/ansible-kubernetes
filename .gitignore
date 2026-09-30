@@ -10,3 +10,5 @@ linux/roles/wod.gateway/files/
 
 # vscode
 .vscode/
+
+/.env

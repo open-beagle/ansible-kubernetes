@@ -8,12 +8,12 @@
 
 ### 限制条件
 
-- Linux Kernel >= 4.9.17 , 推荐 Ubuntu 22.04
+- Linux Kernel >= 4.19 , 推荐 Ubuntu 24.04
 
 ### 核心组件
 
 - 容器引擎: containerd 2.1
-- 容器平台: kubernetes v1.30
+- 容器平台: kubernetes v1.32
 - 数据库: etcd v3.5
 - 网络组件: cilium v1.18
 - 扩展组件: coredns 1.11
