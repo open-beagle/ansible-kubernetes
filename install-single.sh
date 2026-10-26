@@ -52,16 +52,16 @@ if ! (grep -q "^K8S_SINGLE:" /etc/kubernetes/ansible/ansible-kubernetes.yml); th
 fi
 sed -i --expression "s?^K8S_SINGLE:.*?K8S_SINGLE: true?" /etc/kubernetes/ansible/ansible-kubernetes.yml
 
-# 公网服务器不保留通用的 ansible 安装公钥
+# 公网服务器不保留通用的 ansible 安装公钥，以及上次异常中断残留的临时公钥
 if [ -e /root/.ssh/authorized_keys ]; then
-  sed -i '/ansible@bd-apaas.com/d' /root/.ssh/authorized_keys
+  sed -i '/ansible@bd-apaas\.com/d; / ansible@beagle\.io$/d' /root/.ssh/authorized_keys
 fi
 
 # 临时SSH密钥，安装结束（含失败）后移除
 SSH_KEY_DIR="$(mktemp -d)"
-SSH_KEY_COMMENT="ansible-single-$(date +%Y%m%d%H%M%S)-$$"
+SSH_KEY_COMMENT="ansible@beagle.io"
 cleanup() {
-  sed -i "/${SSH_KEY_COMMENT}/d" /root/.ssh/authorized_keys
+  sed -i '/ ansible@beagle\.io$/d' /root/.ssh/authorized_keys
   rm -rf "${SSH_KEY_DIR}"
 }
 trap cleanup EXIT
