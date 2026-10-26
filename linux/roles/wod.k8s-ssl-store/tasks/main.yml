@@ -1,0 +1,45 @@
+# 证书仓库 K8S_SSL_STORE 位于ansible容器内，由安装脚本挂载宿主机 /etc/kubernetes/ansible/ssl
+# 1. 证书仓库已有的文件直接使用（高级用法：安装前放入自备的CA）
+# 2. 证书仓库缺失的文件，从 master[0] 回收（兼容已安装的老集群）
+# 3. master[0] 也没有的文件，在 master[0] 上生成后回收
+- name: mkdir k8s ssl store
+  file: path={{ K8S_SSL_STORE }}/etcd state=directory mode=0700
+  delegate_to: localhost
+
+- name: check k8s ssl store
+  stat: path={{ K8S_SSL_STORE }}/{{ item }}
+  loop: "{{ K8S_SSL_STORE_FILES }}"
+  register: check_k8s_ssl_store
+  delegate_to: localhost
+
+- name: set k8s ssl store missing files
+  set_fact:
+    K8S_SSL_STORE_MISSING: "{{ check_k8s_ssl_store.results | rejectattr('stat.exists') | map(attribute='item') | list }}"
+
+- name: check k8s ssl store ca pair
+  assert:
+    that:
+      - ('ca.crt' in K8S_SSL_STORE_MISSING) == ('ca.key' in K8S_SSL_STORE_MISSING)
+      - ('etcd/ca.crt' in K8S_SSL_STORE_MISSING) == ('etcd/ca.key' in K8S_SSL_STORE_MISSING)
+    fail_msg: "{{ K8S_SSL_STORE }} 中的CA证书与私钥必须成对提供"
+
+- name: mkdir -p /etc/kubernetes/ssl/etcd
+  raw: mkdir -p /etc/kubernetes/ssl/etcd
+  when: K8S_SSL_STORE_MISSING | length > 0
+
+- name: template store.sh
+  template: src=store.sh dest=/etc/kubernetes/ssl/store.sh mode=0700
+  when: K8S_SSL_STORE_MISSING | length > 0
+
+- name: /etc/kubernetes/ssl/store.sh
+  raw: /etc/kubernetes/ssl/store.sh && rm -f /etc/kubernetes/ssl/store.sh
+  when: K8S_SSL_STORE_MISSING | length > 0
+
+- name: fetch k8s ssl store
+  fetch: src=/etc/kubernetes/ssl/{{ item }} dest={{ K8S_SSL_STORE }}/{{ item }} flat=yes
+  loop: "{{ K8S_SSL_STORE_MISSING }}"
+
+- name: chmod k8s ssl store
+  file: path={{ K8S_SSL_STORE }}/{{ item }} mode=0600
+  loop: "{{ K8S_SSL_STORE_FILES }}"
+  delegate_to: localhost

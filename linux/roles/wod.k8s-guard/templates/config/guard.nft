@@ -1,0 +1,25 @@
+{% set ALLOW_IPV4 = K8S_GUARD_ALLOW_CIDRS | reject('search', ':') | list %}
+{% set ALLOW_IPV6 = K8S_GUARD_ALLOW_CIDRS | select('search', ':') | list %}
+# 由 ansible-kubernetes wod.k8s-guard 生成，请勿手动修改
+# 独立的 inet beagle_guard 表，不影响 cilium、docker 的 iptables 规则
+
+table inet beagle_guard
+delete table inet beagle_guard
+
+table inet beagle_guard {
+  chain input {
+    type filter hook input priority -5; policy accept;
+    iifname { {% for iface in K8S_GUARD_IFACES %}"{{ iface }}"{% if not loop.last %}, {% endif %}{% endfor %} } jump public
+  }
+
+  chain public {
+{% if ALLOW_IPV4 | length > 0 %}
+    ip saddr { {{ ALLOW_IPV4 | join(', ') }} } return
+{% endif %}
+{% if ALLOW_IPV6 | length > 0 %}
+    ip6 saddr { {{ ALLOW_IPV6 | join(', ') }} } return
+{% endif %}
+    tcp dport { {{ K8S_GUARD_TCP_PORTS | join(', ') }} } drop
+    udp dport { {{ K8S_GUARD_UDP_PORTS | join(', ') }} } drop
+  }
+}

@@ -1,1 +1,1 @@
-{{ K8S_ADMIN_TOKEN }},kubernetes-admin,1,"system:masters"
+{{ lookup('file', K8S_SSL_STORE + '/admin.token') }},kubernetes-admin,1,"system:masters"

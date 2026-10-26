@@ -7,14 +7,19 @@
   ignore_errors: True  
 
 - name: copy ca.crt
-  copy: src=ca.crt dest=/etc/kubernetes/ssl/ca.crt mode=0644
+  copy: src={{ K8S_SSL_STORE }}/ca.crt dest=/etc/kubernetes/ssl/ca.crt mode=0644
   when: need_ssl_ca_crt is failed
 
+# ca.key 仅分发给 master，node 的 kubelet 证书由 master[0] 签发
+# 老集群 node 上已有的 ca.key 保持不变
 - name: check need ca.key
   raw: stat /etc/kubernetes/ssl/ca.key
   register: need_ssl_ca_key
-  ignore_errors: True  
+  ignore_errors: True
+  when: inventory_hostname in groups['master']
 
 - name: copy ca.key
-  copy: src=ca.key dest=/etc/kubernetes/ssl/ca.key mode=0600
-  when: need_ssl_ca_key is failed
+  copy: src={{ K8S_SSL_STORE }}/ca.key dest=/etc/kubernetes/ssl/ca.key mode=0600
+  when:
+    - inventory_hostname in groups['master']
+    - need_ssl_ca_key is failed

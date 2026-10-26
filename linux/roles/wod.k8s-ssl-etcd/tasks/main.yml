@@ -1,11 +1,23 @@
 - name: mkdir -p /etc/kubernetes/ssl/etcd
   raw: mkdir -p /etc/kubernetes/ssl/etcd
 
+- name: check need /etc/kubernetes/ssl/etcd/ca.crt
+  raw: stat /etc/kubernetes/ssl/etcd/ca.crt
+  register: need_ssl_etcd_ca_crt
+  ignore_errors: True
+
 - name: copy /etc/kubernetes/ssl/etcd/ca.crt
-  copy: src=ca.crt dest=/etc/kubernetes/ssl/etcd/ca.crt mode=0644
+  copy: src={{ K8S_SSL_STORE }}/etcd/ca.crt dest=/etc/kubernetes/ssl/etcd/ca.crt mode=0644
+  when: need_ssl_etcd_ca_crt is failed
+
+- name: check need /etc/kubernetes/ssl/etcd/ca.key
+  raw: stat /etc/kubernetes/ssl/etcd/ca.key
+  register: need_ssl_etcd_ca_key
+  ignore_errors: True
 
 - name: copy /etc/kubernetes/ssl/etcd/ca.key
-  copy: src=ca.key dest=/etc/kubernetes/ssl/etcd/ca.key mode=0600
+  copy: src={{ K8S_SSL_STORE }}/etcd/ca.key dest=/etc/kubernetes/ssl/etcd/ca.key mode=0600
+  when: need_ssl_etcd_ca_key is failed
 
 - name: template /etc/kubernetes/ssl/etcd/server.cnf
   template: src=server.cnf dest=/etc/kubernetes/ssl/etcd/server.cnf mode=0600

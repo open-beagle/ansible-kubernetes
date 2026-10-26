@@ -84,12 +84,17 @@ K8S_VERSION: "${K8S_VERSION}"
 EOF
 fi
 
+# 证书仓库，首次安装自动生成CA
+mkdir -p /etc/kubernetes/ansible/ssl
+chmod 0700 /etc/kubernetes/ansible/ssl
+
 # 运行ansible-kubernetes容器安装k8s
 docker run \
   -t \
   --rm \
   -v /etc/kubernetes/ansible/ansible-kubernetes.ini:/etc/ansible/hosts \
   -v /etc/kubernetes/ansible/ansible-kubernetes.yml:/etc/ansible/linux/beagle_vars/ansible-kubernetes.yml \
+  -v /etc/kubernetes/ansible/ssl:/etc/ansible/linux/ssl \
   -v /etc/kubernetes/ansible/ansible-kubernetes-images-${K8S_VERSION}-${TARGET_ARCH}.tgz:/etc/ansible/linux/roles/wod.registry/files/images/ansible-kubernetes-images-${K8S_VERSION}-${TARGET_ARCH}.tgz \
   -w /etc/ansible/linux \
   registry.cn-qingdao.aliyuncs.com/wod/ansible-kubernetes:${ANSIBLE_K8S_VERSION}-${TARGET_ARCH} \

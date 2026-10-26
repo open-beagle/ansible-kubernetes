@@ -2,13 +2,15 @@
 *.deb
 *.rpm
 
+# vscode
+/.vscode
+
 # projects
 linux/roles/wod.cilium/files/
 linux/roles/wod.docker/files/
 linux/roles/wod.registry/files/
 linux/roles/wod.gateway/files/
-
-# vscode
-.vscode/
-
+linux/ssl/
 /.env
+/.tmp
+/hosts

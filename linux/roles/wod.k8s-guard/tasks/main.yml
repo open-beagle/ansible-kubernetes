@@ -1,0 +1,23 @@
+- name: check need nftables
+  raw: command -v nft || PATH=/usr/sbin:/sbin:$PATH command -v nft
+  register: check_need_nft
+  ignore_errors: True
+
+- name: install nftables
+  raw: (command -v apt-get && apt-get update && apt-get install -y nftables) || (command -v dnf && dnf install -y nftables) || (command -v yum && yum install -y nftables)
+  when: check_need_nft is failed
+
+- name: mkdir -p /etc/kubernetes/guard
+  raw: mkdir -p /etc/kubernetes/guard /etc/kubernetes/scripts
+
+- name: template config/guard.nft
+  template: src=config/guard.nft dest=/etc/kubernetes/guard/guard.nft mode=0644
+
+- name: copy k8s-guard.sh
+  copy: src=scripts/k8s-guard.sh dest=/etc/kubernetes/scripts/k8s-guard.sh mode=0755
+
+- name: template services/k8s-guard.service
+  template: src=services/k8s-guard.service dest=/etc/systemd/system/k8s-guard.service
+
+- name: systemctl restart k8s-guard.service
+  raw: systemctl daemon-reload && systemctl enable k8s-guard.service && systemctl restart k8s-guard.service

@@ -3,6 +3,10 @@
   roles:
     - wod.python
 
+- hosts: master[0]
+  roles:
+    - wod.k8s-ssl-store
+
 - hosts: all
   roles:
     - wod.sys

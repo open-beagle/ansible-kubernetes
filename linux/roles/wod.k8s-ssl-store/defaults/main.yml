@@ -1,0 +1,12 @@
+# 证书仓库中需要在所有节点保持一致的文件
+## ca.crt / ca.key , 集群CA
+## etcd/ca.crt / etcd/ca.key , etcd CA
+## apiserver.key , apiserver证书私钥，同时是ServiceAccount签名私钥
+## admin.token , 集群管理员静态Token
+K8S_SSL_STORE_FILES:
+  - ca.crt
+  - ca.key
+  - etcd/ca.crt
+  - etcd/ca.key
+  - apiserver.key
+  - admin.token

@@ -1,10 +1,12 @@
+{% set ETCD_ADVERTISE_HOST = "127.0.0.1" if K8S_SINGLE | bool else inventory_hostname %}
+{% set ETCD_LISTEN_HOST = "127.0.0.1" if K8S_SINGLE | bool else "0.0.0.0" %}
 apiVersion: v1
 kind: Pod
 metadata:
   name: etcd
   namespace: kube-system
   annotations:
-    kubeadm.kubernetes.io/etcd.advertise-client-urls: https://{{ inventory_hostname }}:2379
+    kubeadm.kubernetes.io/etcd.advertise-client-urls: https://{{ ETCD_ADVERTISE_HOST }}:2379
     k8s.beagle.io/etcd.version: "{{ BEAGLE_ETCD_VERSION }}"
   labels:
     k8s-app: etcd
@@ -38,7 +40,7 @@ spec:
     command:
     - etcd
     - --snapshot-count=10000
-    - --listen-metrics-urls=http://0.0.0.0:2381
+    - --listen-metrics-urls=http://127.0.0.1:2381
     - --data-dir=/etc/kubernetes/data/etcd
     - --client-cert-auth=true
     - --key-file=/etc/kubernetes/ssl/etcd/server.key
@@ -49,10 +51,10 @@ spec:
     - --peer-cert-file=/etc/kubernetes/ssl/etcd/peer.crt
     - --peer-trusted-ca-file=/etc/kubernetes/ssl/etcd/ca.crt
     - --name={{ inventory_hostname }}
-    - --initial-advertise-peer-urls=https://{{ inventory_hostname }}:2380
-    - --listen-peer-urls=https://0.0.0.0:2380
-    - --advertise-client-urls=https://{{ inventory_hostname }}:2379
-    - --listen-client-urls=https://0.0.0.0:2379
+    - --initial-advertise-peer-urls=https://{{ ETCD_ADVERTISE_HOST }}:2380
+    - --listen-peer-urls=https://{{ ETCD_LISTEN_HOST }}:2380
+    - --advertise-client-urls=https://{{ ETCD_ADVERTISE_HOST }}:2379
+    - --listen-client-urls=https://{{ ETCD_LISTEN_HOST }}:2379
 {% if groups['master'] | length > 1 %}
     - --initial-cluster-state=new
     - --initial-cluster-token=beagle

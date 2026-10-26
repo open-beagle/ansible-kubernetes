@@ -6,6 +6,7 @@ cd /etc/kubernetes/ssl
 
 if ! [ -e /etc/kubernetes/ssl/admin.key ]; then
   openssl genrsa -out admin.key 2048
+  chmod 0600 admin.key
 fi
 
 if ! [ -e /etc/kubernetes/ssl/admin.crt ]; then

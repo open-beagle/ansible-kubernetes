@@ -89,8 +89,16 @@ K8S_IMAGES:
     VERSION: "1.0"
 
 #### k8s 可选设置 ####
-# K8S_ADMIN_TOKEN , 设置集群的管理员静态Token
+# K8S_ADMIN_TOKEN , 设置集群的管理员静态Token，不设置时首次安装随机生成，保存在证书仓库 admin.token
 # K8S_ADMIN_TOKEN: pleasechangeit
+
+# K8S_SSL_STORE , 证书仓库，安装脚本挂载宿主机 /etc/kubernetes/ansible/ssl
+# 首次安装时自动生成CA；如需使用自备CA，安装前将 ca.crt、ca.key、etcd/ca.crt、etcd/ca.key 放入该目录
+K8S_SSL_STORE: "{{ playbook_dir }}/ssl"
+
+# K8S_SINGLE , 单机模式，由 1.install-single.yml 开启
+# 开启后 etcd、registry 仅监听 127.0.0.1，并在公网网卡上拦截集群内部端口
+K8S_SINGLE: false
 
 # K8S_NETWORK_PLUGIN , 网络插件cilium, flannel
 K8S_NETWORK_PLUGIN: cilium

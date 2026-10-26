@@ -9,6 +9,6 @@ log:
     environment: staging
 
 http:
-  addr: :6444
+  addr: {{ "127.0.0.1" if K8S_SINGLE | bool else "" }}:6444
   headers:
     X-Content-Type-Options: [nosniff]

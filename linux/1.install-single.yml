@@ -1,0 +1,69 @@
+# 单机模式：适用于直接暴露在公网的单台物理服务器
+# - etcd、registry 仅监听 127.0.0.1
+# - wod.k8s-guard 在公网网卡上拦截 6443 等集群内部端口
+# - 不向 /root/.ssh/authorized_keys 注入 ansible 公钥
+# 单机模式安装的集群不支持再通过 3.install-node.yml 扩容
+- hosts: all
+  gather_facts: False
+  tasks:
+    - name: check single host
+      assert:
+        that:
+          - groups['master'] | length == 1
+          - groups['node'] | default([]) | length == 0
+        fail_msg: "单机模式要求 [master] 只有一台主机，且 [node] 为空"
+      run_once: True
+
+- hosts: all
+  gather_facts: False
+  roles:
+    - wod.python
+
+- hosts: master[0]
+  vars:
+    K8S_SINGLE: true
+  roles:
+    - wod.k8s-ssl-store
+
+- hosts: all
+  vars:
+    K8S_SINGLE: true
+    SSH_INSTALL_KEYS: []
+  roles:
+    - wod.sys
+    - wod.k8s-guard
+    - wod.k8s-ssl
+    - wod.docker
+    - wod.k8s-dropcaches
+
+- hosts: master
+  vars:
+    K8S_SINGLE: true
+    K8S_VERSION_NUM: "{{ K8S_VERSION | replace('v', '') }}"
+  roles:
+    - role: wod.k8s-ssl-master
+    - role: wod.k8s-ssl-kubelet
+    - role: wod.k8s-ssl-etcd
+    - role: wod.registry
+    - role: wod.docker-login
+    - role: wod.k8s-etcd
+    - role: wod.k8s-master
+    - role: wod.k8s-kubelet-images-containerd
+    - role: wod.k8s-kubelet-containerd
+    - role: wod.k8s-kubectl
+    - role: wod.k8s-label
+    - role: wod.k8s-kubectl-creds
+
+- hosts: master
+  vars:
+    K8S_SINGLE: true
+  roles:
+    - role: wod.k8s-helm
+    - role: wod.flannel
+      when:
+        - "K8S_NETWORK_PLUGIN == 'flannel'"
+    - role: wod.cilium
+      when:
+        - "K8S_NETWORK_PLUGIN == 'cilium'"
+        - ansible_kernel is version('4.9.17','>=')
+    - role: wod.k8s-addon

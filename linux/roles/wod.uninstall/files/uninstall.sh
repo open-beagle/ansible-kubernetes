@@ -23,6 +23,14 @@ if [ "`systemctl is-active $SERVICE`" == "active" ] ; then
 fi
 rm -rf /etc/systemd/system/$SERVICE.service
 
+SERVICE=k8s-guard
+
+if [ "`systemctl is-active $SERVICE`" == "active" ] ; then
+  systemctl stop $SERVICE
+fi
+systemctl disable $SERVICE 2>/dev/null
+rm -rf /etc/systemd/system/$SERVICE.service
+
 docker rm $(docker ps -a | awk '{print $1}') -f
 
 docker system prune -a -f

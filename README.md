@@ -70,6 +70,30 @@ curl -sfL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-kubernetes.s
 bash /etc/kubernetes/ansible/ansible-kubernetes.sh
 ```
 
+## 单机安装 kubernetes（公网服务器）
+
+适用于直接暴露在互联网的单台物理服务器，在该服务器上以 root 执行，无需准备 hosts 文件
+
+```bash
+mkdir -p /etc/kubernetes/ansible && \
+curl -sfL https://cache.ali.wodcloud.com/kubernetes/ansible/ansible-kubernetes-single.sh > /etc/kubernetes/ansible/ansible-kubernetes-single.sh && \
+bash /etc/kubernetes/ansible/ansible-kubernetes-single.sh
+```
+
+与集群安装的区别：
+
+- etcd、registry 仅监听 `127.0.0.1`
+- `k8s-guard` 服务在公网网卡上拦截 `6443`、`2379-2381`、`6444`、`10250` 等集群内部端口，管理 IP 可通过 `K8S_GUARD_ALLOW_CIDRS` 放行，或使用 `ssh -L 6443:127.0.0.1:6443` 访问
+- 使用临时 SSH 密钥连接本机，安装结束后自动移除，并清理 `ansible@bd-apaas.com` 公钥
+- 单机模式安装的集群不支持再通过 `3.install-node.yml` 扩容
+- SSH、80、443 及业务端口不做处理，请在外部防火墙（如 Hetzner Robot Firewall）配置白名单
+
+## 证书仓库
+
+首次安装时在 `master[0]` 上随机生成集群 CA、etcd CA、ServiceAccount 私钥与管理员 Token，保存至 `/etc/kubernetes/ansible/ssl`，后续扩容、升级从该目录分发。已安装的老集群会从 `master[0]` 回收原有证书，无需额外操作。
+
+如需使用自备 CA，安装前将 `ca.crt`、`ca.key`、`etcd/ca.crt`、`etcd/ca.key` 放入 `/etc/kubernetes/ansible/ssl`。
+
 ## 离线安装 kubernetes 集群
 
 ```bash

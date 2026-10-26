@@ -6,3 +6,50 @@
 
 - name: Run kubelet.sh
   raw: /etc/kubernetes/ssl/kubelet.sh
+
+- name: check need kubelet.crt
+  raw: stat /etc/kubernetes/ssl/kubelet.crt
+  register: need_ssl_kubelet_crt
+  ignore_errors: True
+
+# master[0] 签发 kubelet 证书，CSR 与签发结果保存在 master[0] 的 /etc/kubernetes/ssl/kubelet
+- block:
+    - name: slurp kubelet.csr
+      slurp: src=/etc/kubernetes/ssl/kubelet.csr
+      register: ssl_kubelet_csr
+
+    - name: mkdir -p /etc/kubernetes/ssl/kubelet
+      raw: mkdir -p /etc/kubernetes/ssl/kubelet
+      delegate_to: "{{ groups['master'][0] }}"
+
+    - name: copy kubelet csr to master
+      copy:
+        content: "{{ ssl_kubelet_csr.content | b64decode }}"
+        dest: /etc/kubernetes/ssl/kubelet/{{ inventory_hostname }}.csr
+      delegate_to: "{{ groups['master'][0] }}"
+
+    - name: template kubelet cnf to master
+      template: src=kubelet.cnf dest=/etc/kubernetes/ssl/kubelet/{{ inventory_hostname }}.cnf
+      delegate_to: "{{ groups['master'][0] }}"
+
+    # 使用随机序列号，避免多个节点并发签发时争用 ca.srl
+    - name: sign kubelet crt
+      raw: >-
+        openssl x509 -req -in /etc/kubernetes/ssl/kubelet/{{ inventory_hostname }}.csr
+        -CA /etc/kubernetes/ssl/ca.crt -CAkey /etc/kubernetes/ssl/ca.key
+        -set_serial 0x$(openssl rand -hex 16)
+        -out /etc/kubernetes/ssl/kubelet/{{ inventory_hostname }}.crt
+        -days 36500 -extensions v3_req -extfile /etc/kubernetes/ssl/kubelet/{{ inventory_hostname }}.cnf
+      delegate_to: "{{ groups['master'][0] }}"
+
+    - name: slurp kubelet crt from master
+      slurp: src=/etc/kubernetes/ssl/kubelet/{{ inventory_hostname }}.crt
+      register: ssl_kubelet_crt
+      delegate_to: "{{ groups['master'][0] }}"
+
+    - name: copy kubelet.crt
+      copy:
+        content: "{{ ssl_kubelet_crt.content | b64decode }}"
+        dest: /etc/kubernetes/ssl/kubelet.crt
+        mode: "0644"
+  when: need_ssl_kubelet_crt is failed

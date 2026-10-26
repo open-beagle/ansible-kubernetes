@@ -1,0 +1,13 @@
+[Unit]
+Description=Kubernetes Guard, drop cluster internal ports on public interfaces
+Wants=network-pre.target
+Before=network-pre.target k8s-kubelet.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/etc/kubernetes/scripts/k8s-guard.sh start
+ExecStop=/etc/kubernetes/scripts/k8s-guard.sh stop
+
+[Install]
+WantedBy=multi-user.target

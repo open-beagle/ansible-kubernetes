@@ -1,0 +1,44 @@
+# K8S_GUARD , 单机公网节点的端口防护
+# 在公网网卡上拦截集群内部端口，本机回环、容器网络(cilium/lxc)的流量不受影响
+# 仅拦截以下端口，其余端口（ssh、80、443、业务端口）不做处理，由外部防火墙管理
+
+# K8S_GUARD_IFACES , 公网网卡，默认为默认路由网卡
+K8S_GUARD_IFACES:
+  - "{{ IFACE }}"
+
+# K8S_GUARD_ALLOW_CIDRS , 放行的管理IP，如需从外部访问 6443，在此添加
+# K8S_GUARD_ALLOW_CIDRS:
+#   - 1.2.3.4/32
+#   - 2001:db8::/64
+K8S_GUARD_ALLOW_CIDRS: []
+
+# K8S_GUARD_TCP_PORTS , 拦截的TCP端口
+## 2379-2381 , etcd
+## 6443 , kube-apiserver
+## 6444 , k8s-registry
+## 10248-10260 , kubelet、kube-proxy、kube-controller-manager、kube-scheduler
+## 4240 , cilium-health
+## 4244 , hubble
+## 6060-6062 , cilium pprof
+## 9234 9878-9881 9890-9893 9901 9962-9966 , cilium/operator/envoy 健康检查与监控
+K8S_GUARD_TCP_PORTS:
+  - 2379-2381
+  - 4240
+  - 4244
+  - 6060-6062
+  - 6443-6444
+  - 9234
+  - 9878-9881
+  - 9890-9893
+  - 9901
+  - 9962-9966
+  - 10248-10260
+
+# K8S_GUARD_UDP_PORTS , 拦截的UDP端口
+## 8472 , cilium vxlan
+## 6081 , cilium geneve
+## 51871 , cilium wireguard
+K8S_GUARD_UDP_PORTS:
+  - 8472
+  - 6081
+  - 51871
