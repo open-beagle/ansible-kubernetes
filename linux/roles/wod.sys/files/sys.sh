@@ -10,7 +10,7 @@ if ! [ -e /etc/kubernetes/scripts/authorized_keys.sh ] ; then
 
   if ! [ -e /root/.ssh/authorized_keys ]; then
     mkdir -p /root/.ssh/
-    touch /root/.ssh/authorized_keys create file
+    touch /root/.ssh/authorized_keys
   fi
 
   IFS=","
@@ -51,20 +51,23 @@ if ! [ -e /etc/kubernetes/scripts/swap.sh ] ; then
   swapoff -a 
   sysctl -w vm.swappiness=0
   sed -ri '/^[^#]*swap/s@^@#@' /etc/fstab
+  systemctl mask swap.target || true
   touch /etc/kubernetes/scripts/swap.sh
 fi
 
 if ! [ -e /etc/modules-load.d/k8s.conf ] ; then 
-  cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
+  cat <<EOF | tee /etc/modules-load.d/k8s.conf
+tcp_bbr
 overlay
 br_netfilter
 xt_bpf
 EOF
 fi
 
+modprobe tcp_bbr || true
 modprobe overlay
 modprobe br_netfilter
-modprobe xt_bpf
+modprobe xt_bpf || true
 
 SYSCTL_CONF="/etc/sysctl.d/99-kubernetes.conf"
 touch "${SYSCTL_CONF}"
@@ -82,18 +85,29 @@ set_sysctl_param() {
 }
 
 # sysctl params required by setup, params persist across reboots
+set_sysctl_param "net.core.default_qdisc" "fq"
+set_sysctl_param "net.ipv4.tcp_congestion_control" "bbr"
+set_sysctl_param "vm.swappiness" "0"
+set_sysctl_param "vm.overcommit_memory" "1"
+set_sysctl_param "vm.panic_on_oom" "0"
 set_sysctl_param "net.bridge.bridge-nf-call-iptables" "1"
 set_sysctl_param "net.bridge.bridge-nf-call-ip6tables" "1"
 set_sysctl_param "net.ipv4.ip_forward" "1"
 set_sysctl_param "net.ipv4.ip_unprivileged_port_start" "0"
-set_sysctl_param "net.ipv4.ip_local_port_range" "1 65535"
+set_sysctl_param "net.ipv4.ip_local_port_range" "10240 65535"
 set_sysctl_param "net.ipv6.conf.all.forwarding" "1"
+set_sysctl_param "net.ipv6.conf.default.forwarding" "1"
+set_sysctl_param "net.ipv4.conf.all.rp_filter" "0"
+set_sysctl_param "net.ipv4.conf.default.rp_filter" "0"
 set_sysctl_param "net.core.bpf_jit_limit" "264241152"
-set_sysctl_param "net.core.somaxconn" "4096"
+set_sysctl_param "net.core.somaxconn" "8192"
+set_sysctl_param "net.core.netdev_max_backlog" "16384"
+set_sysctl_param "net.ipv4.tcp_max_syn_backlog" "8192"
 set_sysctl_param "fs.inotify.max_user_watches" "524288"
 set_sysctl_param "fs.inotify.max_queued_events" "131072"
 set_sysctl_param "fs.inotify.max_user_instances" "25600"
 set_sysctl_param "fs.file-max" "500000"
+set_sysctl_param "fs.may_detach_mounts" "1"
 set_sysctl_param "vm.max_map_count" "262144"
 
 # Apply sysctl params without reboot
