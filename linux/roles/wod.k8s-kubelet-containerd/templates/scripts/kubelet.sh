@@ -17,11 +17,19 @@ mkdir -p /etc/containerd
 if ! [ -e /etc/containerd/config.toml ]; then
   containerd config default >/etc/containerd/config.toml
 fi
+if [ -e /etc/systemd/system/containerd.service ] && grep -q "^MountFlags=slave" /etc/systemd/system/containerd.service; then
+  sed -i 's/^MountFlags=slave/#MountFlags=slave/' /etc/systemd/system/containerd.service
+  CONTAINERD_NEEDS_RESTART=true
+fi
 if ! (grep -q $PAUSE_IMAGE /etc/containerd/config.toml); then
   dasel -f /etc/containerd/config.toml -r toml -w yaml >/etc/containerd/config.yaml
   yq eval ".plugins.\"io.containerd.cri.v1.images\".pinned_images.sandbox = \"$PAUSE_IMAGE\"" /etc/containerd/config.yaml -i
   dasel -f /etc/containerd/config.yaml -r yaml -w toml >/etc/containerd/config.toml
   rm -rf /etc/containerd/config.yaml
+  CONTAINERD_NEEDS_RESTART=true
+fi
+if [ "${CONTAINERD_NEEDS_RESTART}" = "true" ]; then
+  systemctl daemon-reload
   systemctl restart containerd
 fi
 

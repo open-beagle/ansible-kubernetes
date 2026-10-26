@@ -83,7 +83,7 @@ bash /etc/kubernetes/ansible/ansible-kubernetes-single.sh
 与集群安装的区别：
 
 - etcd、registry 仅监听 `127.0.0.1`
-- `k8s-guard` 服务在公网网卡上拦截 `6443`、`2379-2381`、`6444`、`10250` 等集群内部端口，管理 IP 可通过 `K8S_GUARD_ALLOW_CIDRS` 放行，或使用 `ssh -L 6443:127.0.0.1:6443` 访问
+- `k8s-guard` 服务在公网网卡上拦截 `6443`、`2379-2381`、`6444`、`10250` 等集群内部端口，并在 `ingress` 钩子丢弃直连 Pod/Service/Docker 内网段（`10.2.0.0/16`、`10.3.0.0/16`、`172.17.0.0/16`）的外部伪造路由流量；管理 IP 可通过 `K8S_GUARD_ALLOW_CIDRS` 放行，或使用 `ssh -L 6443:127.0.0.1:6443` 访问
 - 使用临时 SSH 密钥连接本机，安装结束后自动移除，并清理 `ansible@bd-apaas.com` 公钥
 - 单机模式安装的集群不支持再通过 `3.install-node.yml` 扩容
 - SSH、80、443 及业务端口不做处理，请在外部防火墙（如 Hetzner Robot Firewall）配置白名单

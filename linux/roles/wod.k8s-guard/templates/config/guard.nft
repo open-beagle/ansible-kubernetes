@@ -1,5 +1,6 @@
 {% set ALLOW_IPV4 = K8S_GUARD_ALLOW_CIDRS | reject('search', ':') | list %}
 {% set ALLOW_IPV6 = K8S_GUARD_ALLOW_CIDRS | select('search', ':') | list %}
+{% set INTERNAL_IPV4 = K8S_GUARD_INTERNAL_CIDRS | default([]) | reject('search', ':') | list %}
 # 由 ansible-kubernetes wod.k8s-guard 生成，请勿手动修改
 # 独立的 inet beagle_guard 表，不影响 cilium、docker 的 iptables 规则
 
@@ -7,6 +8,16 @@ table inet beagle_guard
 delete table inet beagle_guard
 
 table inet beagle_guard {
+{% if INTERNAL_IPV4 | length > 0 %}
+  chain ingress {
+    type filter hook ingress devices = { {% for iface in K8S_GUARD_IFACES %}"{{ iface }}"{% if not loop.last %}, {% endif %}{% endfor %} } priority -5; policy accept;
+{% if ALLOW_IPV4 | length > 0 %}
+    ip saddr { {{ ALLOW_IPV4 | join(', ') }} } accept
+{% endif %}
+    ip daddr { {{ INTERNAL_IPV4 | join(', ') }} } drop
+  }
+
+{% endif %}
   chain input {
     type filter hook input priority -5; policy accept;
     iifname { {% for iface in K8S_GUARD_IFACES %}"{{ iface }}"{% if not loop.last %}, {% endif %}{% endfor %} } jump public

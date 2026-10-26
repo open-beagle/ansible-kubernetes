@@ -42,3 +42,9 @@ K8S_GUARD_UDP_PORTS:
   - 8472
   - 6081
   - 51871
+
+# K8S_GUARD_INTERNAL_CIDRS , 拦截从公网网卡直连容器与集群内部网段（防止同二层邻居伪造路由直连 Pod/Service/Docker）
+K8S_GUARD_INTERNAL_CIDRS:
+  - "{{ K8S_POD_NETWORK }}"
+  - "{{ K8S_SERVICE_IP_RANGE }}"
+  - 172.17.0.0/16
